@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import java.util.HashMap;
 
 @NoArgsConstructor
-public class ApiResponse extends HashMap {
+public class ApiResponse extends HashMap<String, Object> {
 
     private static final long serialVersionUID = 1L;
 
