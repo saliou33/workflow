@@ -1,7 +1,6 @@
 package com.innov.workflow.core.domain;
 
 import lombok.NoArgsConstructor;
-
 import java.util.HashMap;
 
 @NoArgsConstructor
@@ -106,6 +105,5 @@ public class ApiResponse extends HashMap<String, Object> {
     public static ApiResponse serverError() {
         return ApiResponse.success(DEFAULT_SERVER_ERROR_MSG);
     }
-
 
 }
