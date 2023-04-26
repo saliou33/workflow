@@ -1,3 +1,7 @@
+idm:
+  jwtSecret: aeee730baff4b270b49ae582ed92e4d300fa2e39cd385b516ed
+  jwtExpirationMs: 86400000
+
 service:
   message: Hello World
 
@@ -10,7 +14,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
 
     show-sql: true
     properties:
