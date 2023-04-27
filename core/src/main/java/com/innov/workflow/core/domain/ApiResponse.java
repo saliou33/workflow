@@ -1,6 +1,9 @@
 package com.innov.workflow.core.domain;
 
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 import java.util.HashMap;
 
 @NoArgsConstructor
@@ -15,35 +18,13 @@ public class ApiResponse extends HashMap<String, Object> {
     public static final String DATA_TAG = "data";
 
 
-    public static final String DEFAULT_SUCCESS_MSG = "Opération Réussie Avec Succés";
-
-    public static final String DEFAULT_CLIENT_ERROR_MSG = "Erreur Client";
-
-    public static final String DEFAULT_SERVER_ERROR_MSG = "Erreur Serveur";
-
-    public enum Type {
-        SUCCESS(200),
-        CLIENT_ERROR(400),
-        SERVER_ERROR(500);
-
-        private final int value;
-
-        Type(int value)      {
-            this.value = value;
-        }
-
-        public int value() {
-            return this.value;
-        }
-    }
-
-    public ApiResponse(Type type, String msg) {
-        super.put(CODE_TAG, type.value);
+    public ApiResponse(HttpStatus code, String msg) {
+        super.put(CODE_TAG, code.name());
         super.put(MSG_TAG, msg);
     }
 
-    public ApiResponse(Type type, String msg, Object data) {
-        super.put(CODE_TAG, type.value);
+    public ApiResponse(HttpStatus code, String msg, Object data) {
+        super.put(CODE_TAG, code.name());
         super.put(MSG_TAG, msg);
 
         if (data != null) {
@@ -57,53 +38,33 @@ public class ApiResponse extends HashMap<String, Object> {
         return this;
     }
 
-    public static ApiResponse success(String msg, Object data) {
-        return new ApiResponse(Type.SUCCESS, msg, data);
+    public ResponseEntity build() {
+        return new ResponseEntity(this, HttpStatus.valueOf((String) this.get(CODE_TAG)));
     }
 
-    public static ApiResponse success(String msg) {
-        return ApiResponse.success(msg, null);
+    public static ResponseEntity created(String msg, Object data) {
+        return (new ApiResponse(HttpStatus.CREATED, msg, data)).build();
     }
 
-    public static ApiResponse success(Object data) {
-        return ApiResponse.success(DEFAULT_SUCCESS_MSG, data);
+    public static ResponseEntity created(String msg) {
+        return (new ApiResponse(HttpStatus.CREATED, msg)).build();
     }
 
-    public static ApiResponse success() {
-        return ApiResponse.success(DEFAULT_SUCCESS_MSG);
+    public static ResponseEntity success(String msg) {
+        return (new ApiResponse(HttpStatus.OK, msg)).build();
     }
 
-
-    public static ApiResponse clientError(String msg, Object data) {
-        return new ApiResponse(Type.CLIENT_ERROR, msg, data);
+    public static ResponseEntity success(String msg, Object data) {
+        return (new ApiResponse(HttpStatus.OK, msg, data)).build();
     }
 
-    public static ApiResponse clientError(String msg) {
-        return ApiResponse.success(msg, null);
+    public static ResponseEntity error(String msg) {
+        return (new ApiResponse(HttpStatus.BAD_REQUEST, msg)).build();
     }
 
-    public static ApiResponse clientError(Object data) {
-        return ApiResponse.success(DEFAULT_CLIENT_ERROR_MSG, data);
+    public static ResponseEntity error(String msg, Object data) {
+        return (new ApiResponse(HttpStatus.BAD_REQUEST, msg, data)).build();
     }
 
-    public static ApiResponse clientError() {
-        return ApiResponse.success(DEFAULT_CLIENT_ERROR_MSG);
-    }
-
-    public static ApiResponse serverError(String msg, Object data) {
-        return new ApiResponse(Type.SUCCESS, msg, data);
-    }
-
-    public static ApiResponse serverError(String msg) {
-        return ApiResponse.success(msg, null);
-    }
-
-    public static ApiResponse serverError(Object data) {
-        return ApiResponse.success(DEFAULT_SERVER_ERROR_MSG, data);
-    }
-
-    public static ApiResponse serverError() {
-        return ApiResponse.success(DEFAULT_SERVER_ERROR_MSG);
-    }
 
 }
