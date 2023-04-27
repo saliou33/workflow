@@ -2,7 +2,6 @@ package com.innov.workflow.idm.config.jwt;
 
 import com.innov.workflow.idm.config.service.UserDetailsServiceImpl;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
