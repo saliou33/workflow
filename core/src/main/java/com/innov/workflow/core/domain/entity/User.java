@@ -22,7 +22,9 @@ public class User extends BaseEntity {
     private String username;
     private String name;
     private String avatar;
+
     @Email
+    @Column(unique = true)
     private String email;
     private String password;
     private String tel;
@@ -34,8 +36,13 @@ public class User extends BaseEntity {
 
     @ManyToMany
     @JoinTable(name = "user_role",
-    joinColumns = @JoinColumn(name = "roleId"),
-    inverseJoinColumns = @JoinColumn(name = "userId"))
+            joinColumns = @JoinColumn(name = "roleId"),
+            inverseJoinColumns = @JoinColumn(name = "userId"))
     private List<Role> roles;
 
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
 }
