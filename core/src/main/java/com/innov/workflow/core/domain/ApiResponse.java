@@ -50,8 +50,16 @@ public class ApiResponse extends HashMap<String, Object> {
         return (new ApiResponse(HttpStatus.CREATED, msg)).build();
     }
 
+    public static ResponseEntity created(Object data) {
+        return ApiResponse.created("", data);
+    }
+
     public static ResponseEntity success(String msg) {
         return (new ApiResponse(HttpStatus.OK, msg)).build();
+    }
+
+    public static ResponseEntity success(Object data) {
+        return ApiResponse.success("", data);
     }
 
     public static ResponseEntity success(String msg, Object data) {
@@ -66,5 +74,8 @@ public class ApiResponse extends HashMap<String, Object> {
         return (new ApiResponse(HttpStatus.BAD_REQUEST, msg, data)).build();
     }
 
+    public static ResponseEntity error(Object data) {
+        return ApiResponse.error("", data);
+    }
 
 }

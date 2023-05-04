@@ -20,21 +20,26 @@ public class User extends BaseEntity {
 
     @Column(unique = true)
     private String username;
+
     private String name;
+
     private String avatar;
 
     @Email
     @Column(unique = true)
     private String email;
+
     private String password;
+
     private String tel;
+
     private boolean enabled;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "orgId")
     private Organization organization;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "roleId"),
             inverseJoinColumns = @JoinColumn(name = "userId"))

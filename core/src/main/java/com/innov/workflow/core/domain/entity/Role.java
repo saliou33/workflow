@@ -1,5 +1,7 @@
 package com.innov.workflow.core.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.innov.workflow.core.domain.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,8 +18,18 @@ public class Role extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roleId;
-    private String roleKey;
+
+    @ManyToOne
+    @JoinColumn(name = "tagId")
+    private RoleTag tag;
+
     private String name;
-    @ManyToMany(mappedBy = "roles")
-    private List<Organization> organizations;
+
+    @Lob
+    private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "orgId")
+    @JsonIgnore
+    private Organization organization;
 }

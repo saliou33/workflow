@@ -20,4 +20,6 @@ public abstract class BaseEntity implements Serializable {
     private LocalDateTime updatedAt;
 
     private boolean deleted = false;
+
+
 }

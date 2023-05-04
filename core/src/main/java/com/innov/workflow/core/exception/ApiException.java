@@ -15,7 +15,6 @@ public class ApiException extends RuntimeException {
     private HttpStatus code;
     private List<Object> errors;
 
-
     public ApiException(HttpStatus code, String msg) {
         this.msg = msg;
         this.code = code;

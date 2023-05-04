@@ -2,12 +2,14 @@ package com.innov.workflow.app.config;
 
 import com.innov.workflow.core.domain.ApiResponse;
 import com.innov.workflow.core.exception.ApiException;
+import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.ArrayList;
@@ -48,5 +50,5 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(responseData, e.getCode());
     }
-
+    
 }
