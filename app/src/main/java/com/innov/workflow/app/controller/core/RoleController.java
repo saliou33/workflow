@@ -6,6 +6,9 @@ import com.innov.workflow.core.domain.ApiResponse;
 import com.innov.workflow.core.domain.entity.Role;
 import com.innov.workflow.core.service.RoleService;
 import lombok.AllArgsConstructor;
+import org.activiti.bpmn.model.FlowElement;
+import org.activiti.engine.TaskService;
+import org.activiti.engine.task.Task;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +21,8 @@ import java.util.List;
 public class RoleController {
     private final RoleService roleService;
 
+    private final TaskService taskService;
+
     @GetMapping
     public ResponseEntity getAllRoles() {
         return ApiResponse.success(roleService.getAllRoles());
@@ -26,6 +31,7 @@ public class RoleController {
     @PostMapping("/pages")
     public ResponseEntity getAllRolesByPage(@RequestBody PaginationDTO p) {
         List<Role> data = roleService.getAllRoles(p.getPageNumber(), p.getPageSize()).toList();
+        
         return ApiResponse.success(data);
     }
 

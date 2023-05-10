@@ -37,6 +37,8 @@ public class UserDTO extends BaseDTO {
     @Pattern(regexp = "^\\d{10}$", message = "le numero de téléphone est invalide")
     private String tel;
 
+    private String avatar;
+
     private List<RoleDTO> roles;
 
     public static UserDTO fromEntity(User user) {
@@ -47,7 +49,7 @@ public class UserDTO extends BaseDTO {
         dto.setUsername(user.getUsername());
         dto.setEmail(user.getEmail());
         dto.setTel(user.getTel());
-
+        dto.setAvatar(user.getAvatar());
 
         List<RoleDTO> roleDTOs = user.getRoles().stream().map(RoleDTO::fromEntity).collect(Collectors.toList());
         dto.setRoles(roleDTOs);

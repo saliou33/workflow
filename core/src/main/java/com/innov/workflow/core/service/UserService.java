@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,8 +37,17 @@ public class UserService {
 
 
     public User getUserById(Long id) {
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById(id).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "User not found with id: " + id));
     }
+
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "User not found with username: " + username));
+    }
+
+    public  Boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
 
     public List<User> getUsersByRole(Long id) {
         Optional<Role> role = roleRepository.findById(id);
@@ -79,15 +89,20 @@ public class UserService {
         return userRepository.save(user);
     }
 
+
+    public User saveUser(User user) {
+        return userRepository.save(user);
+    }
+
     public User updateUser(Long id, User user) {
-        User existingUser = userRepository.findById(id).orElse(null);
-        if (existingUser == null) {
-            return null;
-        }
+        User existingUser = getUserById(id);
 
         existingUser.setOrganization(user.getOrganization());
         existingUser.setUsername(user.getUsername());
-        existingUser.setPassword(user.getPassword());
+        existingUser.setName(user.getName());
+        existingUser.setAvatar(user.getAvatar());
+        existingUser.setTel(user.getTel());
+        existingUser.setUpdatedAt(LocalDateTime.now());
 
         // set other properties as needed
         return userRepository.save(existingUser);
