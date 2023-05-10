@@ -6,8 +6,19 @@ import javax.validation.constraints.NotNull;
 
 @Data
 public class PaginationDTO {
-    @NotNull(message = "pageNumber: the number of the page is required")
     private Integer pageNumber;
-    @NotNull(message = "pageSize: the size of the page is required")
+
     private Integer pageSize;
+
+
+    public int getStart() {
+        setDefault();
+        return (pageNumber- 1) * pageSize;
+    }
+
+    private void setDefault() {
+        if(pageNumber == null) this.pageNumber = 1;
+        if(pageSize == null) this.pageSize = 25;
+    }
+
 }
