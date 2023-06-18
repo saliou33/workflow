@@ -1,9 +1,9 @@
 package com.innov.workflow.core.service;
 
+import com.innov.workflow.core.domain.entity.Group;
 import com.innov.workflow.core.domain.entity.Organization;
-import com.innov.workflow.core.domain.entity.Role;
+import com.innov.workflow.core.domain.repository.GroupRepository;
 import com.innov.workflow.core.domain.repository.OrganizationRepository;
-import com.innov.workflow.core.domain.repository.RoleRepository;
 import com.innov.workflow.core.exception.ApiException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,7 +19,7 @@ import java.util.List;
 public class OrganizationService {
 
     private final OrganizationRepository organizationRepository;
-    private final RoleRepository roleRepository;
+    private final GroupRepository groupRepository;
 
     public List<Organization> getAllOrganizations() {
         return organizationRepository.findAll();
@@ -55,11 +55,11 @@ public class OrganizationService {
     }
 
     public Organization addRole(Long orgId, Long roleId) {
-        Role role = roleRepository.findById(roleId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Role not found with id" + roleId));
+        Group group = groupRepository.findById(roleId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Role not found with id" + roleId));
         Organization organization = organizationRepository.findById(orgId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Organization not found with id" + orgId));
 
-        if (!organization.getRoles().contains(role)) {
-            organization.getRoles().add(role);
+        if (!organization.getGroups().contains(group)) {
+            organization.getGroups().add(group);
             return organizationRepository.save(organization);
         }
 

@@ -3,7 +3,6 @@ package com.innov.workflow.idm.config.service;
 import com.innov.workflow.core.domain.entity.User;
 import com.innov.workflow.core.domain.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

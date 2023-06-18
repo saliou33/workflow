@@ -1,6 +1,6 @@
 package com.innov.workflow.idm.config.config;
 
-import com.innov.workflow.idm.config.jwt.AuthEntryPointJwt;
+import com.innov.workflow.idm.config.jwt.AuthEntryPoint;
 import com.innov.workflow.idm.config.jwt.AuthTokenFilter;
 import com.innov.workflow.idm.config.service.UserDetailsServiceImpl;
 import lombok.AllArgsConstructor;
@@ -27,7 +27,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     private final UserDetailsServiceImpl userDetailsService;
 
-    private final AuthEntryPointJwt unauthorizedHandler;
+    private final AuthEntryPoint unauthorizedHandler;
 
     private final AuthTokenFilter authTokenJwtTokenFilter;
 
@@ -57,6 +57,8 @@ public class SecurityConfig {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll().and()
+                .authorizeRequests().antMatchers("/app/**").permitAll().and()
+                .authorizeRequests().antMatchers("/actuator/**").permitAll().and()
                 .authorizeRequests().antMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .antMatchers("/api/test/**").permitAll()
                 .anyRequest().authenticated();

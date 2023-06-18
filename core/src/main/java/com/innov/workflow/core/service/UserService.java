@@ -1,10 +1,10 @@
 package com.innov.workflow.core.service;
 
+import com.innov.workflow.core.domain.entity.Group;
 import com.innov.workflow.core.domain.entity.Organization;
-import com.innov.workflow.core.domain.entity.Role;
 import com.innov.workflow.core.domain.entity.User;
+import com.innov.workflow.core.domain.repository.GroupRepository;
 import com.innov.workflow.core.domain.repository.OrganizationRepository;
-import com.innov.workflow.core.domain.repository.RoleRepository;
 import com.innov.workflow.core.domain.repository.UserRepository;
 import com.innov.workflow.core.exception.ApiException;
 import lombok.AllArgsConstructor;
@@ -23,12 +23,17 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+    private final GroupRepository groupRepository;
     private final OrganizationRepository organizationRepository;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
+
+    public List<User> getAllUserLike(String p) {
+        return userRepository.findUsersByUsernameLike(p);
+    }
+
 
     public Page<User> getAllUsers(int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
@@ -36,23 +41,27 @@ public class UserService {
     }
 
 
-    public User getUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "User not found with id: " + id));
+    public User getUserByUserId(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "User not found with id: " + userId));
     }
 
     public User getUserByUsername(String username) {
-        return userRepository.findByUsername(username).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "User not found with username: " + username));
+        return userRepository.findByUsername(username).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "user not found with username: " + username));
     }
 
-    public  Boolean existsByUsername(String username) {
+    public Boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
+    }
+
+    public Boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
     }
 
 
     public List<User> getUsersByRole(Long id) {
-        Optional<Role> role = roleRepository.findById(id);
+        Optional<Group> group = groupRepository.findById(id);
 
-        return userRepository.findAllByRoles(role.get());
+        return userRepository.findAllByGroups(group.get());
     }
 
     public List<User> getUsersByOrganization(Long id) {
@@ -61,24 +70,24 @@ public class UserService {
         return userRepository.findAllByOrganization(organization.get());
     }
 
-    public User addRole(Long userId, Long roleId) {
-        Role role = roleRepository.findById(roleId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Role not found with id: " + roleId));
-        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "User not found with id: " + roleId));
+    public User addRole(Long userId, Long groupId) {
+        Group group = groupRepository.findById(groupId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Role not found with id: " + groupId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "User not found with id: " + groupId));
 
-        if (!user.getRoles().contains(role)) {
-            user.getRoles().add(role);
+        if (!user.getGroups().contains(group)) {
+            user.getGroups().add(group);
             return userRepository.save(user);
         }
 
         throw new ApiException(HttpStatus.BAD_REQUEST, "Role already added");
     }
 
-    public User deleteRole(Long userId, Long roleId) {
-        Role role = roleRepository.findById(roleId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Role not found with id: " + roleId));
-        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "User not found with id: " + roleId));
+    public User deleteRole(Long userId, Long groupId) {
+        Group group = groupRepository.findById(groupId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Role not found with id: " + groupId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "User not found with id: " + groupId));
 
-        if (user.getRoles().contains(role)) {
-            user.getRoles().remove(role);
+        if (user.getGroups().contains(group)) {
+            user.getGroups().remove(group);
             return userRepository.save(user);
         }
 
@@ -95,11 +104,13 @@ public class UserService {
     }
 
     public User updateUser(Long id, User user) {
-        User existingUser = getUserById(id);
+        User existingUser = getUserByUserId(id);
 
         existingUser.setOrganization(user.getOrganization());
         existingUser.setUsername(user.getUsername());
-        existingUser.setName(user.getName());
+        existingUser.setFirstName(user.getFirstName());
+        existingUser.setLastName(user.getLastName());
+        existingUser.setFullName();
         existingUser.setAvatar(user.getAvatar());
         existingUser.setTel(user.getTel());
         existingUser.setUpdatedAt(LocalDateTime.now());

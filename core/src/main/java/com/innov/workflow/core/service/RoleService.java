@@ -1,5 +1,6 @@
 package com.innov.workflow.core.service;
 
+
 import com.innov.workflow.core.domain.entity.Role;
 import com.innov.workflow.core.domain.repository.RoleRepository;
 import lombok.AllArgsConstructor;
@@ -40,7 +41,6 @@ public class RoleService {
             return null;
         }
         existingRole.setName(role.getName());
-        existingRole.setDescription(role.getDescription());
         // set other properties as needed
         return roleRepository.save(existingRole);
     }

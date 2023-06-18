@@ -1,7 +1,7 @@
 package com.innov.workflow.core.domain.repository;
 
+import com.innov.workflow.core.domain.entity.Group;
 import com.innov.workflow.core.domain.entity.Organization;
-import com.innov.workflow.core.domain.entity.Role;
 import com.innov.workflow.core.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -17,7 +17,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Boolean existsByEmail(String email);
 
-    List<User> findAllByRoles(Role role);
+    List<User> findAllByGroups(Group group);
+
+    List<User> findUsersByUsernameLike(String p);
 
     List<User> findAllByOrganization(Organization organization);
+
+
 }

@@ -12,4 +12,5 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan(basePackages = {"com.innov.workflow.core"})
 @EnableJpaRepositories(basePackages = {"com.innov.workflow.core"})
 public class CoreModule {
+
 }

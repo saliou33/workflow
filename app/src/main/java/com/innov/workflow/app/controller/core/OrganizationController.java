@@ -1,6 +1,7 @@
 package com.innov.workflow.app.controller.core;
 
-import com.innov.workflow.app.dto.core.OrganizationDTO;
+import com.innov.workflow.app.dto.core.OrganizationDto;
+import com.innov.workflow.app.mapper.core.OrganizationMapper;
 import com.innov.workflow.core.domain.ApiResponse;
 import com.innov.workflow.core.domain.entity.Organization;
 import com.innov.workflow.core.service.OrganizationService;
@@ -17,32 +18,34 @@ import java.util.List;
 public class OrganizationController {
 
     private final OrganizationService organizationService;
+    private final OrganizationMapper orgMapper;
 
     @GetMapping
     public ResponseEntity getAllOrganizations() {
-        return ApiResponse.success(organizationService.getAllOrganizations());
+        List<OrganizationDto> data = orgMapper.
+                mapToDtoList(organizationService.getAllOrganizations());
+        return ApiResponse.success(data);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity getOrganizationById(@PathVariable Long id) {
-        return ApiResponse.success(organizationService.getOrganizationById(id));
+        OrganizationDto organization = orgMapper.
+                mapToDto(organizationService.getOrganizationById(id));
+        return ApiResponse.success(organization);
     }
 
-    @PostMapping("/pages")
-    public ResponseEntity getAllOrganizationssByPage(int pageNumber, int pageSize) {
-        List<Organization> data = organizationService.getAllOrganizations(pageNumber, pageSize).toList();
-        return ApiResponse.success(data);
-    }
 
     @PostMapping
-    public ResponseEntity createOrganization(@RequestBody OrganizationDTO organizationDTO) {
-        Organization organization = organizationService.createOrganization(organizationDTO.toEntity());
+    public ResponseEntity createOrganization(@RequestBody OrganizationDto organizationDto) {
+        Organization data = orgMapper.mapFromDto(organizationDto);
+        Organization organization = organizationService.createOrganization(data);
         return ApiResponse.created("organisation créer", organization);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateOrganization(@PathVariable Long id, @RequestBody OrganizationDTO organizationDTO) {
-        Organization organization = organizationService.updateOrganization(id, organizationDTO.toEntity());
+    public ResponseEntity updateOrganization(@PathVariable Long id, @RequestBody OrganizationDto organizationDto) {
+        Organization data = orgMapper.mapFromDto(organizationDto);
+        Organization organization = organizationService.updateOrganization(id, data);
         return ApiResponse.success("organisation modifier", organization);
     }
 

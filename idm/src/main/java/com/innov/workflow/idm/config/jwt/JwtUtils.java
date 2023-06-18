@@ -1,23 +1,30 @@
 package com.innov.workflow.idm.config.jwt;
 
+import com.innov.workflow.core.domain.entity.User;
+import com.innov.workflow.core.service.UserService;
 import com.innov.workflow.idm.config.service.UserDetailsImpl;
 import io.jsonwebtoken.*;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 @Slf4j
 @Component
+@Data
+@RequiredArgsConstructor
 public class JwtUtils {
 
+    private final UserService userService;
     @Value("${idm.jwtSecret")
     private String jwtSecret;
-
     @Value("${idm.jwtExpirationMs}")
-    private int jwtExpirationMs;
+    private Long jwtExpirationMs;
 
     public String generateJwtToken(Authentication authentication) {
 
@@ -31,8 +38,23 @@ public class JwtUtils {
                 .compact();
     }
 
+    public String generateTokenWithUsername(String username) {
+
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .compact();
+    }
+
+
     public String getUserNameFromJwtToken(String token) {
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public Date getExpirationFromJwtToken(String token) {
+        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getExpiration();
     }
 
     public boolean validateJwtToken(String authToken) {
@@ -61,5 +83,13 @@ public class JwtUtils {
             throw new JwtException("JWT claims string is empty: " + e.getMessage());
         }
 
+    }
+
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.
+                getContext().getAuthentication();
+
+        UserDetailsImpl userImp = (UserDetailsImpl) authentication.getPrincipal();
+        return userService.getUserByUserId(userImp.getId());
     }
 }

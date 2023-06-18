@@ -1,7 +1,5 @@
 package com.innov.workflow.core.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.innov.workflow.core.domain.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,17 +11,15 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "CR_ORGANIZATION")
 public class Organization extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orgId;
-
+    private Long id;
     @Column(unique = true)
     private String name;
-
     @Lob
     private String description;
-
-    @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY)
-    private List<Role> roles;
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Group> groups;
 }

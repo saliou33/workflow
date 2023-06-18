@@ -1,25 +1,54 @@
 spring:
+  main:
+    allow-bean-definition-overriding: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/wkflow?useSSL=false
+    url: jdbc:mysql://localhost:3306/workflow?useSSL=false
     username: root
     password: password
 
   jpa:
     hibernate:
       ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
     show-sql: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
 
+  mail:
+    host: sandbox.smtp.mailtrap.io
+    port: 2525
+    username: e44ee1444d3730
+    password: 5cced67f6e8bff
+    protocol: smtp
+
+  thymeleaf:
+    check-template: false
+
+gpt:
+  apiKey: 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
+  url: https://chatgpt-api.shn.hk/v1/
+
+
 idm:
   jwtSecret: aeee730baff4b270b49ae582ed92e4d300fa2e39cd385b516ed
-  jwtExpirationMs: 86400000
+  #  jwtExpirationMs: 60000
+  #  jwtRefreshExpirationMs: 180000
+  jwtExpirationMs: 1800000
+  jwtRefreshExpirationMs: 20000000
+  jwtCookieName: i-workflow-jwt
+  jwtRefreshCookieName: i-workflow-jwt-refresh
 
-service:
-  message: Hello World
 
+logging:
+  level:
+    org.springframework.web: debug
+    org.hibernate.sql: info
+  file:
+    name: app.log
+    path: log/app.log
 server:
   port: 8083

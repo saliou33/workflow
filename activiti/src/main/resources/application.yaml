@@ -1,0 +1,6 @@
+spring:
+  activiti:
+    history-level: full
+    db-history-used: true
+
+

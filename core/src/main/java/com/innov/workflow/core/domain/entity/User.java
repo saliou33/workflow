@@ -1,6 +1,5 @@
 package com.innov.workflow.core.domain.entity;
 
-import com.innov.workflow.core.domain.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +9,7 @@ import javax.validation.constraints.Email;
 import java.util.List;
 
 @Entity
+@Table(name = "CR_USER")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,34 +20,38 @@ public class User extends BaseEntity {
 
     @Column(unique = true)
     private String username;
-
-    private String name;
-
+    private String id;
+    private String fullName;
+    private String lastName;
+    private String firstName;
     private String avatar;
-
     @Email
     @Column(unique = true)
     private String email;
-
     private String password;
-
     private String tel;
-
     private boolean enabled;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "orgId")
     private Organization organization;
-
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_role",
-            joinColumns = @JoinColumn(name = "roleId"),
-            inverseJoinColumns = @JoinColumn(name = "userId"))
-    private List<Role> roles;
+    private List<Group> groups;
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<SysRole> sysRoles;
+
 
     public User(String username, String email, String password) {
+        this.id = username;
         this.username = username;
         this.email = email;
         this.password = password;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+        this.id = username;
+    }
+
+    public void setFullName() {
+        this.fullName = this.firstName + " " + this.lastName;
     }
 }
