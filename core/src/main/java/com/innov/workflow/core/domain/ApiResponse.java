@@ -9,13 +9,10 @@ import java.util.HashMap;
 @NoArgsConstructor
 public class ApiResponse extends HashMap<String, Object> {
 
-    private static final long serialVersionUID = 1L;
-
     public static final String CODE_TAG = "code";
-
     public static final String MSG_TAG = "msg";
-
     public static final String DATA_TAG = "data";
+    private static final long serialVersionUID = 1L;
 
 
     public ApiResponse(HttpStatus code, String msg) {
@@ -31,15 +28,6 @@ public class ApiResponse extends HashMap<String, Object> {
             super.put(DATA_TAG, data);
         }
 
-    }
-
-    public ApiResponse put(String key, Object value) {
-        super.put(key, value);
-        return this;
-    }
-
-    public ResponseEntity build() {
-        return new ResponseEntity(this, HttpStatus.valueOf((String) this.get(CODE_TAG)));
     }
 
     public static ResponseEntity created(String msg, Object data) {
@@ -76,6 +64,15 @@ public class ApiResponse extends HashMap<String, Object> {
 
     public static ResponseEntity error(Object data) {
         return ApiResponse.error("", data);
+    }
+
+    public ApiResponse put(String key, Object value) {
+        super.put(key, value);
+        return this;
+    }
+
+    public ResponseEntity build() {
+        return new ResponseEntity(this, HttpStatus.valueOf((String) this.get(CODE_TAG)));
     }
 
 }

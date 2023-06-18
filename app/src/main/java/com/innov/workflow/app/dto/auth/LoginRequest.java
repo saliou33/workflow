@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 public class LoginRequest {
     @NotBlank(message = "le champs username est vide")
     private String username;
-    
+
     @NotBlank(message = "le champs mot de passe est vide")
     private String password;
 }

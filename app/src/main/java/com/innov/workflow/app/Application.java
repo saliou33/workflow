@@ -1,4 +1,3 @@
-
 package com.innov.workflow.app;
 
 import org.springframework.boot.SpringApplication;

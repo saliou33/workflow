@@ -1,17 +1,17 @@
 package com.innov.workflow.core.utils.file;
 
+import com.innov.workflow.core.constant.Constants;
+import com.innov.workflow.core.utils.StringUtils;
+import org.apache.poi.util.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Arrays;
-
-import com.innov.workflow.core.constant.Constants;
-import com.innov.workflow.core.utils.StringUtils;
-import org.apache.poi.util.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 public class ImageUtils {
@@ -40,17 +40,12 @@ public class ImageUtils {
         return null;
     }
 
-    /**
-     * 读取文件为字节数据
-     *
-     * @param url 地址
-     * @return 字节数据
-     */
+
     public static byte[] readFile(String url) {
         InputStream in = null;
         try {
             if (url.startsWith("http")) {
-                // 网络地址
+
                 URL urlObj = new URL(url);
                 URLConnection urlConnection = urlObj.openConnection();
                 urlConnection.setConnectTimeout(30 * 1000);
@@ -58,7 +53,7 @@ public class ImageUtils {
                 urlConnection.setDoInput(true);
                 in = urlConnection.getInputStream();
             } else {
-                // 本机地址
+
                 String localPath = Constants.UPLOAD_PATH;
                 String downloadPath = localPath + StringUtils.substringAfter(url, Constants.RESOURCE_PREFIX);
                 in = new FileInputStream(downloadPath);
