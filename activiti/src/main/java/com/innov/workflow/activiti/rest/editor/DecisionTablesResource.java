@@ -16,7 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 
 @RestController
-@RequestMapping({"/app/rest/decision-table-models"})
+@RequestMapping({"/api/activiti/decision-table-models"})
 public class DecisionTablesResource {
     @Autowired
     protected ActivitiDecisionTableService decisionTableService;

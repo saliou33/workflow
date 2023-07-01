@@ -7,14 +7,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/api")
 
 public class ProcessDefinitionsResource extends AbstractProcessDefinitionsResource {
     public ProcessDefinitionsResource() {
     }
 
     @RequestMapping(
-            value = {"/rest/process-definitions"},
+            value = {"/activiti/process-definitions"},
             method = {RequestMethod.GET}
     )
     public ResultListDataRepresentation getProcessDefinitions(@RequestParam(value = "latest", required = false) Boolean latest, @RequestParam(value = "deploymentKey", required = false) String deploymentKey) {

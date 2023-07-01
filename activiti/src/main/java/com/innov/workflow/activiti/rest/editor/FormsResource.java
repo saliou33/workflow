@@ -20,7 +20,7 @@ import java.nio.charset.Charset;
 import java.util.*;
 
 @RestController
-@RequestMapping({"/app/rest/form-models"})
+@RequestMapping({"/api/activiti/form-models"})
 public class FormsResource {
     private static final Logger logger = LoggerFactory.getLogger(FormsResource.class);
     private static final int MIN_FILTER_LENGTH = 2;

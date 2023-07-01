@@ -24,10 +24,10 @@ public interface ModelRelationRepository extends JpaRepository<ModelRelation, Lo
     @Query("from ModelRelation mr where mr.modelId = :modelId and mr.type = :type")
     List<ModelRelation> findByChildModelIdAndType(@Param("modelId") String var1, @Param("type") String var2);
 
-    @Query("select m.id, m.name, m.modelType from ModelRelation mr inner join mr.model m where mr.parentModelId = :parentModelId")
+    @Query("select new com.innov.workflow.activiti.domain.editor.ModelInformation(m.id, m.name, m.modelType) from ModelRelation mr inner join mr.model m where mr.parentModelId = :parentModelId")
     List<ModelInformation> findModelInformationByParentModelId(@Param("parentModelId") String var1);
 
-    @Query("select m.id, m.name, m.modelType from ModelRelation mr inner join mr.parentModel m where mr.modelId = :modelId")
+    @Query(value = "select new com.innov.workflow.activiti.domain.editor.ModelInformation(m.id, m.name, m.modelType) from ModelRelation mr inner join mr.parentModel m where mr.modelId = :modelId")
     List<ModelInformation> findModelInformationByChildModelId(@Param("modelId") String var1);
 
     @Modifying

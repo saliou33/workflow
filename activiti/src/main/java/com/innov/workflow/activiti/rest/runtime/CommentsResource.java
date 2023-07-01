@@ -5,13 +5,13 @@ import com.innov.workflow.activiti.model.runtime.CommentRepresentation;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/api")
 public class CommentsResource extends AbstractCommentsResource {
     public CommentsResource() {
     }
 
     @RequestMapping(
-            value = {"/rest/tasks/{taskId}/comments"},
+            value = {"/activiti/tasks/{taskId}/comments"},
             method = {RequestMethod.GET},
             produces = {"application/json"}
     )
@@ -20,7 +20,7 @@ public class CommentsResource extends AbstractCommentsResource {
     }
 
     @RequestMapping(
-            value = {"/rest/tasks/{taskId}/comments"},
+            value = {"/activiti/tasks/{taskId}/comments"},
             method = {RequestMethod.POST},
             produces = {"application/json"}
     )
@@ -29,7 +29,7 @@ public class CommentsResource extends AbstractCommentsResource {
     }
 
     @RequestMapping(
-            value = {"/rest/process-instances/{processInstanceId}/comments"},
+            value = {"/activiti/process-instances/{processInstanceId}/comments"},
             method = {RequestMethod.GET},
             produces = {"application/json"}
     )
@@ -38,7 +38,7 @@ public class CommentsResource extends AbstractCommentsResource {
     }
 
     @RequestMapping(
-            value = {"/rest/process-instances/{processInstanceId}/comments"},
+            value = {"/activiti/process-instances/{processInstanceId}/comments"},
             method = {RequestMethod.POST},
             produces = {"application/json"}
     )

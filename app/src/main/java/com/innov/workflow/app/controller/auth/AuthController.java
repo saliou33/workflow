@@ -43,7 +43,7 @@ public class AuthController {
         return authCookieService.refreshToken(request);
     }
 
-    @PostMapping("/logout")
+    @GetMapping("/logout")
     public ResponseEntity logoutUser() {
         return authCookieService.logout();
     }

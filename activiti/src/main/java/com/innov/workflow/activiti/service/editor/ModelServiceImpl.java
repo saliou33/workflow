@@ -3,6 +3,7 @@ package com.innov.workflow.activiti.service.editor;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.domain.editor.*;
 import com.innov.workflow.activiti.model.editor.ModelKeyRepresentation;
 import com.innov.workflow.activiti.model.editor.ModelRepresentation;
@@ -15,8 +16,6 @@ import com.innov.workflow.activiti.service.api.ModelService;
 import com.innov.workflow.activiti.service.exception.InternalServerErrorException;
 import com.innov.workflow.activiti.service.exception.NotFoundException;
 import com.innov.workflow.core.domain.entity.User;
-import com.innov.workflow.core.service.UserService;
-import com.innov.workflow.idm.config.jwt.JwtUtils;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.ExtensionElement;
@@ -53,10 +52,9 @@ public class ModelServiceImpl implements ModelService {
     protected ModelRelationRepository modelRelationRepository;
     @Autowired
     protected ObjectMapper objectMapper;
+
     @Autowired
-    protected UserService userService;
-    @Autowired
-    protected JwtUtils jwtUtils;
+    protected IdentityService identityService;
 
     @Autowired
     protected AppDefinitionService appDefinitionService;
@@ -249,7 +247,7 @@ public class ModelServiceImpl implements ModelService {
             List<ModelHistory> history = this.modelHistoryRepository.findByModelIdAndRemovalDateIsNullOrderByVersionDesc(model.getId());
             ModelHistory toRevive;
             if (deleteRuntimeApp && model.getModelType() == 3) {
-                String appDefinitionId = this.appDefinitionService.getDefinitionIdForModelAndUser(model.getId(), jwtUtils.getCurrentUser());
+                String appDefinitionId = this.appDefinitionService.getDefinitionIdForModelAndUser(model.getId(), identityService.getCurrentUserObject());
                 if (appDefinitionId != null) {
                     deleteAppDefinition(appDefinitionId);
                 }

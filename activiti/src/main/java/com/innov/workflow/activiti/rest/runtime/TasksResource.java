@@ -3,7 +3,7 @@ package com.innov.workflow.activiti.rest.runtime;
 
 import com.innov.workflow.activiti.model.runtime.CreateTaskRepresentation;
 import com.innov.workflow.activiti.model.runtime.TaskRepresentation;
-import com.innov.workflow.activiti.old.service.IdentityService;
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.service.exception.BadRequestException;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Task;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/api")
 
 public class TasksResource {
     @Autowired
@@ -30,7 +30,7 @@ public class TasksResource {
     }
 
     @RequestMapping(
-            value = {"/rest/tasks"},
+            value = {"/activiti/tasks"},
             method = {RequestMethod.POST}
     )
     public TaskRepresentation createNewTask(@RequestBody CreateTaskRepresentation taskRepresentation, HttpServletRequest request) {

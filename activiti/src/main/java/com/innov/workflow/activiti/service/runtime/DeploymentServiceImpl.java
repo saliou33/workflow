@@ -2,6 +2,8 @@ package com.innov.workflow.activiti.service.runtime;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.innov.workflow.activiti.custom.dao.ActFormDefinitionService;
+import com.innov.workflow.activiti.custom.form.ActFormDefinition;
 import com.innov.workflow.activiti.domain.editor.AppDefinition;
 import com.innov.workflow.activiti.domain.editor.AppModelDefinition;
 import com.innov.workflow.activiti.domain.editor.Model;
@@ -19,9 +21,14 @@ import org.activiti.dmn.xml.converter.DmnXMLConverter;
 import org.activiti.editor.dmn.converter.DmnJsonConverter;
 import org.activiti.editor.language.json.converter.util.CollectionUtils;
 import org.activiti.engine.RepositoryService;
+import org.activiti.engine.impl.persistence.entity.DeploymentEntityImpl;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.DeploymentBuilder;
+import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.form.api.FormDeployment;
+import org.activiti.form.api.FormRepositoryService;
 import org.activiti.form.engine.FormEngine;
+import org.activiti.form.model.FormDefinition;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +54,13 @@ public class DeploymentServiceImpl implements DeploymentService {
     protected FormEngine formEngine;
     @Autowired
     protected ObjectMapper objectMapper;
+    @Autowired
+    protected FormRepositoryService formRepositoryService;
+
+    @Autowired
+    protected ActFormDefinitionService actFormDefinitionService;
+
+
     protected DmnJsonConverter dmnJsonConverter = new DmnJsonConverter();
     protected DmnXMLConverter dmnXMLConverter = new DmnXMLConverter();
 
@@ -54,17 +68,21 @@ public class DeploymentServiceImpl implements DeploymentService {
     }
 
     @Transactional
-    public Deployment updateAppDefinition(Model appDefinitionModel, User user) {
-        Deployment deployment = null;
+    public DeploymentEntityImpl updateAppDefinition(Model appDefinitionModel, User user) {
+        DeploymentEntityImpl deployment = null;
         AppDefinition appDefinition = this.resolveAppDefinition(appDefinitionModel);
+
+
         if (CollectionUtils.isNotEmpty(appDefinition.getModels())) {
             DeploymentBuilder deploymentBuilder = this.repositoryService.createDeployment().name(appDefinitionModel.getName()).key(appDefinitionModel.getKey());
+            Iterator i$ = appDefinition.getModels().iterator();
             Map<String, Model> formMap = new HashMap();
             Map<String, Model> decisionTableMap = new HashMap();
-            Iterator i$ = appDefinition.getModels().iterator();
-
             Model decisionTableInfo;
+
             while (i$.hasNext()) {
+
+
                 AppModelDefinition appModelDef = (AppModelDefinition) i$.next();
                 decisionTableInfo = this.modelService.getModel(appModelDef.getId());
                 if (decisionTableInfo == null) {
@@ -105,8 +123,6 @@ public class DeploymentServiceImpl implements DeploymentService {
                     decisionTableId = (String) i$.next();
                     decisionTableInfo = (Model) formMap.get(decisionTableId);
                     deploymentBuilder.addString("form-" + decisionTableInfo.getKey() + ".form", decisionTableInfo.getModelEditorJson());
-
-
                 }
             }
 
@@ -129,11 +145,85 @@ public class DeploymentServiceImpl implements DeploymentService {
                 }
             }
 
-            deployment = deploymentBuilder.deploy();
+            deployment = (DeploymentEntityImpl) deploymentBuilder.deploy();
         }
 
         return deployment;
     }
+
+    public void deployForm(Model appDefinitionModel) {
+        AppDefinition appDefinition = this.resolveAppDefinition(appDefinitionModel);
+
+        Iterator i = appDefinition.getModels().iterator();
+
+            while (i.hasNext()) {
+                AppModelDefinition appModelDef = (AppModelDefinition) i.next();
+                Model processModel = this.modelService.getModel(appModelDef.getId());
+
+                if (processModel == null) {
+                    logger.error("Model " + appModelDef.getId() + " for app definition " + appDefinitionModel.getId() + " could not be found");
+                    throw new BadRequestException("Model for app definition could not be found");
+                }
+
+                if(processModel.getModelType() == 0) {
+                    createFormDeployment(processModel);
+                }
+            }
+    }
+
+
+
+    public void createFormDeployment (Model processModel) {
+        List<Model> formModels = this.modelRepository.findModelsByParentModelId(processModel.getId());
+        System.out.println(processModel.getKey());
+        ProcessDefinition p = this.repositoryService.createProcessDefinitionQuery()
+                .processDefinitionKey(processModel.getKey()).orderByProcessDefinitionVersion().desc().list().get(0);
+
+        if (p == null) {
+            return;
+        }
+
+        for(Model f: formModels) {
+//            FormDefinition formDefinition = null;
+//            try {
+//                formDefinition = formRepositoryService.getFormDefinitionByKey(f.getKey());
+//            } catch (Exception e) {
+//
+//            }
+
+//            if(formDefinition != null) continue;
+
+            FormDefinition formDefinition = new FormDefinition();
+
+            formDefinition.setKey(f.getKey());
+            formDefinition.setName(f.getName());
+            formDefinition.setDescription(f.getDescription());
+            formDefinition.setVersion(f.getVersion());
+
+            String resourceName = "form-" + f.getKey() + ".form";
+
+            FormDeployment formDeployment = formRepositoryService.createDeployment()
+                    .name(f.getName())
+                    .parentDeploymentId(p.getDeploymentId())
+                    .addFormDefinition(resourceName, formDefinition)
+                    .deploy();
+
+            ActFormDefinition actFormDefinition = new ActFormDefinition();
+
+            actFormDefinition.setId(UUID.randomUUID().toString());
+            actFormDefinition.setResourceName(resourceName);
+            actFormDefinition.setVersion(f.getVersion());
+            actFormDefinition.setKey(f.getKey());
+            actFormDefinition.setName(f.getName());
+            actFormDefinition.setTenantId(formDeployment.getTenantId());
+            actFormDefinition.setParentDeploymentId(formDeployment.getParentDeploymentId());
+            actFormDefinition.setDeploymentId(formDeployment.getId());
+            actFormDefinition.setDescription(f.getDescription());
+
+            actFormDefinitionService.save(actFormDefinition);
+        }
+    }
+
 
     @Transactional
     public void deleteAppDefinition(String appDefinitionId) {

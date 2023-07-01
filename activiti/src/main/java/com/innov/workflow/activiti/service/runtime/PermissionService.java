@@ -5,7 +5,7 @@ package com.innov.workflow.activiti.service.runtime;//
 
 
 import com.innov.workflow.activiti.domain.runtime.RelatedContent;
-import com.innov.workflow.activiti.old.service.IdentityService;
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.service.exception.NotFoundException;
 import com.innov.workflow.activiti.service.exception.NotPermittedException;
 import com.innov.workflow.core.domain.entity.User;

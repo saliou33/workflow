@@ -57,7 +57,7 @@ public class SecurityConfig {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll().and()
-                .authorizeRequests().antMatchers("/app/**").permitAll().and()
+                .authorizeRequests().antMatchers("/api/activiti/**").permitAll().and()
                 .authorizeRequests().antMatchers("/actuator/**").permitAll().and()
                 .authorizeRequests().antMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .antMatchers("/api/test/**").permitAll()

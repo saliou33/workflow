@@ -9,13 +9,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/api")
 public class ModelBpmnResource extends AbstractModelBpmnResource {
     public ModelBpmnResource() {
     }
 
     @RequestMapping(
-            value = {"/rest/models/{processModelId}/bpmn20"},
+            value = {"/activiti/models/{processModelId}/bpmn20"},
             method = {RequestMethod.GET}
     )
     public void getProcessModelBpmn20Xml(HttpServletResponse response, @PathVariable String processModelId) throws IOException {
@@ -23,7 +23,7 @@ public class ModelBpmnResource extends AbstractModelBpmnResource {
     }
 
     @RequestMapping(
-            value = {"/rest/models/{processModelId}/history/{processModelHistoryId}/bpmn20"},
+            value = {"/activiti/models/{processModelId}/history/{processModelHistoryId}/bpmn20"},
             method = {RequestMethod.GET}
     )
     public void getHistoricProcessModelBpmn20Xml(HttpServletResponse response, @PathVariable String processModelId, @PathVariable String processModelHistoryId) throws IOException {

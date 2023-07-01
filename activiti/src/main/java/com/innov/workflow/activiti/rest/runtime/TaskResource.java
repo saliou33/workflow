@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/api")
 
 public class TaskResource extends AbstractTaskResource {
     private final Logger log = LoggerFactory.getLogger(TaskResource.class);
@@ -28,7 +28,7 @@ public class TaskResource extends AbstractTaskResource {
     }
 
     @RequestMapping(
-            value = {"/rest/tasks/{taskId}"},
+            value = {"/activiti/tasks/{taskId}"},
             method = {RequestMethod.GET},
             produces = {"application/json"}
     )
@@ -37,7 +37,7 @@ public class TaskResource extends AbstractTaskResource {
     }
 
     @RequestMapping(
-            value = {"/rest/tasks/{taskId}"},
+            value = {"/activiti/tasks/{taskId}"},
             method = {RequestMethod.PUT},
             produces = {"application/json"}
     )

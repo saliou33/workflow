@@ -10,7 +10,7 @@ import com.innov.workflow.activiti.model.common.ResultListDataRepresentation;
 import com.innov.workflow.activiti.model.editor.ModelKeyRepresentation;
 import com.innov.workflow.activiti.model.editor.ModelRepresentation;
 import com.innov.workflow.activiti.model.editor.decisiontable.DecisionTableDefinitionRepresentation;
-import com.innov.workflow.activiti.old.service.IdentityService;
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.service.exception.BadRequestException;
 import com.innov.workflow.activiti.service.exception.InternalServerErrorException;
 import org.activiti.form.model.FormDefinition;
@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.util.Iterator;
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/api")
 public class ModelsResource extends AbstractModelsResource {
     private final Logger logger = LoggerFactory.getLogger(ModelsResource.class);
 
@@ -37,7 +37,7 @@ public class ModelsResource extends AbstractModelsResource {
     }
 
     @RequestMapping(
-            value = {"/rest/models"},
+            value = {"/activiti/models"},
             method = {RequestMethod.GET},
             produces = {"application/json"}
     )
@@ -46,7 +46,7 @@ public class ModelsResource extends AbstractModelsResource {
     }
 
     @RequestMapping(
-            value = {"/rest/models-for-app-definition"},
+            value = {"/activiti/models-for-app-definition"},
             method = {RequestMethod.GET},
             produces = {"application/json"}
     )
@@ -55,7 +55,7 @@ public class ModelsResource extends AbstractModelsResource {
     }
 
     @RequestMapping(
-            value = {"/rest/import-process-model"},
+            value = {"/activiti/import-process-model"},
             method = {RequestMethod.POST},
             produces = {"application/json"}
     )
@@ -64,7 +64,7 @@ public class ModelsResource extends AbstractModelsResource {
     }
 
     @RequestMapping(
-            value = {"/rest/import-process-model/text"},
+            value = {"/activiti/import-process-model/text"},
             method = {RequestMethod.POST}
     )
     public String importProcessModelText(HttpServletRequest request, @RequestParam("file") MultipartFile file) {
@@ -81,7 +81,7 @@ public class ModelsResource extends AbstractModelsResource {
     }
 
     @RequestMapping(
-            value = {"/rest/models"},
+            value = {"/activiti/models"},
             method = {RequestMethod.POST},
             produces = {"application/json"}
     )
@@ -161,7 +161,7 @@ public class ModelsResource extends AbstractModelsResource {
     }
 
     @RequestMapping(
-            value = {"/rest/models/{modelId}/clone"},
+            value = {"/activiti/models/{modelId}/clone"},
             method = {RequestMethod.POST},
             produces = {"application/json"}
     )

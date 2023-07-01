@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.innov.workflow.activiti.model.common.ResultListDataRepresentation;
 import com.innov.workflow.activiti.model.idm.UserRepresentation;
 import com.innov.workflow.activiti.model.runtime.TaskRepresentation;
-import com.innov.workflow.activiti.old.service.IdentityService;
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.service.exception.BadRequestException;
 import com.innov.workflow.activiti.service.exception.NotPermittedException;
 import com.innov.workflow.activiti.service.runtime.PermissionService;
@@ -25,7 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/api")
 public class HistoricTaskQueryResource {
     @Autowired
     protected HistoryService historyService;
@@ -39,7 +39,7 @@ public class HistoricTaskQueryResource {
     }
 
     @RequestMapping(
-            value = {"/rest/query/history/tasks"},
+            value = {"/activiti/query/history/tasks"},
             method = {RequestMethod.POST},
             produces = {"application/json"}
     )

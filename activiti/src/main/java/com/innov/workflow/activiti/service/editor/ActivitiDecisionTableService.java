@@ -12,7 +12,7 @@ import com.innov.workflow.activiti.model.editor.ModelKeyRepresentation;
 import com.innov.workflow.activiti.model.editor.ModelRepresentation;
 import com.innov.workflow.activiti.model.editor.decisiontable.DecisionTableDefinitionRepresentation;
 import com.innov.workflow.activiti.model.editor.decisiontable.DecisionTableRepresentation;
-import com.innov.workflow.activiti.old.service.IdentityService;
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.service.api.ModelService;
 import com.innov.workflow.activiti.service.exception.BadRequestException;
 import com.innov.workflow.activiti.service.exception.InternalServerErrorException;

@@ -27,12 +27,10 @@
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
@@ -52,28 +50,17 @@
             <artifactId>activiti-spring-boot-starter</artifactId>
             <version>${activiti.version}</version>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>org.activiti</groupId>-->
-        <!--            <artifactId>activiti-spring-boot-starter</artifactId>-->
-        <!--            <version>${activiti.version}</version>-->
-        <!--            <exclusions>-->
-        <!--                <exclusion>-->
-        <!--                    <groupId>org.activiti</groupId>-->
-        <!--                    <artifactId>activiti-engine</artifactId>-->
-        <!--                </exclusion>-->
-        <!--            </exclusions>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.activiti</groupId>-->
-        <!--            <artifactId>activiti-engine</artifactId>-->
-        <!--            <version>6.0.0</version>-->
-        <!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>org.zalando</groupId>-->
+<!--            <artifactId>logbook-spring-boot-starter</artifactId>-->
+<!--            <version>3.1.0</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.activiti</groupId>
             <artifactId>activiti-json-converter</artifactId>
             <version>${activiti.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-transcoder</artifactId>

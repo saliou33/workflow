@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
-@RequestMapping({"/app/rest/decision-table-models"})
+@RequestMapping({"/api/activiti/decision-table-models"})
 public class DecisionTableResource {
     private static final Logger logger = LoggerFactory.getLogger(DecisionTableResource.class);
     @Autowired

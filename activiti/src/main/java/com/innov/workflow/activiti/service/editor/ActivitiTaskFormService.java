@@ -3,7 +3,7 @@ package com.innov.workflow.activiti.service.editor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.innov.workflow.activiti.model.runtime.CompleteFormRepresentation;
 import com.innov.workflow.activiti.model.runtime.ProcessInstanceVariableRepresentation;
-import com.innov.workflow.activiti.old.service.IdentityService;
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.service.exception.NotFoundException;
 import com.innov.workflow.activiti.service.exception.NotPermittedException;
 import com.innov.workflow.activiti.service.runtime.PermissionService;

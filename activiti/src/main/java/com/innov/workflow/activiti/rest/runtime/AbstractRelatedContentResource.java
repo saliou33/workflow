@@ -5,7 +5,7 @@ import com.innov.workflow.activiti.model.common.ResultListDataRepresentation;
 import com.innov.workflow.activiti.model.component.SimpleContentTypeMapper;
 import com.innov.workflow.activiti.model.runtime.ProcessInstanceRepresentation;
 import com.innov.workflow.activiti.model.runtime.RelatedContentRepresentation;
-import com.innov.workflow.activiti.old.service.IdentityService;
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.service.exception.BadRequestException;
 import com.innov.workflow.activiti.service.exception.InternalServerErrorException;
 import com.innov.workflow.activiti.service.exception.NotFoundException;

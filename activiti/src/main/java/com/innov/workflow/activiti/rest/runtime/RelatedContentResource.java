@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/api")
 public class RelatedContentResource extends AbstractRelatedContentResource {
     private static final Logger logger = LoggerFactory.getLogger(AbstractRelatedContentResource.class);
     protected ObjectMapper objectMapper = new ObjectMapper();
@@ -21,7 +21,7 @@ public class RelatedContentResource extends AbstractRelatedContentResource {
     }
 
     @RequestMapping(
-            value = {"/rest/tasks/{taskId}/content"},
+            value = {"/activiti/tasks/{taskId}/content"},
             method = {RequestMethod.GET}
     )
     public ResultListDataRepresentation getRelatedContentForTask(@PathVariable("taskId") String taskId) {
@@ -29,7 +29,7 @@ public class RelatedContentResource extends AbstractRelatedContentResource {
     }
 
     @RequestMapping(
-            value = {"/rest/process-instances/{processInstanceId}/content"},
+            value = {"/activiti/process-instances/{processInstanceId}/content"},
             method = {RequestMethod.GET}
     )
     public ResultListDataRepresentation getRelatedContentForProcessInstance(@PathVariable("processInstanceId") String processInstanceId) {
@@ -37,7 +37,7 @@ public class RelatedContentResource extends AbstractRelatedContentResource {
     }
 
     @RequestMapping(
-            value = {"/rest/content/{source}/{sourceId}/process-instances"},
+            value = {"/activiti/content/{source}/{sourceId}/process-instances"},
             method = {RequestMethod.GET}
     )
     public ResultListDataRepresentation getRelatedProcessInstancesForContent(@PathVariable("source") String source, @PathVariable("sourceId") String sourceId) {
@@ -45,7 +45,7 @@ public class RelatedContentResource extends AbstractRelatedContentResource {
     }
 
     @RequestMapping(
-            value = {"/rest/tasks/{taskId}/raw-content"},
+            value = {"/activiti/tasks/{taskId}/raw-content"},
             method = {RequestMethod.POST}
     )
     public RelatedContentRepresentation createRelatedContentOnTask(@PathVariable("taskId") String taskId, @RequestParam("file") MultipartFile file) {
@@ -53,7 +53,7 @@ public class RelatedContentResource extends AbstractRelatedContentResource {
     }
 
     @RequestMapping(
-            value = {"/rest/tasks/{taskId}/raw-content/text"},
+            value = {"/activiti/tasks/{taskId}/raw-content/text"},
             method = {RequestMethod.POST}
     )
     public String createRelatedContentOnTaskText(@PathVariable("taskId") String taskId, @RequestParam("file") MultipartFile file) {
@@ -70,7 +70,7 @@ public class RelatedContentResource extends AbstractRelatedContentResource {
     }
 
     @RequestMapping(
-            value = {"/rest/tasks/{taskId}/content"},
+            value = {"/activiti/tasks/{taskId}/content"},
             method = {RequestMethod.POST}
     )
     public RelatedContentRepresentation createRelatedContentOnTask(@PathVariable("taskId") String taskId, @RequestBody RelatedContentRepresentation relatedContent) {
@@ -78,7 +78,7 @@ public class RelatedContentResource extends AbstractRelatedContentResource {
     }
 
     @RequestMapping(
-            value = {"/rest/processes/{processInstanceId}/content"},
+            value = {"/activiti/processes/{processInstanceId}/content"},
             method = {RequestMethod.POST}
     )
     public RelatedContentRepresentation createRelatedContentOnProcessInstance(@PathVariable("processInstanceId") String processInstanceId, @RequestBody RelatedContentRepresentation relatedContent) {
@@ -86,7 +86,7 @@ public class RelatedContentResource extends AbstractRelatedContentResource {
     }
 
     @RequestMapping(
-            value = {"/rest/process-instances/{processInstanceId}/raw-content"},
+            value = {"/activiti/process-instances/{processInstanceId}/raw-content"},
             method = {RequestMethod.POST}
     )
     public RelatedContentRepresentation createRelatedContentOnProcessInstance(@PathVariable("processInstanceId") String processInstanceId, @RequestParam("file") MultipartFile file) {
@@ -94,7 +94,7 @@ public class RelatedContentResource extends AbstractRelatedContentResource {
     }
 
     @RequestMapping(
-            value = {"/rest/process-instances/{processInstanceId}/raw-content/text"},
+            value = {"/activiti/process-instances/{processInstanceId}/raw-content/text"},
             method = {RequestMethod.POST}
     )
     public String createRelatedContentOnProcessInstanceText(@PathVariable("processInstanceId") String processInstanceId, @RequestParam("file") MultipartFile file) {
@@ -111,7 +111,7 @@ public class RelatedContentResource extends AbstractRelatedContentResource {
     }
 
     @RequestMapping(
-            value = {"/rest/content/raw"},
+            value = {"/activiti/content/raw"},
             method = {RequestMethod.POST}
     )
     public RelatedContentRepresentation createTemporaryRawRelatedContent(@RequestParam("file") MultipartFile file) {
@@ -119,7 +119,7 @@ public class RelatedContentResource extends AbstractRelatedContentResource {
     }
 
     @RequestMapping(
-            value = {"/rest/content/raw/text"},
+            value = {"/activiti/content/raw/text"},
             method = {RequestMethod.POST}
     )
     public String createTemporaryRawRelatedContentText(@RequestParam("file") MultipartFile file) {
@@ -136,7 +136,7 @@ public class RelatedContentResource extends AbstractRelatedContentResource {
     }
 
     @RequestMapping(
-            value = {"/rest/content"},
+            value = {"/activiti/content"},
             method = {RequestMethod.POST}
     )
     public RelatedContentRepresentation createTemporaryRelatedContent(@RequestBody RelatedContentRepresentation relatedContent) {
@@ -144,7 +144,7 @@ public class RelatedContentResource extends AbstractRelatedContentResource {
     }
 
     @RequestMapping(
-            value = {"/rest/content/{contentId}"},
+            value = {"/activiti/content/{contentId}"},
             method = {RequestMethod.DELETE}
     )
     public void deleteContent(@PathVariable("contentId") Long contentId, HttpServletResponse response) {
@@ -152,7 +152,7 @@ public class RelatedContentResource extends AbstractRelatedContentResource {
     }
 
     @RequestMapping(
-            value = {"/rest/content/{contentId}"},
+            value = {"/activiti/content/{contentId}"},
             method = {RequestMethod.GET}
     )
     public RelatedContentRepresentation getContent(@PathVariable("contentId") Long contentId) {
@@ -160,7 +160,7 @@ public class RelatedContentResource extends AbstractRelatedContentResource {
     }
 
     @RequestMapping(
-            value = {"/rest/content/{contentId}/raw"},
+            value = {"/activiti/content/{contentId}/raw"},
             method = {RequestMethod.GET}
     )
     public void getRawContent(@PathVariable("contentId") Long contentId, HttpServletResponse response) {

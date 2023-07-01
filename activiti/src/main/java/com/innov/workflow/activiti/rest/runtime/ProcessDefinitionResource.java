@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/api")
 
 public class ProcessDefinitionResource extends AbstractProcessDefinitionResource {
     public ProcessDefinitionResource() {
     }
 
     @RequestMapping(
-            value = {"/rest/process-definitions/{processDefinitionId}/start-form"},
+            value = {"/activiti/process-definitions/{processDefinitionId}/start-form"},
             method = {RequestMethod.GET},
             produces = {"application/json"}
     )

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping({"/app/rest/form-models"})
+@RequestMapping({"/api/activiti/form-models"})
 public class FormResource {
     @Autowired
     protected ActivitiFormService formService;

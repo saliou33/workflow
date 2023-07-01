@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/api")
 public class ProcessInstanceQueryResource extends AbstractProcessInstanceQueryResource {
     public ProcessInstanceQueryResource() {
     }
 
     @RequestMapping(
-            value = {"/rest/query/process-instances"},
+            value = {"/activiti/query/process-instances"},
             method = {RequestMethod.POST},
             produces = {"application/json"}
     )

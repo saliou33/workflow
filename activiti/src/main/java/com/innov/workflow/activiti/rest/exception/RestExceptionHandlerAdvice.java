@@ -1,6 +1,6 @@
 package com.innov.workflow.activiti.rest.exception;
 
-import com.innov.workflow.activiti.old.service.IdentityService;
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.service.exception.*;
 import com.innov.workflow.core.domain.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;

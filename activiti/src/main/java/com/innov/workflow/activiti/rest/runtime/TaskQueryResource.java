@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/api")
 
 public class TaskQueryResource extends AbstractTaskQueryResource {
     public TaskQueryResource() {
     }
 
     @RequestMapping(
-            value = {"/rest/query/tasks"},
+            value = {"/activiti/query/tasks"},
             method = {RequestMethod.POST},
             produces = {"application/json"}
     )

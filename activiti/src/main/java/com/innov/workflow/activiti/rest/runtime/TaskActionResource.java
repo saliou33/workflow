@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/api")
 
 public class TaskActionResource {
     @Autowired
@@ -18,7 +18,7 @@ public class TaskActionResource {
     }
 
     @RequestMapping(
-            value = {"/rest/tasks/{taskId}/action/complete"},
+            value = {"/activiti/tasks/{taskId}/action/complete"},
             method = {RequestMethod.PUT}
     )
     @ResponseStatus(HttpStatus.OK)
@@ -27,7 +27,7 @@ public class TaskActionResource {
     }
 
     @RequestMapping(
-            value = {"/rest/tasks/{taskId}/action/assign"},
+            value = {"/activiti/tasks/{taskId}/action/assign"},
             method = {RequestMethod.PUT}
     )
     public TaskRepresentation assignTask(@PathVariable String taskId, @RequestBody ObjectNode requestNode) {
@@ -35,7 +35,7 @@ public class TaskActionResource {
     }
 
     @RequestMapping(
-            value = {"/rest/tasks/{taskId}/action/involve"},
+            value = {"/activiti/tasks/{taskId}/action/involve"},
             method = {RequestMethod.PUT},
             produces = {"application/json"}
     )
@@ -45,7 +45,7 @@ public class TaskActionResource {
     }
 
     @RequestMapping(
-            value = {"/rest/tasks/{taskId}/action/remove-involved"},
+            value = {"/activiti/tasks/{taskId}/action/remove-involved"},
             method = {RequestMethod.PUT},
             produces = {"application/json"}
     )
@@ -55,7 +55,7 @@ public class TaskActionResource {
     }
 
     @RequestMapping(
-            value = {"/rest/tasks/{taskId}/action/claim"},
+            value = {"/activiti/tasks/{taskId}/action/claim"},
             method = {RequestMethod.PUT}
     )
     @ResponseStatus(HttpStatus.OK)

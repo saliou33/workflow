@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.innov.workflow.activiti.domain.editor.Model;
 import com.innov.workflow.activiti.model.editor.ModelKeyRepresentation;
 import com.innov.workflow.activiti.model.editor.ModelRepresentation;
-import com.innov.workflow.activiti.old.service.IdentityService;
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.repository.editor.ModelRepository;
 import com.innov.workflow.activiti.service.api.ModelService;
 import com.innov.workflow.activiti.service.exception.BadRequestException;
@@ -27,7 +27,7 @@ import java.text.ParseException;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/api")
 public class ModelResource extends AbstractModelResource {
     private static final Logger log = LoggerFactory.getLogger(ModelResource.class);
     private static final String RESOLVE_ACTION_OVERWRITE = "overwrite";
@@ -49,7 +49,7 @@ public class ModelResource extends AbstractModelResource {
     }
 
     @RequestMapping(
-            value = {"/rest/models/{modelId}"},
+            value = {"/activiti/models/{modelId}"},
             method = {RequestMethod.GET},
             produces = {"application/json"}
     )
@@ -58,7 +58,7 @@ public class ModelResource extends AbstractModelResource {
     }
 
     @RequestMapping(
-            value = {"/rest/models/{modelId}/thumbnail"},
+            value = {"/activiti/models/{modelId}/thumbnail"},
             method = {RequestMethod.GET},
             produces = {"image/png"}
     )
@@ -67,7 +67,7 @@ public class ModelResource extends AbstractModelResource {
     }
 
     @RequestMapping(
-            value = {"/rest/models/{modelId}"},
+            value = {"/activiti/models/{modelId}"},
             method = {RequestMethod.PUT}
     )
     public ModelRepresentation updateModel(@PathVariable String modelId, @RequestBody ModelRepresentation updatedModel) {
@@ -89,7 +89,7 @@ public class ModelResource extends AbstractModelResource {
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(
-            value = {"/rest/models/{modelId}"},
+            value = {"/activiti/models/{modelId}"},
             method = {RequestMethod.DELETE}
     )
     public void deleteModel(@PathVariable String modelId, @RequestParam(required = false) Boolean cascade, @RequestParam(required = false) Boolean deleteRuntimeApp) {
@@ -109,7 +109,7 @@ public class ModelResource extends AbstractModelResource {
     }
 
     @RequestMapping(
-            value = {"/rest/models/{modelId}/editor/json"},
+            value = {"/activiti/models/{modelId}/editor/json"},
             method = {RequestMethod.GET},
             produces = {"application/json"}
     )
@@ -146,10 +146,15 @@ public class ModelResource extends AbstractModelResource {
     }
 
     @RequestMapping(
-            value = {"/rest/models/{modelId}/editor/json"},
+            value = {"/activiti/models/{modelId}/editor/json"},
             method = {RequestMethod.POST}
     )
-    public ModelRepresentation saveModel(@PathVariable String modelId, @RequestBody MultiValueMap<String, String> values) {
+    public ModelRepresentation saveModel(@PathVariable("modelId") String modelId, @RequestBody MultiValueMap<String, String> values) {
+
+        if(values == null) {
+            throw  new BadRequestException("values are null");
+        }
+
         long lastUpdated = -1L;
         String lastUpdatedString = (String) values.getFirst("lastUpdated");
         if (lastUpdatedString == null) {
@@ -194,7 +199,7 @@ public class ModelResource extends AbstractModelResource {
     }
 
     @RequestMapping(
-            value = {"/rest/models/{modelId}/newversion"},
+            value = {"/activiti/models/{modelId}/newversion"},
             method = {RequestMethod.POST}
     )
     public ModelRepresentation importNewVersion(@PathVariable String modelId, @RequestParam("file") MultipartFile file) {

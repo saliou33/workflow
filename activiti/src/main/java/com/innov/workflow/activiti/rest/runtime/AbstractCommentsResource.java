@@ -3,7 +3,7 @@ package com.innov.workflow.activiti.rest.runtime;
 import com.innov.workflow.activiti.domain.runtime.Comment;
 import com.innov.workflow.activiti.model.common.ResultListDataRepresentation;
 import com.innov.workflow.activiti.model.runtime.CommentRepresentation;
-import com.innov.workflow.activiti.old.service.IdentityService;
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.service.exception.BadRequestException;
 import com.innov.workflow.activiti.service.exception.NotFoundException;
 import com.innov.workflow.activiti.service.exception.NotPermittedException;

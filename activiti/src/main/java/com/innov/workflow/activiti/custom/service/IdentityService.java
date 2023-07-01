@@ -1,11 +1,13 @@
-package com.innov.workflow.activiti.old.service;
+package com.innov.workflow.activiti.custom.service;
 
 
 import com.innov.workflow.core.domain.entity.Group;
 import com.innov.workflow.core.domain.entity.User;
+import com.innov.workflow.core.exception.ApiException;
 import com.innov.workflow.core.service.UserService;
 import com.innov.workflow.idm.config.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,14 +21,8 @@ public class IdentityService {
     private final JwtUtils jwtUtils;
 
     public User getCurrentUserObject() {
-
-        User user = userService.getAllUsers().get(0);
-//        user.setId((long) -1);
-//        user.setFirstName("WORKFLOW");
-//        user.setLastName("USER");
-//        user.setFullName();
-//        user.setUsername("USER");
-//        return userService.getUserById(jwtUtils.getCurrentUser().getId());
+        User user =  jwtUtils.getCurrentUser();
+        if(user == null) throw new ApiException(HttpStatus.UNAUTHORIZED ,"User need to be authenticated");
         return user;
     }
 

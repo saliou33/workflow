@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/api")
 public class ProcessInstanceResource extends AbstractProcessInstanceResource {
     public ProcessInstanceResource() {
     }
 
     @RequestMapping(
-            value = {"/rest/process-instances/{processInstanceId}"},
+            value = {"/activiti/process-instances/{processInstanceId}"},
             method = {RequestMethod.GET},
             produces = {"application/json"}
     )
@@ -24,7 +24,7 @@ public class ProcessInstanceResource extends AbstractProcessInstanceResource {
     }
 
     @RequestMapping(
-            value = {"/rest/process-instances/{processInstanceId}/start-form"},
+            value = {"/activiti/process-instances/{processInstanceId}/start-form"},
             method = {RequestMethod.GET},
             produces = {"application/json"}
     )
@@ -33,7 +33,7 @@ public class ProcessInstanceResource extends AbstractProcessInstanceResource {
     }
 
     @RequestMapping(
-            value = {"/rest/process-instances/{processInstanceId}"},
+            value = {"/activiti/process-instances/{processInstanceId}"},
             method = {RequestMethod.DELETE}
     )
     @ResponseStatus(HttpStatus.OK)

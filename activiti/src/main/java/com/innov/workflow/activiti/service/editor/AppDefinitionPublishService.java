@@ -3,7 +3,9 @@ package com.innov.workflow.activiti.service.editor;
 import com.innov.workflow.activiti.domain.editor.Model;
 import com.innov.workflow.activiti.service.api.DeploymentService;
 import com.innov.workflow.activiti.service.api.ModelService;
+import com.innov.workflow.activiti.service.runtime.DeploymentServiceImpl;
 import com.innov.workflow.core.domain.entity.User;
+import org.activiti.engine.impl.persistence.entity.DeploymentEntityImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,7 @@ public class AppDefinitionPublishService {
     @Autowired
     protected ModelService modelService;
     @Autowired
-    protected DeploymentService deploymentService;
+    protected DeploymentServiceImpl deploymentService;
 
     public AppDefinitionPublishService() {
     }
@@ -25,5 +27,6 @@ public class AppDefinitionPublishService {
     public void publishAppDefinition(String comment, Model appDefinitionModel, User user) {
         this.modelService.createNewModelVersion(appDefinitionModel, comment, user);
         this.deploymentService.updateAppDefinition(appDefinitionModel, user);
+        this.deploymentService.deployForm(appDefinitionModel);
     }
 }

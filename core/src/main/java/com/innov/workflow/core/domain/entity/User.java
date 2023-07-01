@@ -1,5 +1,6 @@
 package com.innov.workflow.core.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,7 @@ public class User extends BaseEntity {
     @Email
     @Column(unique = true)
     private String email;
+    @JsonIgnore
     private String password;
     private String tel;
     private boolean enabled;

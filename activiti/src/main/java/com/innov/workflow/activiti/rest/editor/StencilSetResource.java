@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/api")
 public class StencilSetResource {
     private final Logger log = LoggerFactory.getLogger(StencilSetResource.class);
     @Autowired
@@ -21,7 +21,7 @@ public class StencilSetResource {
     }
 
     @RequestMapping(
-            value = {"/rest/stencil-sets/editor"},
+            value = {"/activiti/stencil-sets/editor"},
             method = {RequestMethod.GET},
             produces = {"application/json"}
     )

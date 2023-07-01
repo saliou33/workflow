@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class MissingModelInformation extends ModelInformation {
+public class MissingModelInformation  {
     private String usedIn;
 }

@@ -71,10 +71,9 @@ public class AuthService {
         user.setTel(signupRequest.getTel());
         user.setSysRoles(Arrays.asList(roleService.getRoleByName(ESysRole.ROLE_USER)));
         user.setEnabled(true);
-
         userService.saveUser(user);
 
-        String token = generateVerificationToken(user);
+//        String token = generateVerificationToken(user);
 
 //        mailService.sendMail(new NotificationEmail("Activation compte",
 //                user.getEmail(), "Heureux de vous avoir parmi nous, " +

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/api")
 public class ModelRelationResource extends AbstractModelResource {
     @Autowired
     private ModelRelationService modelRelationService;
@@ -22,7 +22,7 @@ public class ModelRelationResource extends AbstractModelResource {
     }
 
     @RequestMapping(
-            value = {"/rest/models/{modelId}/parent-relations"},
+            value = {"/activiti/models/{modelId}/parent-relations"},
             method = {RequestMethod.GET},
             produces = {"application/json"}
     )
@@ -31,6 +31,7 @@ public class ModelRelationResource extends AbstractModelResource {
         if (model == null) {
             throw new NotFoundException();
         } else {
+
             return this.modelRelationService.findParentModels(modelId);
         }
     }

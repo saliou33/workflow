@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.util.ISO8601Utils;
 import com.innov.workflow.activiti.model.common.ResultListDataRepresentation;
 import com.innov.workflow.activiti.model.idm.UserRepresentation;
 import com.innov.workflow.activiti.model.runtime.TaskRepresentation;
-import com.innov.workflow.activiti.old.service.IdentityService;
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.service.exception.BadRequestException;
 import com.innov.workflow.activiti.service.runtime.PermissionService;
 import com.innov.workflow.core.domain.entity.User;

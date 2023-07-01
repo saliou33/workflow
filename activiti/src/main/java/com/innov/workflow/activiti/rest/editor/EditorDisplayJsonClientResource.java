@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/api")
 public class EditorDisplayJsonClientResource {
     @Autowired
     protected ModelService modelService;
@@ -27,7 +27,7 @@ public class EditorDisplayJsonClientResource {
     }
 
     @RequestMapping(
-            value = {"/rest/models/{processModelId}/model-json"},
+            value = {"/activiti/models/{processModelId}/model-json"},
             method = {RequestMethod.GET},
             produces = {"application/json"}
     )
@@ -39,7 +39,7 @@ public class EditorDisplayJsonClientResource {
     }
 
     @RequestMapping(
-            value = {"/rest/models/{processModelId}/history/{processModelHistoryId}/model-json"},
+            value = {"/activiti/models/{processModelId}/history/{processModelHistoryId}/model-json"},
             method = {RequestMethod.GET},
             produces = {"application/json"}
     )

@@ -2,7 +2,7 @@ package com.innov.workflow.activiti.rest.runtime;
 
 import com.innov.workflow.activiti.model.common.ResultListDataRepresentation;
 import com.innov.workflow.activiti.model.idm.UserRepresentation;
-import com.innov.workflow.activiti.old.service.IdentityService;
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.core.domain.entity.User;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;

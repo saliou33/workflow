@@ -5,13 +5,13 @@ import com.innov.workflow.activiti.model.common.BaseRestActionRepresentation;
 import com.innov.workflow.activiti.model.common.ResultListDataRepresentation;
 import com.innov.workflow.activiti.model.editor.ModelRepresentation;
 import com.innov.workflow.activiti.model.editor.ReviveModelResultRepresentation;
-import com.innov.workflow.activiti.old.service.IdentityService;
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.service.exception.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/api")
 public class ModelHistoryResource extends AbstractModelHistoryResource {
 
     @Autowired
@@ -21,7 +21,7 @@ public class ModelHistoryResource extends AbstractModelHistoryResource {
     }
 
     @RequestMapping(
-            value = {"/rest/models/{modelId}/history"},
+            value = {"/activiti/models/{modelId}/history"},
             method = {RequestMethod.GET},
             produces = {"application/json"}
     )
@@ -30,7 +30,7 @@ public class ModelHistoryResource extends AbstractModelHistoryResource {
     }
 
     @RequestMapping(
-            value = {"/rest/models/{modelId}/history/{modelHistoryId}"},
+            value = {"/activiti/models/{modelId}/history/{modelHistoryId}"},
             method = {RequestMethod.GET},
             produces = {"application/json"}
     )
@@ -39,7 +39,7 @@ public class ModelHistoryResource extends AbstractModelHistoryResource {
     }
 
     @RequestMapping(
-            value = {"/rest/models/{modelId}/history/{modelHistoryId}"},
+            value = {"/activiti/models/{modelId}/history/{modelHistoryId}"},
             method = {RequestMethod.POST},
             produces = {"application/json"}
     )

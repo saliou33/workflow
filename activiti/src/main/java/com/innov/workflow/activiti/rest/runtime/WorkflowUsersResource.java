@@ -7,14 +7,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/api")
 
 public class WorkflowUsersResource extends AbstractWorkflowUsersResource {
     public WorkflowUsersResource() {
     }
 
     @RequestMapping(
-            value = {"/rest/workflow-users"},
+            value = {"/activiti/workflow-users"},
             method = {RequestMethod.GET}
     )
     public ResultListDataRepresentation getUsers(@RequestParam(value = "filter", required = false) String filter, @RequestParam(value = "email", required = false) String email, @RequestParam(value = "externalId", required = false) String externalId, @RequestParam(value = "excludeTaskId", required = false) String excludeTaskId, @RequestParam(value = "excludeProcessId", required = false) String excludeProcessId, @RequestParam(value = "groupId", required = false) Long groupId, @RequestParam(value = "tenantId", required = false) Long tenantId) {

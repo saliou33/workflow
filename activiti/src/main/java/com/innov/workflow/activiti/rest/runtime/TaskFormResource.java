@@ -1,8 +1,4 @@
-package com.innov.workflow.activiti.rest.runtime;//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
+package com.innov.workflow.activiti.rest.runtime;
 
 import com.innov.workflow.activiti.model.runtime.CompleteFormRepresentation;
 import com.innov.workflow.activiti.model.runtime.ProcessInstanceVariableRepresentation;
@@ -15,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping({"/app/rest/task-forms"})
+@RequestMapping({"/api/activiti/task-forms"})
 public class TaskFormResource {
     @Autowired
     protected ActivitiTaskFormService taskFormService;

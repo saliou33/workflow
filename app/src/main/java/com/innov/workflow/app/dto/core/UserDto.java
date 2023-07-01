@@ -9,8 +9,7 @@ import java.util.List;
 @Data
 public class UserDto extends BaseDto {
 
-    private Long id;
-    private String name;
+    private String id;
     private String username;
     private String lastName;
     private String firstName;

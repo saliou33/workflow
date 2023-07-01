@@ -14,7 +14,7 @@ public class EditorGroupsResource {
     }
 
     @RequestMapping(
-            value = {"/app/rest/editor-groups"},
+            value = {"/api/activiti/editor-groups"},
             method = {RequestMethod.GET}
     )
     public ResultListDataRepresentation getGroups(@RequestParam(required = false, value = "filter") String filter) {

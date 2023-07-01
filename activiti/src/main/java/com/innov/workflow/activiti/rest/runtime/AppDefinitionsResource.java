@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/api")
 public class AppDefinitionsResource extends AbstractAppDefinitionsResource {
     private final Logger logger = LoggerFactory.getLogger(AppDefinitionsResource.class);
     @Autowired
@@ -27,7 +27,7 @@ public class AppDefinitionsResource extends AbstractAppDefinitionsResource {
     }
 
     @RequestMapping(
-            value = {"/rest/runtime/app-definitions"},
+            value = {"/activiti/runtime/app-definitions"},
             method = {RequestMethod.GET}
     )
     public ResultListDataRepresentation getAppDefinitions() {
@@ -35,7 +35,7 @@ public class AppDefinitionsResource extends AbstractAppDefinitionsResource {
     }
 
     @RequestMapping(
-            value = {"/rest/runtime/app-definitions/{deploymentKey}"},
+            value = {"/activiti/runtime/app-definitions/{deploymentKey}"},
             method = {RequestMethod.GET}
     )
     public AppDefinitionRepresentation getAppDefinition(@PathVariable("deploymentKey") String deploymentKey) {

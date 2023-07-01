@@ -9,7 +9,7 @@ import com.innov.workflow.activiti.model.editor.AppDefinitionPublishRepresentati
 import com.innov.workflow.activiti.model.editor.AppDefinitionRepresentation;
 import com.innov.workflow.activiti.model.editor.AppDefinitionSaveRepresentation;
 import com.innov.workflow.activiti.model.editor.AppDefinitionUpdateResultRepresentation;
-import com.innov.workflow.activiti.old.service.IdentityService;
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.service.api.ModelService;
 import com.innov.workflow.activiti.service.editor.AppDefinitionExportService;
 import com.innov.workflow.activiti.service.editor.AppDefinitionImportService;
@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/api")
 public class AppDefinitionResource {
     private static final Logger logger = LoggerFactory.getLogger(AppDefinitionResource.class);
     @Autowired
@@ -45,7 +45,7 @@ public class AppDefinitionResource {
     }
 
     @RequestMapping(
-            value = {"/rest/app-definitions/{modelId}"},
+            value = {"/activiti/app-definitions/{modelId}"},
             method = {RequestMethod.GET},
             produces = {"application/json"}
     )
@@ -55,7 +55,7 @@ public class AppDefinitionResource {
     }
 
     @RequestMapping(
-            value = {"/rest/app-definitions/{modelId}/history/{modelHistoryId}"},
+            value = {"/activiti/app-definitions/{modelId}/history/{modelHistoryId}"},
             method = {RequestMethod.GET},
             produces = {"application/json"}
     )
@@ -65,7 +65,7 @@ public class AppDefinitionResource {
     }
 
     @RequestMapping(
-            value = {"/rest/app-definitions/{modelId}"},
+            value = {"/activiti/app-definitions/{modelId}"},
             method = {RequestMethod.PUT},
             produces = {"application/json"}
     )
@@ -97,7 +97,7 @@ public class AppDefinitionResource {
     }
 
     @RequestMapping(
-            value = {"/rest/app-definitions/{modelId}/publish"},
+            value = {"/activiti/app-definitions/{modelId}/publish"},
             method = {RequestMethod.POST},
             produces = {"application/json"}
     )
@@ -106,7 +106,7 @@ public class AppDefinitionResource {
     }
 
     @RequestMapping(
-            value = {"/rest/app-definitions/{modelId}/export"},
+            value = {"/activiti/app-definitions/{modelId}/export"},
             method = {RequestMethod.GET}
     )
     public void exportAppDefinition(HttpServletResponse response, @PathVariable String modelId) throws IOException {
@@ -115,7 +115,7 @@ public class AppDefinitionResource {
 
     @Transactional
     @RequestMapping(
-            value = {"/rest/app-definitions/{modelId}/import"},
+            value = {"/activiti/app-definitions/{modelId}/import"},
             method = {RequestMethod.POST},
             produces = {"application/json"}
     )
@@ -125,7 +125,7 @@ public class AppDefinitionResource {
 
     @Transactional
     @RequestMapping(
-            value = {"/rest/app-definitions/{modelId}/text/import"},
+            value = {"/activiti/app-definitions/{modelId}/text/import"},
             method = {RequestMethod.POST}
     )
     public String importAppDefinitionText(HttpServletRequest request, @PathVariable String modelId, @RequestParam("file") MultipartFile file) {
@@ -143,7 +143,7 @@ public class AppDefinitionResource {
 
     @Transactional
     @RequestMapping(
-            value = {"/rest/app-definitions/import"},
+            value = {"/activiti/app-definitions/import"},
             method = {RequestMethod.POST},
             produces = {"application/json"}
     )
@@ -153,7 +153,7 @@ public class AppDefinitionResource {
 
     @Transactional
     @RequestMapping(
-            value = {"/rest/app-definitions/text/import"},
+            value = {"/activiti/app-definitions/text/import"},
             method = {RequestMethod.POST}
     )
     public String importAppDefinitionText(HttpServletRequest request, @RequestParam("file") MultipartFile file) {

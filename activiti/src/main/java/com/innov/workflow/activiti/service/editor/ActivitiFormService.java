@@ -7,7 +7,7 @@ import com.innov.workflow.activiti.domain.editor.ModelHistory;
 import com.innov.workflow.activiti.model.editor.FormSaveRepresentation;
 import com.innov.workflow.activiti.model.editor.ModelKeyRepresentation;
 import com.innov.workflow.activiti.model.editor.form.FormRepresentation;
-import com.innov.workflow.activiti.old.service.IdentityService;
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.service.api.ModelService;
 import com.innov.workflow.activiti.service.exception.BadRequestException;
 import com.innov.workflow.activiti.service.exception.InternalServerErrorException;

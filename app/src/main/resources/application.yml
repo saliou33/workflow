@@ -28,10 +28,12 @@ spring:
   thymeleaf:
     check-template: false
 
+  mvc:
+    log-request-details: true
+
 gpt:
   apiKey: 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
   url: https://chatgpt-api.shn.hk/v1/
-
 
 idm:
   jwtSecret: aeee730baff4b270b49ae582ed92e4d300fa2e39cd385b516ed
@@ -39,16 +41,17 @@ idm:
   #  jwtRefreshExpirationMs: 180000
   jwtExpirationMs: 1800000
   jwtRefreshExpirationMs: 20000000
-  jwtCookieName: i-workflow-jwt
-  jwtRefreshCookieName: i-workflow-jwt-refresh
-
+  jwtCookieName: 1GfuGq3rPuN3r5C9
+  jwtRefreshCookieName: b270b49ae582ed92
 
 logging:
   level:
     org.springframework.web: debug
     org.hibernate.sql: info
-  file:
-    name: app.log
-    path: log/app.log
+#   org.zalando.logbook: trace
+#   file:
+#    name: app.log
+
+
 server:
   port: 8083

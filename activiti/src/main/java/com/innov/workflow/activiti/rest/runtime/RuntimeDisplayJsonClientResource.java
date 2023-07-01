@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.innov.workflow.activiti.old.service.IdentityService;
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.service.editor.mapper.*;
 import com.innov.workflow.activiti.service.exception.BadRequestException;
 import com.innov.workflow.activiti.service.exception.InternalServerErrorException;
@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.*;
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/api")
 public class RuntimeDisplayJsonClientResource {
     @Autowired
     protected RepositoryService repositoryService;
@@ -69,7 +69,7 @@ public class RuntimeDisplayJsonClientResource {
     }
 
     @RequestMapping(
-            value = {"/rest/process-instances/{processInstanceId}/model-json"},
+            value = {"/activiti/process-instances/{processInstanceId}/model-json"},
             method = {RequestMethod.GET},
             produces = {"application/json"}
     )
@@ -168,7 +168,7 @@ public class RuntimeDisplayJsonClientResource {
     }
 
     @RequestMapping(
-            value = {"/rest/process-definitions/{processDefinitionId}/model-json"},
+            value = {"/activiti/process-definitions/{processDefinitionId}/model-json"},
             method = {RequestMethod.GET},
             produces = {"application/json"}
     )
@@ -182,7 +182,7 @@ public class RuntimeDisplayJsonClientResource {
     }
 
     @RequestMapping(
-            value = {"/rest/process-instances/history/{processInstanceId}/model-json"},
+            value = {"/activiti/process-instances/history/{processInstanceId}/model-json"},
             method = {RequestMethod.GET},
             produces = {"application/json"}
     )
