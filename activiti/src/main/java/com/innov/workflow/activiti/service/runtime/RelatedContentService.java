@@ -7,6 +7,7 @@ import org.activiti.content.storage.api.ContentObject;
 import org.activiti.content.storage.api.ContentStorage;
 import org.activiti.engine.runtime.Clock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class RelatedContentService {
     protected RelatedContentRepository contentRepository;
     @Autowired
     protected ContentStorage contentStorage;
+    @Autowired
     protected Clock clock;
 
     public RelatedContentService() {

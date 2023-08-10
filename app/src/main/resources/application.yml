@@ -27,7 +27,6 @@ spring:
 
   thymeleaf:
     check-template: false
-
   mvc:
     log-request-details: true
 
@@ -51,7 +50,6 @@ logging:
 #   org.zalando.logbook: trace
 #   file:
 #    name: app.log
-
 
 server:
   port: 8083

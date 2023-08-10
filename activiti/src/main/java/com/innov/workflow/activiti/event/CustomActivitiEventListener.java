@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CustomActivitiEventListener implements ActivitiEventListener {
 
-
-
     @Override
     public void onEvent(ActivitiEvent event) {
         log.info("Received event: {}", event.getType());
@@ -29,8 +27,6 @@ public class CustomActivitiEventListener implements ActivitiEventListener {
 
         }
     }
-
-
 
     @Override
     public boolean isFailOnException() {

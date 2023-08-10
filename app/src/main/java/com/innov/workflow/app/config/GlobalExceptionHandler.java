@@ -31,7 +31,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(responseData, HttpStatus.BAD_REQUEST);
     }
 
-
     @ExceptionHandler(ApiException.class)
     public ResponseEntity handleApiException(ApiException e) {
 
@@ -45,7 +44,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(responseData, e.getCode());
     }
 
-    @ExceptionHandler({AuthenticationException.class, JwtException.class, ActivitiException.class})
+    @ExceptionHandler({AuthenticationException.class, JwtException.class})
     public ResponseEntity handleCoreException(Exception e) {
         ApiResponse responseData = new ApiResponse();
         responseData.put("msg", e.getMessage());
@@ -59,8 +58,8 @@ public class GlobalExceptionHandler {
         e.printStackTrace();
         ApiResponse responseData = new ApiResponse();
         responseData.put("msg", "Server Error");
-        responseData.put("code", HttpStatus.BAD_REQUEST.name());
-        return new ResponseEntity(responseData, HttpStatus.BAD_REQUEST);
+        responseData.put("code", HttpStatus.INTERNAL_SERVER_ERROR.name());
+        return new ResponseEntity(responseData, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

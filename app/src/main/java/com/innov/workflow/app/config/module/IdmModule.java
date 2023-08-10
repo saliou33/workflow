@@ -1,4 +1,4 @@
-package com.innov.workflow.app.config;
+package com.innov.workflow.app.config.module;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

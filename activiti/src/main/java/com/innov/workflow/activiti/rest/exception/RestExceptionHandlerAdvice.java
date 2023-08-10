@@ -6,13 +6,10 @@ import com.innov.workflow.core.domain.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.LockedException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class RestExceptionHandlerAdvice {
     private static final String UNAUTHORIZED_MESSAGE_KEY = "GENERAL.ERROR.UNAUTHORIZED";
     private static final String NOT_FOUND_MESSAGE_KEY = "GENERAL.ERROR.NOT-FOUND";
@@ -46,6 +43,7 @@ public class RestExceptionHandlerAdvice {
     @ExceptionHandler({BadRequestException.class})
     @ResponseBody
     public ErrorInfo handleBadRequest(BadRequestException e) {
+        System.out.println("Hi Exception");
         return this.createInfoFromException(e, "GENERAL.ERROR.BAD-REQUEST");
     }
 

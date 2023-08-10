@@ -5,9 +5,12 @@ import com.innov.workflow.activiti.event.CustomActivitiEventListener;
 import lombok.RequiredArgsConstructor;
 import org.activiti.engine.ProcessEngineConfiguration;
 import org.activiti.engine.delegate.event.ActivitiEventListener;
+import org.activiti.engine.impl.util.DefaultClockImpl;
+import org.activiti.engine.runtime.Clock;
 import org.activiti.spring.SpringProcessEngineConfiguration;
 import org.activiti.spring.boot.ProcessEngineConfigurationConfigurer;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Arrays;
@@ -43,6 +46,8 @@ public class ActivitiConfig implements ProcessEngineConfigurationConfigurer {
     @Value("${spring.mail.protocol")
     private String mailProtocol;
 
+    private static  SpringProcessEngineConfiguration configuration = null;
+
 
     @Override
     public void configure(SpringProcessEngineConfiguration springProcessEngineConfiguration) {
@@ -55,11 +60,19 @@ public class ActivitiConfig implements ProcessEngineConfigurationConfigurer {
                 .setMailServerUsername(mailUsername)
                 .setMailServerPassword(mailPassword)
                 .setMailServerPort(mailPort)
-                .setAsyncExecutorActivate(true);
+                .setAsyncExecutorActivate(true)
+                .setClock(new DefaultClockImpl());
 
 
         springProcessEngineConfiguration.setEventListeners(Arrays.asList(new ActivitiEventListener[]{
                 customActivitiEventListener
         }));
+
+        configuration = springProcessEngineConfiguration;
+    }
+
+    @Bean
+    Clock getClock () {
+        return  configuration.getClock();
     }
 }

@@ -96,7 +96,6 @@ public class FormEngineConfig {
         return formEngine.getFormService();
     }
 
-    @Bean
     public Clock clock(
             @Qualifier("formEngine") FormEngine formEngine) {
         return formEngine.getFormEngineConfiguration().getClock();

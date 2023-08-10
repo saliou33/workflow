@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 @Data
 public class SignupRequest {
 
-    @NotBlank(message = "le champs prenom est vide")
+    @NotBlank(message = "le champs prénom est vide")
     @Size(message = "votre nom doit être compris entre 3 et 100 caractères")
     private String firstname;
 

@@ -3,6 +3,7 @@ package com.innov.workflow.activiti.rest.runtime;
 import com.innov.workflow.activiti.model.common.ResultListDataRepresentation;
 import com.innov.workflow.activiti.model.runtime.ProcessDefinitionRepresentation;
 import com.innov.workflow.activiti.service.runtime.PermissionService;
+import liquibase.pro.packaged.Z;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.StartEvent;
 import org.activiti.editor.language.json.converter.util.CollectionUtils;
@@ -10,6 +11,7 @@ import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
+import org.activiti.form.api.Form;
 import org.activiti.form.api.FormRepositoryService;
 import org.activiti.form.model.FormDefinition;
 import org.apache.commons.lang3.StringUtils;
@@ -65,14 +67,15 @@ public abstract class AbstractProcessDefinitionsResource {
                     while (j$.hasNext()) {
                         StartEvent startEvent = (StartEvent) j$.next();
                         if (StringUtils.isNotEmpty(startEvent.getFormKey())) {
-                            FormDefinition formDefinition = this.formRepositoryService.getFormDefinitionByKey(startEvent.getFormKey());
-                            if (formDefinition != null) {
+                            System.out.println(startEvent.getFormKey());
+
+                            List<Form> form = this.formRepositoryService.createFormQuery().formDefinitionKey(startEvent.getFormKey()).orderByFormVersion().desc().list();
+                            if (form.size() > 0) {
                                 hasStartForm = true;
                                 break;
                             }
                         }
                     }
-
                     startFormMap.put(processDefinition.getId(), hasStartForm);
                 }
 
