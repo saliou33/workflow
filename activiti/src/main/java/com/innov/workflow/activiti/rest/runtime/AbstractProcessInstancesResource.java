@@ -76,11 +76,12 @@ public abstract class AbstractProcessInstancesResource {
             if (startRequest.getValues() != null || startRequest.getOutcome() != null) {
                 BpmnModel bpmnModel = this.repositoryService.getBpmnModel(processDefinition.getId());
                 Process process = bpmnModel.getProcessById(processDefinition.getKey());
+
                 FlowElement startElement = process.getInitialFlowElement();
                 if (startElement instanceof StartEvent) {
                     StartEvent startEvent = (StartEvent) startElement;
                     if (StringUtils.isNotEmpty(startEvent.getFormKey())) {
-                        formDefinition = this.formRepositoryService.getFormDefinitionByKey(startEvent.getFormKey());
+                        formDefinition = this.formRepositoryService.getFormDefinitionByKeyAndParentDeploymentId(startEvent.getFormKey(), processDefinition.getDeploymentId());
 
                         if (formDefinition != null) {
                             variables = this.formService.getVariablesFromFormSubmission(formDefinition, startRequest.getValues(), startRequest.getOutcome());

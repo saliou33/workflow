@@ -175,7 +175,6 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     public void createFormDeployment (Model processModel) {
         List<Model> formModels = this.modelRepository.findModelsByParentModelId(processModel.getId());
-        System.out.println(processModel.getKey());
         ProcessDefinition p = this.repositoryService.createProcessDefinitionQuery()
                 .processDefinitionKey(processModel.getKey()).orderByProcessDefinitionVersion().desc().list().get(0);
 
@@ -190,7 +189,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 //            } catch (Exception e) {
 //
 //            }
-
+//
 //            if(formDefinition != null) continue;
 
             FormDefinition formDefinition = new FormDefinition();
