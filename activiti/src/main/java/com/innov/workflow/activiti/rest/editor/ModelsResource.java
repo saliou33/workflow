@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.innov.workflow.activiti.domain.editor.AppDefinition;
 import com.innov.workflow.activiti.domain.editor.Model;
+import com.innov.workflow.activiti.dto.ModelCount;
 import com.innov.workflow.activiti.model.common.ResultListDataRepresentation;
 import com.innov.workflow.activiti.model.editor.ModelKeyRepresentation;
 import com.innov.workflow.activiti.model.editor.ModelRepresentation;
@@ -21,9 +22,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.Tuple;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -43,6 +47,15 @@ public class ModelsResource extends AbstractModelsResource {
     )
     public ResultListDataRepresentation getModels(@RequestParam(required = false) String filter, @RequestParam(required = false) String sort, @RequestParam(required = false) Integer modelType, HttpServletRequest request) {
         return super.getModels(filter, sort, modelType, request);
+    }
+
+    @RequestMapping(
+            value = {"/activiti/models/count"},
+            method = {RequestMethod.GET},
+            produces = {"application/json"}
+    )
+    public List<ModelCount> getModelsCount(HttpServletRequest request) {
+        return getModelsCountByType(identityService.getCurrentUserObject().getId());
     }
 
     @RequestMapping(

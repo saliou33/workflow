@@ -52,6 +52,20 @@ public abstract class AbstractTaskQueryResource {
     public AbstractTaskQueryResource() {
     }
 
+
+    public Map<String, Long> countTasks() {
+        User user = identityService.getCurrentUserObject();
+        Long nbActive = taskService.createTaskQuery().taskAssignee(user.getId()).active().count();
+        Long nbSuspended = taskService.createTaskQuery().taskAssignee(user.getId()).suspended().count();
+        Long nbCompleted = historyService.createHistoricTaskInstanceQuery().taskAssignee(user.getId()).finished().count();
+
+        Map<String, Long> counts = new HashMap<>();
+        counts.put("Finished", nbCompleted);
+        counts.put("Suspended", nbSuspended);
+        counts.put("Active", nbActive);
+
+        return  counts;
+    }
     public ResultListDataRepresentation listTasks(ObjectNode requestNode) {
         if (requestNode == null) {
             throw new BadRequestException("No request found");

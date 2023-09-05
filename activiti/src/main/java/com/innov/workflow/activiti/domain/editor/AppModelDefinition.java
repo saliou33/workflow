@@ -14,6 +14,8 @@ public class AppModelDefinition {
     protected Integer version;
     protected Integer modelType;
     protected String description;
+    protected String key;
+
     protected Long stencilSetId;
     protected String createdBy;
     protected String lastUpdatedBy;

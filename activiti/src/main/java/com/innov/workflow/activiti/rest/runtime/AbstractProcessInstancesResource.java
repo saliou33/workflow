@@ -25,6 +25,7 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.form.api.FormRepositoryService;
 import org.activiti.form.api.FormService;
 import org.activiti.form.model.FormDefinition;
+import org.activiti.form.model.FormField;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -90,8 +91,23 @@ public abstract class AbstractProcessInstancesResource {
                 }
             }
 
+            RelatedContent relatedContent = null;
+            if(formDefinition != null) {
+                for(FormField formField: formDefinition.getFields()) {
+                    if(formField.getType().equals("upload")) {
+                       Long relatedContendId = Long.valueOf((String) startRequest.getValues().get(formField.getId()));
+                       relatedContent = relatedContentService.getRelatedContent(relatedContendId, false);
+                    }
+                }
+            }
+
             ProcessInstance processInstance = this.activitiService.startProcessInstance(startRequest.getProcessDefinitionId(), variables, startRequest.getName());
 
+            System.out.println(variables);
+            if(relatedContent != null) {
+                relatedContent.setProcessInstanceId(processInstance.getProcessInstanceId());
+                relatedContentService.storeRelatedContent(relatedContent);
+            }
 
             HistoricProcessInstance historicProcess = (HistoricProcessInstance) this.historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstance.getId()).singleResult();
             if (formDefinition != null) {

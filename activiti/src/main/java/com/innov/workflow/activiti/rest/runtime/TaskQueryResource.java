@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api")
 
@@ -21,5 +23,14 @@ public class TaskQueryResource extends AbstractTaskQueryResource {
     )
     public ResultListDataRepresentation listTasks(@RequestBody ObjectNode requestNode) {
         return super.listTasks(requestNode);
+    }
+
+    @RequestMapping(
+            value = {"/activiti/query/tasks/count"},
+            method = {RequestMethod.GET},
+            produces = {"application/json"}
+    )
+    public Map countTasks() {
+        return super.countTasks();
     }
 }

@@ -4,8 +4,8 @@ import com.innov.workflow.activiti.domain.runtime.RelatedContent;
 import com.innov.workflow.activiti.repository.runtime.RelatedContentRepository;
 import com.innov.workflow.core.domain.entity.User;
 import org.activiti.content.storage.api.ContentObject;
-import org.activiti.content.storage.api.ContentStorage;
 import org.activiti.engine.runtime.Clock;
+import org.activiti.content.storage.api.ContentStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -103,7 +103,6 @@ public class RelatedContentService {
         } else {
             newContent.setContentAvailable(false);
         }
-
         this.contentRepository.save(newContent);
         return newContent;
     }

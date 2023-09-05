@@ -1,12 +1,14 @@
 package com.innov.workflow.activiti.service.editor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.innov.workflow.activiti.domain.runtime.RelatedContent;
 import com.innov.workflow.activiti.model.runtime.CompleteFormRepresentation;
 import com.innov.workflow.activiti.model.runtime.ProcessInstanceVariableRepresentation;
 import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.service.exception.NotFoundException;
 import com.innov.workflow.activiti.service.exception.NotPermittedException;
 import com.innov.workflow.activiti.service.runtime.PermissionService;
+import com.innov.workflow.activiti.service.runtime.RelatedContentService;
 import com.innov.workflow.core.domain.entity.User;
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.HistoryService;
@@ -20,6 +22,7 @@ import org.activiti.engine.task.TaskQuery;
 import org.activiti.form.api.FormRepositoryService;
 import org.activiti.form.api.FormService;
 import org.activiti.form.model.FormDefinition;
+import org.activiti.form.model.FormField;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +44,8 @@ public class ActivitiTaskFormService {
     protected HistoryService historyService;
     @Autowired
     protected FormRepositoryService formRepositoryService;
+    @Autowired
+    protected RelatedContentService relatedContentService;
     @Autowired
     protected FormService formService;
     @Autowired
@@ -104,6 +109,21 @@ public class ActivitiTaskFormService {
                 Map<String, Object> variables = this.formService.getVariablesFromFormSubmission(formDefinition, completeTaskFormRepresentation.getValues(), completeTaskFormRepresentation.getOutcome());
                 this.formService.storeSubmittedForm(variables, formDefinition, task.getId(), task.getProcessInstanceId());
                 this.taskService.complete(taskId, variables);
+
+
+                if(formDefinition != null) {
+                    for(FormField formField: formDefinition.getFields()) {
+                        if(formField.getType().equals("upload")) {
+                            Long relatedContendId = Long.valueOf((String) completeTaskFormRepresentation.getValues().get(formField.getId()));
+                            RelatedContent relatedContent = relatedContentService.getRelatedContent(relatedContendId, false);
+                            if(relatedContent != null) {
+                                relatedContent.setTaskId(taskId);
+                                relatedContent.setProcessInstanceId(task.getProcessInstanceId());
+                                relatedContentService.storeRelatedContent(relatedContent);
+                            }
+                        }
+                    }
+                }
             }
         }
     }

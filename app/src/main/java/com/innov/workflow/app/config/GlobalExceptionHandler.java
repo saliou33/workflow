@@ -61,5 +61,4 @@ public class GlobalExceptionHandler {
         responseData.put("code", HttpStatus.INTERNAL_SERVER_ERROR.name());
         return new ResponseEntity(responseData, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
 }

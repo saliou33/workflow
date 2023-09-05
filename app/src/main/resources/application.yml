@@ -36,17 +36,16 @@ gpt:
 
 idm:
   jwtSecret: aeee730baff4b270b49ae582ed92e4d300fa2e39cd385b516ed
-  #  jwtExpirationMs: 60000
-  #  jwtRefreshExpirationMs: 180000
-  jwtExpirationMs: 1800000
-  jwtRefreshExpirationMs: 20000000
+  jwtExpirationMs: 180000000
+  jwtRefreshExpirationMs: 2000000000
   jwtCookieName: 1GfuGq3rPuN3r5C9
   jwtRefreshCookieName: b270b49ae582ed92
 
 logging:
   level:
     org.springframework.web: debug
-    org.hibernate.sql: info
+    org.hibernate.sql: debug
+
 #   org.zalando.logbook: trace
 #   file:
 #    name: app.log

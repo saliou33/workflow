@@ -1,13 +1,16 @@
 package com.innov.workflow.activiti.repository.editor;
 
 import com.innov.workflow.activiti.domain.editor.Model;
+import com.innov.workflow.activiti.dto.ModelCount;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Tuple;
 import java.util.List;
+import java.util.Map;
 
 
 @Repository
@@ -43,4 +46,7 @@ public interface ModelRepository extends JpaRepository<Model, String> {
 
     @Query("select model.key from Model as model where model.id = :modelId and model.createdBy = :user")
     String appDefinitionIdByModelAndUser(@Param("modelId") String var1, @Param("user") String var2);
+
+    @Query("select model.modelType as modelType, count(model) as modelCount from Model as model where model.createdBy =:user group by model.modelType")
+    List<ModelCount> countModelsByType(@Param("user") String userId);
 }

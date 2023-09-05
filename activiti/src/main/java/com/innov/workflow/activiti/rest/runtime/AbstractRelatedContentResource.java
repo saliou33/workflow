@@ -160,10 +160,9 @@ public abstract class AbstractRelatedContentResource {
         } else {
             if (content.getMimeType() != null) {
                 response.setContentType(content.getMimeType());
+                response.setHeader("Content-Disposition", "attachment; filename=\""+content.getName()+"\"");
             }
-
             InputStream inputstream = null;
-
             try {
                 inputstream = this.streamProvider.getContentStream(content);
                 IOUtils.copy(inputstream, response.getOutputStream());

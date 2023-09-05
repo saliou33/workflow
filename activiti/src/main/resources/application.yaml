@@ -3,4 +3,7 @@ spring:
     history-level: full
     db-history-used: true
 
+contentstorage.fs:
+  rootFolder: C:\Users\LENOVO\Documents\ssl\workflow-data
+
 

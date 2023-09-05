@@ -44,6 +44,11 @@ public abstract class AbstractProcessInstanceQueryResource {
             instanceQuery.processDefinitionId(processDefinitionIdNode.asText());
         }
 
+        JsonNode processDefinitionKeyNode = requestNode.get("processDefinitionKey");
+        if (processDefinitionKeyNode != null && !processDefinitionKeyNode.isNull()) {
+            instanceQuery.processDefinitionKey(processDefinitionKeyNode.asText());
+        }
+
         JsonNode deploymentKeyNode = requestNode.get("deploymentKey");
         if (deploymentKeyNode != null && !deploymentKeyNode.isNull()) {
             List<Deployment> deployments = this.repositoryService.createDeploymentQuery().deploymentKey(deploymentKeyNode.asText()).list();
