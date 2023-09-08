@@ -37,7 +37,7 @@ public class ActivitiService {
             this.runtimeService.setProcessInstanceName(processInstance.getId(), processInstanceName);
         }
 
-        List<HistoricTaskInstance> taskList = (ArrayList<HistoricTaskInstance>) historyService.createHistoricTaskInstanceQuery().processInstanceId(processInstance.getId()).list();
+        List<HistoricTaskInstance> taskList = historyService.createHistoricTaskInstanceQuery().processInstanceId(processInstance.getId()).list();
 
         for(HistoricTaskInstance task: taskList) {
             if(task.getAssignee() == null) {

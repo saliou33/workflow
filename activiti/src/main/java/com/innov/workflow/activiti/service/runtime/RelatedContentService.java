@@ -74,7 +74,7 @@ public class RelatedContentService {
 
     @Transactional
     public RelatedContent createRelatedContent(User user, String name, String source, String sourceId, String taskId, String processId, String mimeType, InputStream data, Long lengthHint, boolean relatedContent, boolean link) {
-        return this.createRelatedContent(user, name, source, sourceId, taskId, processId, mimeType, data, lengthHint, relatedContent, link, (String) null);
+        return this.createRelatedContent(user, name, source, sourceId, taskId, processId, mimeType, data, lengthHint, relatedContent, link, null);
     }
 
     protected RelatedContent createRelatedContent(User user, String name, String source, String sourceId, String taskId, String processId, String mimeType, InputStream data, Long lengthHint, boolean relatedContent, boolean link, String field) {
@@ -98,17 +98,13 @@ public class RelatedContentService {
             newContent.setContentStoreId(createContentObject.getId());
             newContent.setContentAvailable(true);
             newContent.setContentSize(createContentObject.getContentLength());
-        } else if (link) {
-            newContent.setContentAvailable(true);
-        } else {
-            newContent.setContentAvailable(false);
-        }
+        } else newContent.setContentAvailable(link);
         this.contentRepository.save(newContent);
         return newContent;
     }
 
     public RelatedContent getRelatedContent(Long id, boolean includeOwner) {
-        RelatedContent content = (RelatedContent) this.contentRepository.findById(id).orElse(null);
+        RelatedContent content = this.contentRepository.findById(id).orElse(null);
         if (content != null && includeOwner) {
             content.getCheckoutOwner();
             content.getLockOwner();
@@ -135,7 +131,7 @@ public class RelatedContentService {
     public boolean lockContent(RelatedContent content, int timeOut, User user) {
         content.setLockDate(this.clock.getCurrentTime());
         content.setLocked(true);
-        content.setLockOwner(user.getId().toString());
+        content.setLockOwner(user.getId());
         Calendar expiration = Calendar.getInstance();
         expiration.setTime(content.getLockDate());
         expiration.add(13, timeOut);
@@ -149,16 +145,16 @@ public class RelatedContentService {
         content.setCheckoutDate(this.clock.getCurrentTime());
         content.setCheckedOut(true);
         content.setCheckedOutToLocal(toLocal);
-        content.setCheckoutOwner(user.getId().toString());
+        content.setCheckoutOwner(user.getId());
         this.contentRepository.save(content);
         return true;
     }
 
     @Transactional
     public boolean unlock(RelatedContent content) {
-        content.setLockDate((Date) null);
-        content.setLockExpirationDate((Date) null);
-        content.setLockOwner((String) null);
+        content.setLockDate(null);
+        content.setLockExpirationDate(null);
+        content.setLockOwner(null);
         content.setLocked(false);
         this.contentRepository.save(content);
         return true;
@@ -166,10 +162,10 @@ public class RelatedContentService {
 
     @Transactional
     public boolean uncheckout(RelatedContent content) {
-        content.setCheckoutDate((Date) null);
+        content.setCheckoutDate(null);
         content.setCheckedOut(false);
         content.setCheckedOutToLocal(false);
-        content.setCheckoutOwner((String) null);
+        content.setCheckoutOwner(null);
         this.contentRepository.save(content);
         return true;
     }
@@ -177,9 +173,9 @@ public class RelatedContentService {
     @Transactional
     public boolean checkin(RelatedContent content, String comment, boolean keepCheckedOut) {
         if (!keepCheckedOut) {
-            content.setCheckoutDate((Date) null);
+            content.setCheckoutDate(null);
             content.setCheckedOut(false);
-            content.setCheckoutOwner((String) null);
+            content.setCheckoutOwner(null);
             this.contentRepository.save(content);
             return true;
         } else {
@@ -191,7 +187,7 @@ public class RelatedContentService {
     public void updateRelatedContentData(Long relatedContentId, String contentStoreId, InputStream contentStream, Long lengthHint, User user) {
         Date timestamp = this.clock.getCurrentTime();
         this.contentStorage.updateContentObject(contentStoreId, contentStream, lengthHint);
-        RelatedContent relatedContent = (RelatedContent) this.contentRepository.findById(relatedContentId).orElse(null);
+        RelatedContent relatedContent = this.contentRepository.findById(relatedContentId).orElse(null);
         relatedContent.setLastModifiedBy(user.getId());
         relatedContent.setLastModified(timestamp);
         relatedContent.setContentSize(lengthHint);
@@ -200,14 +196,14 @@ public class RelatedContentService {
 
     @Transactional
     public void updateName(Long relatedContentId, String newName) {
-        RelatedContent relatedContent = (RelatedContent) this.contentRepository.findById(relatedContentId).orElse(null);
+        RelatedContent relatedContent = this.contentRepository.findById(relatedContentId).orElse(null);
         relatedContent.setName(newName);
         this.contentRepository.save(relatedContent);
     }
 
     @Transactional
     public void setContentField(Long relatedContentId, String field, String processInstanceId, String taskId) {
-        RelatedContent relatedContent = (RelatedContent) this.contentRepository.findById(relatedContentId).orElse(null);
+        RelatedContent relatedContent = this.contentRepository.findById(relatedContentId).orElse(null);
         relatedContent.setProcessInstanceId(processInstanceId);
         relatedContent.setTaskId(taskId);
         relatedContent.setRelatedContent(false);

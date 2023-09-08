@@ -16,9 +16,8 @@ public class Group extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    private Role role;
+    private Tag tag;
     private String name;
     @Lob
     private String description;
-
 }

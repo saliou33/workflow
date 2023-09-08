@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @RestController
@@ -38,7 +39,7 @@ public class FormsResource {
     )
     public ResultListDataRepresentation getForms(HttpServletRequest request) {
         String filter = null;
-        List<NameValuePair> params = URLEncodedUtils.parse(request.getQueryString(), Charset.forName("UTF-8"));
+        List<NameValuePair> params = URLEncodedUtils.parse(request.getQueryString(), StandardCharsets.UTF_8);
         NameValuePair nameValuePair;
         if (params != null) {
             Iterator i$ = params.iterator();

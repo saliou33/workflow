@@ -21,9 +21,9 @@ public class ReviveModelResultRepresentation {
     }
 
     public static class UnresolveModelRepresentation {
-        private String id;
-        private String name;
-        private String createdBy;
+        private final String id;
+        private final String name;
+        private final String createdBy;
 
         public UnresolveModelRepresentation(String id, String name, String createdBy) {
             this.id = id;

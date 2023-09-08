@@ -50,11 +50,11 @@ public class TaskRepresentation extends AbstractRepresentation {
     }
 
     public TaskRepresentation(Task task) {
-        this(task, (ProcessDefinition) null);
+        this(task, null);
     }
 
     public TaskRepresentation(HistoricTaskInstance task) {
-        this(task, (ProcessDefinition) null);
+        this(task, null);
     }
 
     public TaskRepresentation(TaskInfo taskInfo, ProcessDefinition processDefinition) {
@@ -95,7 +95,7 @@ public class TaskRepresentation extends AbstractRepresentation {
         task.setName(this.name);
         task.setDescription(this.description);
         if (this.assignee != null && this.assignee.getId() != null) {
-            task.setAssignee(String.valueOf(this.assignee.getId()));
+            task.setAssignee(this.assignee.getId());
         }
 
         task.setDueDate(this.dueDate);

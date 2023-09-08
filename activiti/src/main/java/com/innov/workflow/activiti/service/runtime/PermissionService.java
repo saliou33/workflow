@@ -48,9 +48,9 @@ public class PermissionService {
     }
 
     public HistoricTaskInstance validateReadPermissionOnTask(User user, String taskId) {
-        List<HistoricTaskInstance> tasks = ((HistoricTaskInstanceQuery) ((HistoricTaskInstanceQuery) this.historyService.createHistoricTaskInstanceQuery().taskId(taskId)).taskInvolvedUser(String.valueOf(user.getId()))).list();
+        List<HistoricTaskInstance> tasks = this.historyService.createHistoricTaskInstanceQuery().taskId(taskId).taskInvolvedUser(String.valueOf(user.getId())).list();
         if (CollectionUtils.isNotEmpty(tasks)) {
-            return (HistoricTaskInstance) tasks.get(0);
+            return tasks.get(0);
         } else {
             HistoricTaskInstanceQuery historicTaskInstanceQuery = this.historyService.createHistoricTaskInstanceQuery();
             historicTaskInstanceQuery.taskId(taskId);
@@ -61,11 +61,11 @@ public class PermissionService {
 
             tasks = historicTaskInstanceQuery.list();
             if (CollectionUtils.isNotEmpty(tasks)) {
-                return (HistoricTaskInstance) tasks.get(0);
+                return tasks.get(0);
             } else {
-                tasks = ((HistoricTaskInstanceQuery) this.historyService.createHistoricTaskInstanceQuery().taskId(taskId)).list();
+                tasks = this.historyService.createHistoricTaskInstanceQuery().taskId(taskId).list();
                 if (CollectionUtils.isNotEmpty(tasks)) {
-                    HistoricTaskInstance task = (HistoricTaskInstance) tasks.get(0);
+                    HistoricTaskInstance task = tasks.get(0);
                     if (task != null && task.getProcessInstanceId() != null) {
                         boolean hasReadPermissionOnProcessInstance = this.hasReadPermissionOnProcessInstance(user, task.getProcessInstanceId());
                         if (hasReadPermissionOnProcessInstance) {
@@ -85,7 +85,7 @@ public class PermissionService {
     }
 
     public boolean isTaskOwnerOrAssignee(User user, String taskId) {
-        return this.isTaskOwnerOrAssignee(user, (Task) ((TaskQuery) this.taskService.createTaskQuery().taskId(taskId)).singleResult());
+        return this.isTaskOwnerOrAssignee(user, this.taskService.createTaskQuery().taskId(taskId).singleResult());
     }
 
     public boolean isTaskOwnerOrAssignee(User user, Task task) {
@@ -96,7 +96,7 @@ public class PermissionService {
     public boolean validateIfUserIsInitiatorAndCanCompleteTask(User user, Task task) {
         boolean canCompleteTask = false;
         if (task.getProcessInstanceId() != null) {
-            HistoricProcessInstance historicProcessInstance = (HistoricProcessInstance) this.historyService.createHistoricProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult();
+            HistoricProcessInstance historicProcessInstance = this.historyService.createHistoricProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult();
             if (historicProcessInstance != null && StringUtils.isNotEmpty(historicProcessInstance.getStartUserId())) {
                 String processInstanceStartUserId = historicProcessInstance.getStartUserId();
                 if (String.valueOf(user.getId()).equals(processInstanceStartUserId)) {
@@ -104,9 +104,9 @@ public class PermissionService {
                     FlowElement flowElement = bpmnModel.getFlowElement(task.getTaskDefinitionKey());
                     if (flowElement != null && flowElement instanceof UserTask) {
                         UserTask userTask = (UserTask) flowElement;
-                        List<ExtensionElement> extensionElements = (List) userTask.getExtensionElements().get("initiator-can-complete");
+                        List<ExtensionElement> extensionElements = userTask.getExtensionElements().get("initiator-can-complete");
                         if (CollectionUtils.isNotEmpty(extensionElements)) {
-                            String value = ((ExtensionElement) extensionElements.get(0)).getElementText();
+                            String value = extensionElements.get(0).getElementText();
                             if (StringUtils.isNotEmpty(value) && Boolean.valueOf(value)) {
                                 canCompleteTask = true;
                             }
@@ -120,11 +120,11 @@ public class PermissionService {
     }
 
     public boolean isInvolved(User user, String taskId) {
-        return ((HistoricTaskInstanceQuery) ((HistoricTaskInstanceQuery) this.historyService.createHistoricTaskInstanceQuery().taskId(taskId)).taskInvolvedUser(String.valueOf(user.getId()))).count() == 1L;
+        return this.historyService.createHistoricTaskInstanceQuery().taskId(taskId).taskInvolvedUser(String.valueOf(user.getId())).count() == 1L;
     }
 
     public boolean hasReadPermissionOnProcessInstance(User user, String processInstanceId) {
-        HistoricProcessInstance historicProcessInstance = (HistoricProcessInstance) this.historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+        HistoricProcessInstance historicProcessInstance = this.historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
         return this.hasReadPermissionOnProcessInstance(user, historicProcessInstance, processInstanceId);
     }
 
@@ -136,20 +136,20 @@ public class PermissionService {
         } else {
             HistoricProcessInstanceQuery historicProcessInstanceQuery = this.historyService.createHistoricProcessInstanceQuery();
             historicProcessInstanceQuery.processInstanceId(processInstanceId);
-            historicProcessInstanceQuery.involvedUser(user.getId().toString());
+            historicProcessInstanceQuery.involvedUser(user.getId());
             if (historicProcessInstanceQuery.count() > 0L) {
                 return true;
             } else {
                 HistoricTaskInstanceQuery historicTaskInstanceQuery = this.historyService.createHistoricTaskInstanceQuery();
                 historicTaskInstanceQuery.processInstanceId(processInstanceId);
-                historicTaskInstanceQuery.taskInvolvedUser(user.getId().toString());
+                historicTaskInstanceQuery.taskInvolvedUser(user.getId());
                 if (historicTaskInstanceQuery.count() > 0L) {
                     return true;
                 } else {
                     List<String> groupIds = this.getGroupIdsForUser(user);
                     if (!groupIds.isEmpty()) {
                         historicTaskInstanceQuery = this.historyService.createHistoricTaskInstanceQuery();
-                        ((HistoricTaskInstanceQuery) historicTaskInstanceQuery.processInstanceId(processInstanceId)).taskCandidateGroupIn(groupIds);
+                        historicTaskInstanceQuery.processInstanceId(processInstanceId).taskCandidateGroupIn(groupIds);
                         return historicTaskInstanceQuery.count() > 0L;
                     } else {
                         return false;
@@ -173,7 +173,7 @@ public class PermissionService {
             this.validateReadPermissionOnTask(currentUserObject, content.getTaskId());
             return true;
         } else {
-            return content.getProcessInstanceId() != null ? this.hasReadPermissionOnProcessInstance(currentUserObject, content.getProcessInstanceId()) : false;
+            return content.getProcessInstanceId() != null && this.hasReadPermissionOnProcessInstance(currentUserObject, content.getProcessInstanceId());
         }
     }
 
@@ -181,7 +181,7 @@ public class PermissionService {
         if (content.getProcessInstanceId() != null) {
             return this.hasReadPermissionOnProcessInstance(user, content.getProcessInstanceId());
         } else {
-            return content.getCreatedBy() != null ? content.getCreatedBy().equals(user.getId()) : false;
+            return content.getCreatedBy() != null && content.getCreatedBy().equals(user.getId());
         }
     }
 

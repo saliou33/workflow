@@ -65,7 +65,7 @@ public class ModelServiceImpl implements ModelService {
     }
 
     public Model getModel(String modelId) {
-        Model model = (Model) this.modelRepository.findById(modelId).orElse(null);
+        Model model = this.modelRepository.findById(modelId).orElse(null);
         if (model == null) {
             NotFoundException modelNotFound = new NotFoundException("No model found with the given id: " + modelId);
             modelNotFound.setMessageKey("PROCESS.ERROR.NOT-FOUND");
@@ -81,7 +81,7 @@ public class ModelServiceImpl implements ModelService {
 
     public ModelHistory getModelHistory(String modelId, String modelHistoryId) {
         Model model = this.getModel(modelId);
-        ModelHistory modelHistory = (ModelHistory) this.modelHistoryRepository.findById(modelHistoryId).orElse(null);
+        ModelHistory modelHistory = this.modelHistoryRepository.findById(modelHistoryId).orElse(null);
         if (modelHistory != null && modelHistory.getRemovalDate() == null && modelHistory.getModelId().equals(model.getId())) {
             return modelHistory;
         } else {
@@ -176,7 +176,7 @@ public class ModelServiceImpl implements ModelService {
         this.persistModelHistory(historyModel);
         modelObject.setVersion(modelObject.getVersion() + 1);
         this.persistModel(modelObject);
-        return (AbstractModel) (returnModelHistory ? historyModel : modelObject);
+        return returnModelHistory ? historyModel : modelObject;
     }
 
     public Model saveModel(Model modelObject) {
@@ -190,8 +190,8 @@ public class ModelServiceImpl implements ModelService {
 
     @Transactional
     public Model saveModel(String modelId, String name, String key, String description, String editorJson, boolean newVersion, String newVersionComment, User updatedBy) {
-        Model modelObject = (Model) this.modelRepository.findById(modelId).orElse(null);
-        return this.internalSave(name, key, description, editorJson, newVersion, newVersionComment, (byte[]) null, updatedBy, modelObject);
+        Model modelObject = this.modelRepository.findById(modelId).orElse(null);
+        return this.internalSave(name, key, description, editorJson, newVersion, newVersionComment, null, updatedBy, modelObject);
     }
 
     protected Model internalSave(String name, String key, String description, String editorJson, boolean newVersion, String newVersionComment, byte[] imageBytes, User updatedBy, Model modelObject) {
@@ -240,7 +240,7 @@ public class ModelServiceImpl implements ModelService {
 
     @Transactional
     public void deleteModel(String modelId, boolean cascadeHistory, boolean deleteRuntimeApp) {
-        Model model = (Model) this.modelRepository.findById(modelId).orElse(null);
+        Model model = this.modelRepository.findById(modelId).orElse(null);
         if (model == null) {
             throw new IllegalArgumentException("No model found with id: " + modelId);
         } else {
@@ -258,7 +258,7 @@ public class ModelServiceImpl implements ModelService {
             }
 
             if (!cascadeHistory && history.size() != 0) {
-                toRevive = (ModelHistory) history.remove(0);
+                toRevive = history.remove(0);
                 this.populateModelBasedOnHistory(model, toRevive);
                 this.persistModel(model);
                 this.modelHistoryRepository.delete(toRevive);
@@ -288,7 +288,7 @@ public class ModelServiceImpl implements ModelService {
 
     @Transactional
     public ReviveModelResultRepresentation reviveProcessModelHistory(ModelHistory modelHistory, User user, String newVersionComment) {
-        Model latestModel = (Model) this.modelRepository.findById(modelHistory.getModelId()).orElse(null);
+        Model latestModel = this.modelRepository.findById(modelHistory.getModelId()).orElse(null);
         if (latestModel == null) {
             throw new IllegalArgumentException("No process model found with id: " + modelHistory.getModelId());
         } else {
@@ -307,7 +307,7 @@ public class ModelServiceImpl implements ModelService {
             ReviveModelResultRepresentation result = new ReviveModelResultRepresentation();
             if (latestModel.getModelType() == 3 && StringUtils.isNotEmpty(latestModel.getModelEditorJson())) {
                 try {
-                    AppDefinition appDefinition = (AppDefinition) this.objectMapper.readValue(latestModel.getModelEditorJson(), AppDefinition.class);
+                    AppDefinition appDefinition = this.objectMapper.readValue(latestModel.getModelEditorJson(), AppDefinition.class);
                     Iterator i$ = appDefinition.getModels().iterator();
 
                     while (i$.hasNext()) {
@@ -379,10 +379,10 @@ public class ModelServiceImpl implements ModelService {
     }
 
     protected void addOrUpdateExtensionElement(String name, String value, UserTask userTask) {
-        List<ExtensionElement> extensionElements = (List) userTask.getExtensionElements().get(name);
+        List<ExtensionElement> extensionElements = userTask.getExtensionElements().get(name);
         ExtensionElement extensionElement;
         if (CollectionUtils.isNotEmpty(extensionElements)) {
-            extensionElement = (ExtensionElement) extensionElements.get(0);
+            extensionElement = extensionElements.get(0);
         } else {
             extensionElement = new ExtensionElement();
         }
@@ -402,7 +402,7 @@ public class ModelServiceImpl implements ModelService {
     }
 
     protected Model persistModel(Model model) {
-        model = (Model) this.modelRepository.save(model);
+        model = this.modelRepository.save(model);
         if (StringUtils.isNotEmpty(model.getModelEditorJson())) {
             ObjectNode jsonNode = null;
 
@@ -433,7 +433,7 @@ public class ModelServiceImpl implements ModelService {
     }
 
     protected ModelHistory persistModelHistory(ModelHistory modelHistory) {
-        return (ModelHistory) this.modelHistoryRepository.save(modelHistory);
+        return this.modelHistoryRepository.save(modelHistory);
     }
 
     protected void handleBpmnProcessFormModelRelations(AbstractModel bpmnProcessModel, ObjectNode editorJsonNode) {

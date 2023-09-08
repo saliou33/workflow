@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "CR_ROLE")
+@Table(name = "CR_TAG")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Role extends BaseEntity {
+public class Tag extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

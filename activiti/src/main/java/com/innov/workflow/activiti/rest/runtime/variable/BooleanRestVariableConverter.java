@@ -37,7 +37,7 @@ public class BooleanRestVariableConverter implements RestVariableConverter {
 
             result.setValue(variableValue);
         } else {
-            result.setValue((Object) null);
+            result.setValue(null);
         }
 
     }

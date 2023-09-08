@@ -21,6 +21,7 @@ public class OrganizationService {
     private final OrganizationRepository organizationRepository;
     private final GroupRepository groupRepository;
 
+
     public List<Organization> getAllOrganizations() {
         return organizationRepository.findAll();
     }
@@ -54,15 +55,22 @@ public class OrganizationService {
         organizationRepository.deleteById(id);
     }
 
-    public Organization addRole(Long orgId, Long roleId) {
-        Group group = groupRepository.findById(roleId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Role not found with id" + roleId));
-        Organization organization = organizationRepository.findById(orgId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Organization not found with id" + orgId));
+    public Organization createGroup(Long orgId, Group group) {
+        if(group != null) {
+            groupRepository.save(group);
 
-        if (!organization.getGroups().contains(group)) {
-            organization.getGroups().add(group);
-            return organizationRepository.save(organization);
+            Organization organization = organizationRepository.findById(orgId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Organization not found with id" + orgId));
+
+            if (!organization.getGroups().contains(group)) {
+                organization.getGroups().add(group);
+                return organizationRepository.save(organization);
+            }
         }
 
         return null;
     }
+    
+    
+    
+    
 }

@@ -40,7 +40,7 @@ public class DatabaseConfig {
             name = {"liquibase"}
     )
     public SpringLiquibase liquibase() {
-        this.log.info("Configuring Liquibase");
+        DatabaseConfig.log.info("Configuring Liquibase");
 
         try {
 

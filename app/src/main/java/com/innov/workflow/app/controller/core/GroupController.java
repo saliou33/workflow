@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/roles")
+@RequestMapping("/api/Groups")
 @AllArgsConstructor
 public class GroupController {
     private final GroupService groupService;
@@ -18,33 +18,33 @@ public class GroupController {
     private final GroupMapper groupMapper;
 
     @GetMapping
-    public ResponseEntity getAllRoles() {
-        return ApiResponse.success(groupService.getAllRoles());
+    public ResponseEntity getAllGroups() {
+        return ApiResponse.success(groupService.getAllGroups());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getRoleById(@PathVariable Long id) {
-        return ApiResponse.success(groupService.getRoleById(id));
+    public ResponseEntity getGroupById(@PathVariable Long id) {
+        return ApiResponse.success(groupService.getGroupById(id));
     }
 
     @PostMapping
-    public ResponseEntity createRole(@RequestBody GroupDto groupDTO) {
+    public ResponseEntity createGroup(@RequestBody GroupDto groupDTO) {
         Group data = groupMapper.mapFromDto(groupDTO);
-        Group group = groupService.createRole(data);
-        return ApiResponse.created("role créer", group);
+        Group group = groupService.createGroup(data);
+        return ApiResponse.created("Group créer", group);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateRole(@PathVariable Long id, @RequestBody GroupDto groupDTO) {
+    public ResponseEntity updateGroup(@PathVariable Long id, @RequestBody GroupDto groupDTO) {
         Group data = groupMapper.mapFromDto(groupDTO);
-        Group group = groupService.updateRole(id, data);
-        return ApiResponse.success("role modifier", group);
+        Group group = groupService.updateGroup(id, data);
+        return ApiResponse.success("Group modifier", group);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteRole(@PathVariable Long id) {
-        groupService.deleteRole(id);
-        return ApiResponse.success("role supprimer");
+    public ResponseEntity deleteGroup(@PathVariable Long id) {
+        groupService.deleteGroup(id);
+        return ApiResponse.success("Group supprimer");
     }
 }
 

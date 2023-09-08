@@ -48,7 +48,7 @@ public class ActivitiTaskActionService {
 
     public void completeTask(String taskId) {
         User currentUser = identityService.getCurrentUserObject();
-        Task task = (Task) ((TaskQuery) this.taskService.createTaskQuery().taskId(taskId)).singleResult();
+        Task task = this.taskService.createTaskQuery().taskId(taskId).singleResult();
         if (task == null) {
             throw new NotFoundException("Task with id: " + taskId + " does not exist");
         } else if (!this.permissionService.isTaskOwnerOrAssignee(currentUser, task) && !this.permissionService.validateIfUserIsInitiatorAndCanCompleteTask(currentUser, task)) {
@@ -65,7 +65,7 @@ public class ActivitiTaskActionService {
 
     public TaskRepresentation assignTask(String taskId, ObjectNode requestNode) {
         User currentUser = identityService.getCurrentUserObject();
-        Task task = (Task) ((TaskQuery) this.taskService.createTaskQuery().taskId(taskId)).singleResult();
+        Task task = this.taskService.createTaskQuery().taskId(taskId).singleResult();
         if (task == null) {
             throw new NotFoundException("Task with id: " + taskId + " does not exist");
         } else {
@@ -77,7 +77,7 @@ public class ActivitiTaskActionService {
                     throw new BadRequestException("Invalid assignee id");
                 } else {
                     this.assignTask(currentUser, task, assigneeIdString);
-                    task = (Task) ((TaskQuery) this.taskService.createTaskQuery().taskId(taskId)).singleResult();
+                    task = this.taskService.createTaskQuery().taskId(taskId).singleResult();
                     TaskRepresentation rep = new TaskRepresentation(task);
                     TaskUtil.fillPermissionInformation(rep, task, currentUser, this.identityService, this.historyService, this.repositoryService);
                     this.populateAssignee(task, rep);
@@ -91,7 +91,7 @@ public class ActivitiTaskActionService {
     }
 
     public void involveUser(String taskId, ObjectNode requestNode) {
-        Task task = (Task) ((TaskQuery) this.taskService.createTaskQuery().taskId(taskId)).singleResult();
+        Task task = this.taskService.createTaskQuery().taskId(taskId).singleResult();
         if (task == null) {
             throw new NotFoundException("Task with id: " + taskId + " does not exist");
         } else {
@@ -103,7 +103,7 @@ public class ActivitiTaskActionService {
                 if (user == null) {
                     throw new BadRequestException("Invalid user id");
                 } else {
-                    this.taskService.addUserIdentityLink(taskId, userId.toString(), "participant");
+                    this.taskService.addUserIdentityLink(taskId, userId, "participant");
                 }
             } else {
                 throw new BadRequestException("User id is required");
@@ -112,7 +112,7 @@ public class ActivitiTaskActionService {
     }
 
     public void removeInvolvedUser(String taskId, ObjectNode requestNode) {
-        Task task = (Task) ((TaskQuery) this.taskService.createTaskQuery().taskId(taskId)).singleResult();
+        Task task = this.taskService.createTaskQuery().taskId(taskId).singleResult();
         if (task == null) {
             throw new NotFoundException("Task with id: " + taskId + " does not exist");
         } else {
@@ -141,7 +141,7 @@ public class ActivitiTaskActionService {
 
     public void claimTask(String taskId) {
         User currentUser = identityService.getCurrentUserObject();
-        Task task = (Task) ((TaskQuery) this.taskService.createTaskQuery().taskId(taskId)).singleResult();
+        Task task = this.taskService.createTaskQuery().taskId(taskId).singleResult();
         if (task == null) {
             throw new NotFoundException("Task with id: " + taskId + " does not exist");
         } else {

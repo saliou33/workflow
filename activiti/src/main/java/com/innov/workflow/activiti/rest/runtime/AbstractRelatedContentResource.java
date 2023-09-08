@@ -13,7 +13,10 @@ import com.innov.workflow.activiti.service.exception.NotPermittedException;
 import com.innov.workflow.activiti.service.runtime.PermissionService;
 import com.innov.workflow.activiti.service.runtime.RelatedContentService;
 import com.innov.workflow.activiti.service.runtime.RelatedContentStreamProvider;
+import com.innov.workflow.core.domain.ApiResponse;
 import com.innov.workflow.core.domain.entity.User;
+import com.innov.workflow.core.exception.ApiException;
+import com.innov.workflow.core.service.UserService;
 import org.activiti.editor.language.json.converter.util.CollectionUtils;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
@@ -27,7 +30,12 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -52,11 +60,12 @@ public abstract class AbstractRelatedContentResource {
     protected HistoryService historyService;
     @Autowired
     protected RepositoryService repositoryService;
-
     @Autowired
     protected RelatedContentStreamProvider relatedContentStreamProvider;
     @Autowired
     protected IdentityService identityService;
+    @Autowired
+    protected UserService userService;
 
     public AbstractRelatedContentResource() {
     }
@@ -76,7 +85,7 @@ public abstract class AbstractRelatedContentResource {
 
     public RelatedContentRepresentation createRelatedContentOnTask(String taskId, MultipartFile file) {
         User user = identityService.getCurrentUserObject();
-        Task task = (Task) ((TaskQuery) this.taskService.createTaskQuery().taskId(taskId)).singleResult();
+        Task task = this.taskService.createTaskQuery().taskId(taskId).singleResult();
         if (task == null) {
             throw new NotFoundException("Task not found or already completed: " + taskId);
         } else if (!this.permissionService.canAddRelatedContentToTask(user, taskId)) {
@@ -88,7 +97,7 @@ public abstract class AbstractRelatedContentResource {
 
     public RelatedContentRepresentation createRelatedContentOnTask(String taskId, RelatedContentRepresentation relatedContent) {
         User user = identityService.getCurrentUserObject();
-        Task task = (Task) ((TaskQuery) this.taskService.createTaskQuery().taskId(taskId)).singleResult();
+        Task task = this.taskService.createTaskQuery().taskId(taskId).singleResult();
         if (task == null) {
             throw new NotFoundException("Task not found or already completed: " + taskId);
         } else if (!this.permissionService.canAddRelatedContentToTask(user, taskId)) {
@@ -103,7 +112,7 @@ public abstract class AbstractRelatedContentResource {
         if (!this.permissionService.canAddRelatedContentToProcessInstance(user, processInstanceId)) {
             throw new NotPermittedException("You are not allowed to read the process with id: " + processInstanceId);
         } else {
-            return this.addRelatedContent(relatedContent, (String) null, processInstanceId, true);
+            return this.addRelatedContent(relatedContent, null, processInstanceId, true);
         }
     }
 
@@ -112,17 +121,17 @@ public abstract class AbstractRelatedContentResource {
         if (!this.permissionService.canAddRelatedContentToProcessInstance(user, processInstanceId)) {
             throw new NotPermittedException("You are not allowed to read the process with id: " + processInstanceId);
         } else {
-            return this.uploadFile(user, file, (String) null, processInstanceId);
+            return this.uploadFile(user, file, null, processInstanceId);
         }
     }
 
     public RelatedContentRepresentation createTemporaryRawRelatedContent(MultipartFile file) {
         User user = identityService.getCurrentUserObject();
-        return this.uploadFile(user, file, (String) null, (String) null);
+        return this.uploadFile(user, file, null, null);
     }
 
     public RelatedContentRepresentation createTemporaryRelatedContent(RelatedContentRepresentation relatedContent) {
-        return this.addRelatedContent(relatedContent, (String) null, (String) null, false);
+        return this.addRelatedContent(relatedContent, null, null, false);
     }
 
     public void deleteContent(Long contentId, HttpServletResponse response) {
@@ -234,7 +243,7 @@ public abstract class AbstractRelatedContentResource {
                     contentType = this.getContentTypeForFileExtension(file);
                 }
 
-                RelatedContent relatedContent = this.contentService.createRelatedContent(user, this.getFileName(file), (String) null, (String) null, taskId, processInstanceId, contentType, file.getInputStream(), file.getSize(), true, false);
+                RelatedContent relatedContent = this.contentService.createRelatedContent(user, this.getFileName(file), null, null, taskId, processInstanceId, contentType, file.getInputStream(), file.getSize(), true, false);
                 return new RelatedContentRepresentation(relatedContent, this.simpleTypeMapper);
             } catch (IOException var7) {
                 throw new BadRequestException("Error while reading file data", var7);
@@ -246,7 +255,7 @@ public abstract class AbstractRelatedContentResource {
 
     protected RelatedContentRepresentation addRelatedContent(RelatedContentRepresentation relatedContent, String taskId, String processInstanceId, boolean isRelatedContent) {
         if (relatedContent.getSource() != null && relatedContent.getSourceId() != null && relatedContent.getName() != null) {
-            RelatedContent result = this.contentService.createRelatedContent(identityService.getCurrentUserObject(), relatedContent.getName(), relatedContent.getSource(), relatedContent.getSourceId(), taskId, processInstanceId, relatedContent.getMimeType(), (InputStream) null, (Long) null, isRelatedContent, relatedContent.isLink());
+            RelatedContent result = this.contentService.createRelatedContent(identityService.getCurrentUserObject(), relatedContent.getName(), relatedContent.getSource(), relatedContent.getSourceId(), taskId, processInstanceId, relatedContent.getMimeType(), null, null, isRelatedContent, relatedContent.isLink());
             return new RelatedContentRepresentation(result, this.simpleTypeMapper);
         } else {
             throw new BadRequestException("Name, source and sourceId are required paremeters");
@@ -338,5 +347,46 @@ public abstract class AbstractRelatedContentResource {
         }
 
         return contentType;
+    }
+
+    public ResponseEntity uploadAvatar(Long id,  MultipartFile file) {
+        User user = userService.getUserByUserId(id);
+
+        if (file != null && file.getName() != null) {
+            try {
+                String contentType = file.getContentType();
+                if (StringUtils.equals(file.getContentType(), "application/octet-stream")) {
+                    contentType = this.getContentTypeForImageFileExtension(file);
+                }
+
+                RelatedContent relatedContent = this.contentService.createRelatedContent(user, file.getOriginalFilename(), "", "", "", "", contentType, file.getInputStream(), file.getSize(), true, false);
+                user.setAvatar(relatedContent.getId().toString());
+                userService.saveUser(user);
+
+                return ApiResponse.success("Avatar uploaded successfully");
+            } catch (IOException e) {
+                throw new ApiException(HttpStatus.BAD_REQUEST,"Error while reading file data");
+            }
+        } else {
+            throw new ApiException(HttpStatus.BAD_REQUEST,"File to upload is missing");
+        }
+    }
+
+    protected String getContentTypeForImageFileExtension(MultipartFile file)   {
+        String fileName = file.getOriginalFilename();
+        String contentType = null;
+
+        if (fileName.endsWith(".jpeg") && fileName.endsWith(".jpg")) {
+            contentType = "image/jpeg";
+        } else if (fileName.endsWith("gif")) {
+            contentType = "image/gif";
+        } else if (fileName.endsWith("png")) {
+            contentType = "image/png";
+        }
+        else {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "File type not supported");
+        }
+
+        return  contentType;
     }
 }

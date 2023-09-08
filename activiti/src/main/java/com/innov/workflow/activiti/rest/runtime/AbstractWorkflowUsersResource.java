@@ -88,7 +88,7 @@ public class AbstractWorkflowUsersResource {
             Iterator<User> userIt = matchingUsers.iterator();
 
             while (userIt.hasNext()) {
-                if (involvedUsers.contains(((User) userIt.next()).getId().toString())) {
+                if (involvedUsers.contains(userIt.next().getId())) {
                     userIt.remove();
                 }
             }

@@ -14,19 +14,19 @@ public class GroupService {
     private final GroupRepository groupRepository;
 
 
-    public List<Group> getAllRoles() {
+    public List<Group> getAllGroups() {
         return groupRepository.findAll();
     }
 
-    public Group getRoleById(Long id) {
+    public Group getGroupById(Long id) {
         return groupRepository.findById(id).orElse(null);
     }
 
-    public Group createRole(Group group) {
+    public Group createGroup(Group group) {
         return groupRepository.save(group);
     }
 
-    public Group updateRole(Long id, Group group) {
+    public Group updateGroup(Long id, Group group) {
         Group existingGroup = groupRepository.findById(id).orElse(null);
         if (existingGroup == null) {
             return null;
@@ -37,7 +37,7 @@ public class GroupService {
         return groupRepository.save(existingGroup);
     }
 
-    public void deleteRole(Long id) {
+    public void deleteGroup(Long id) {
         groupRepository.deleteById(id);
     }
 }

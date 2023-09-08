@@ -47,7 +47,7 @@ public class DateRestVariableConverter implements RestVariableConverter {
 
             result.setValue(this.isoFormatter.format(variableValue));
         } else {
-            result.setValue((Object) null);
+            result.setValue(null);
         }
 
     }

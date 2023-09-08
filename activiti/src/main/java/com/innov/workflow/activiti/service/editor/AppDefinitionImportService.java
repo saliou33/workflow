@@ -59,7 +59,7 @@ public class AppDefinitionImportService {
         try {
             InputStream is = file.getInputStream();
             String fileName = file.getOriginalFilename();
-            return this.importAppDefinition(request, is, fileName, (Model) null, (Map) null, (Map) null, (Map) null);
+            return this.importAppDefinition(request, is, fileName, null, null, null, null);
         } catch (IOException var5) {
             throw new InternalServerErrorException("Error loading file", var5);
         }
@@ -141,7 +141,7 @@ public class AppDefinitionImportService {
         AppDefinition appDefinition;
 
         try {
-            appDefinition = (AppDefinition) this.objectMapper.readValue(model.getModelEditorJson(), AppDefinition.class);
+            appDefinition = this.objectMapper.readValue(model.getModelEditorJson(), AppDefinition.class);
         } catch (Exception var4) {
             logger.error("Error deserializing app " + model.getId(), var4);
             throw new InternalServerErrorException("Could not deserialize app definition");
@@ -214,26 +214,26 @@ public class AppDefinitionImportService {
         Model updatedFormModel;
         for (Iterator i$ = formMap.keySet().iterator(); i$.hasNext(); oldFormIdAndModelMap.put(oldFormId, updatedFormModel)) {
             String formKey = (String) i$.next();
-            Model formModel = this.createModelObject((String) formMap.get(formKey), 2);
+            Model formModel = this.createModelObject(formMap.get(formKey), 2);
             oldFormId = formModel.getId();
             Model existingModel = null;
             if (existingFormModelMap != null && existingFormModelMap.containsKey(formModel.getKey())) {
-                existingModel = (Model) existingFormModelMap.get(formModel.getKey());
+                existingModel = existingFormModelMap.get(formModel.getKey());
             }
 
             updatedFormModel = null;
             if (existingModel != null) {
                 byte[] imageBytes = null;
                 if (thumbnailMap.containsKey(formKey)) {
-                    imageBytes = (byte[]) thumbnailMap.get(formKey);
+                    imageBytes = thumbnailMap.get(formKey);
                 }
 
                 updatedFormModel = this.modelService.saveModel(existingModel, formModel.getModelEditorJson(), imageBytes, true, "App definition import", identityService.getCurrentUserObject());
             } else {
-                formModel.setId((String) null);
+                formModel.setId(null);
                 updatedFormModel = this.modelService.createModel(formModel, identityService.getCurrentUserObject());
                 if (thumbnailMap.containsKey(formKey)) {
-                    updatedFormModel.setThumbnail((byte[]) thumbnailMap.get(formKey));
+                    updatedFormModel.setThumbnail(thumbnailMap.get(formKey));
                     this.modelRepository.save(updatedFormModel);
                 }
             }
@@ -249,26 +249,26 @@ public class AppDefinitionImportService {
         Model updatedDecisionTableModel;
         for (Iterator i$ = decisionTableMap.keySet().iterator(); i$.hasNext(); oldDecisionTableIdAndModelMap.put(oldDecisionTableId, updatedDecisionTableModel)) {
             String decisionTableKey = (String) i$.next();
-            Model decisionTableModel = this.createModelObject((String) decisionTableMap.get(decisionTableKey), 4);
+            Model decisionTableModel = this.createModelObject(decisionTableMap.get(decisionTableKey), 4);
             oldDecisionTableId = decisionTableModel.getId();
             Model existingModel = null;
             if (existingDecisionTableMap != null && existingDecisionTableMap.containsKey(decisionTableModel.getKey())) {
-                existingModel = (Model) existingDecisionTableMap.get(decisionTableModel.getKey());
+                existingModel = existingDecisionTableMap.get(decisionTableModel.getKey());
             }
 
             updatedDecisionTableModel = null;
             if (existingModel != null) {
                 byte[] imageBytes = null;
                 if (thumbnailMap.containsKey(decisionTableKey)) {
-                    imageBytes = (byte[]) thumbnailMap.get(decisionTableKey);
+                    imageBytes = thumbnailMap.get(decisionTableKey);
                 }
 
                 updatedDecisionTableModel = this.modelService.saveModel(existingModel, decisionTableModel.getModelEditorJson(), imageBytes, true, "App definition import", identityService.getCurrentUserObject());
             } else {
-                decisionTableModel.setId((String) null);
+                decisionTableModel.setId(null);
                 updatedDecisionTableModel = this.modelService.createModel(decisionTableModel, identityService.getCurrentUserObject());
                 if (thumbnailMap.containsKey(decisionTableKey)) {
-                    updatedDecisionTableModel.setThumbnail((byte[]) thumbnailMap.get(decisionTableKey));
+                    updatedDecisionTableModel.setThumbnail(thumbnailMap.get(decisionTableKey));
                     this.modelRepository.save(updatedDecisionTableModel);
                 }
             }
@@ -286,10 +286,10 @@ public class AppDefinitionImportService {
             String bpmnModelKey = (String) i$.next();
             Model existingModel = null;
             if (existingProcessModelMap != null && existingProcessModelMap.containsKey(bpmnModelKey)) {
-                existingModel = (Model) existingProcessModelMap.get(bpmnModelKey);
+                existingModel = existingProcessModelMap.get(bpmnModelKey);
             }
 
-            String bpmnModelJson = (String) bpmnModelMap.get(bpmnModelKey);
+            String bpmnModelJson = bpmnModelMap.get(bpmnModelKey);
             Model bpmnModelObject = this.createModelObject(bpmnModelJson, 0);
             oldBpmnModelId = bpmnModelObject.getId();
             JsonNode bpmnModelNode = null;
@@ -307,7 +307,7 @@ public class AppDefinitionImportService {
 
             while (j$.hasNext()) {
                 String oldFormId = (String) j$.next();
-                Model formModel = (Model) formKeyAndModelMap.get(oldFormId);
+                Model formModel = formKeyAndModelMap.get(oldFormId);
                 oldFormIdFormKeyMap.put(oldFormId, formModel.getKey());
                 formKeyModelIdMap.put(formModel.getKey(), new ModelInfo(formModel.getId(), formModel.getName(), formModel.getKey()));
             }
@@ -319,7 +319,7 @@ public class AppDefinitionImportService {
             String updatedBpmnJson;
             while (k$.hasNext()) {
                 updatedBpmnJson = (String) k$.next();
-                updatedProcessModel = (Model) decisionTableKeyAndModelMap.get(updatedBpmnJson);
+                updatedProcessModel = decisionTableKeyAndModelMap.get(updatedBpmnJson);
                 oldDecisionTableIdDecisionTableKeyMap.put(updatedBpmnJson, updatedProcessModel.getKey());
                 decisionTableKeyModelIdMap.put(updatedProcessModel.getKey(), new ModelInfo(updatedProcessModel.getId(), updatedProcessModel.getName(), updatedProcessModel.getKey()));
             }
@@ -330,17 +330,17 @@ public class AppDefinitionImportService {
             if (existingModel != null) {
                 byte[] imageBytes = null;
                 if (thumbnailMap.containsKey(bpmnModelKey)) {
-                    imageBytes = (byte[]) thumbnailMap.get(bpmnModelKey);
+                    imageBytes = thumbnailMap.get(bpmnModelKey);
                 }
 
                 existingModel.setModelEditorJson(updatedBpmnJson);
                 updatedProcessModel = this.modelService.saveModel(existingModel, existingModel.getModelEditorJson(), imageBytes, true, "App definition import", identityService.getCurrentUserObject());
             } else {
-                bpmnModelObject.setId((String) null);
+                bpmnModelObject.setId(null);
                 bpmnModelObject.setModelEditorJson(updatedBpmnJson);
                 updatedProcessModel = this.modelService.createModel(bpmnModelObject, identityService.getCurrentUserObject());
                 if (thumbnailMap.containsKey(bpmnModelKey)) {
-                    updatedProcessModel.setThumbnail((byte[]) thumbnailMap.get(bpmnModelKey));
+                    updatedProcessModel.setThumbnail(thumbnailMap.get(bpmnModelKey));
                     this.modelService.saveModel(updatedProcessModel);
                 }
             }
@@ -353,7 +353,7 @@ public class AppDefinitionImportService {
         AppDefinition appDefinition = null;
 
         try {
-            appDefinition = (AppDefinition) this.objectMapper.readValue(appDefinitionModel.getModelEditorJson(), AppDefinition.class);
+            appDefinition = this.objectMapper.readValue(appDefinitionModel.getModelEditorJson(), AppDefinition.class);
         } catch (Exception var9) {
             logger.error("Error reading app definition " + appDefinitionModel.getName(), var9);
             throw new BadRequestException("Error reading app definition", var9);
@@ -364,7 +364,7 @@ public class AppDefinitionImportService {
         while (i$.hasNext()) {
             AppModelDefinition modelDef = (AppModelDefinition) i$.next();
             if (bpmnModelIdAndModelMap.containsKey(modelDef.getId())) {
-                Model newModel = (Model) bpmnModelIdAndModelMap.get(modelDef.getId());
+                Model newModel = bpmnModelIdAndModelMap.get(modelDef.getId());
                 modelDef.setId(newModel.getId());
                 modelDef.setName(newModel.getName());
                 modelDef.setCreatedBy(newModel.getCreatedBy());
@@ -377,9 +377,9 @@ public class AppDefinitionImportService {
         try {
             String updatedAppDefinitionJson = this.objectMapper.writeValueAsString(appDefinition);
             if (existingAppModel != null) {
-                appDefinitionModel = this.modelService.saveModel(existingAppModel, updatedAppDefinitionJson, (byte[]) null, true, "App definition import", identityService.getCurrentUserObject());
+                appDefinitionModel = this.modelService.saveModel(existingAppModel, updatedAppDefinitionJson, null, true, "App definition import", identityService.getCurrentUserObject());
             } else {
-                appDefinitionModel.setId((String) null);
+                appDefinitionModel.setId(null);
                 appDefinitionModel.setModelEditorJson(updatedAppDefinitionJson);
                 appDefinitionModel = this.modelService.createModel(appDefinitionModel, identityService.getCurrentUserObject());
             }

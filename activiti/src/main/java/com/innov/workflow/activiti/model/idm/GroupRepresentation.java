@@ -17,6 +17,6 @@ public class GroupRepresentation extends AbstractRepresentation {
     public GroupRepresentation(Group group) {
         this.setId(group.getId().toString());
         this.setName(group.getName());
-        this.setType(group.getRole().getName());
+        this.setType(group.getTag().getName());
     }
 }

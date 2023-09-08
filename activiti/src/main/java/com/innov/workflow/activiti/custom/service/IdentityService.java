@@ -44,4 +44,6 @@ public class IdentityService {
     public User getUser(String assignee) {
         return userService.getUserByUsername(assignee);
     }
+
+    public User saveUser(User user) { return userService.saveUser(user); }
 }

@@ -18,7 +18,7 @@ import java.util.List;
 
 @Service
 public class ModelImageService {
-    private static float THUMBNAIL_WIDTH = 300.0F;
+    private static final float THUMBNAIL_WIDTH = 300.0F;
     private final Logger log = LoggerFactory.getLogger(ModelImageService.class);
     protected BpmnJsonConverter bpmnJsonConverter = new BpmnJsonConverter();
 

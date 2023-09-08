@@ -35,14 +35,14 @@ public class SubmittedFormVariables {
             this.variableContent = new HashMap();
         }
 
-        List<RelatedContent> contentList = (List) this.variableContent.get(variableName);
+        List<RelatedContent> contentList = this.variableContent.get(variableName);
         if (contentList == null) {
             contentList = new ArrayList();
             this.variableContent.put(variableName, contentList);
         }
 
         if (content != null) {
-            ((List) contentList).add(content);
+            contentList.add(content);
         }
 
     }

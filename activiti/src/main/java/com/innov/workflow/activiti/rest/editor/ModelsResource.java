@@ -100,7 +100,7 @@ public class ModelsResource extends AbstractModelsResource {
     )
     public ModelRepresentation createModel(@RequestBody ModelRepresentation modelRepresentation) {
         modelRepresentation.setKey(modelRepresentation.getKey().replaceAll(" ", ""));
-        ModelKeyRepresentation modelKeyInfo = this.modelService.validateModelKey((Model) null, modelRepresentation.getModelType(), modelRepresentation.getKey());
+        ModelKeyRepresentation modelKeyInfo = this.modelService.validateModelKey(null, modelRepresentation.getModelType(), modelRepresentation.getKey());
         if (modelKeyInfo.isKeyAlreadyExists()) {
             throw new BadRequestException("Provided model key already exists: " + modelRepresentation.getKey());
         } else {

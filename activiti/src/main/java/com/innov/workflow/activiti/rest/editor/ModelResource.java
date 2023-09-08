@@ -96,7 +96,7 @@ public class ModelResource extends AbstractModelResource {
         Model model = this.modelService.getModel(modelId);
 
         try {
-            String currentUserId = identityService.getCurrentUserObject().getId().toString();
+            String currentUserId = identityService.getCurrentUserObject().getId();
             boolean currentUserIsOwner = currentUserId.equals(model.getCreatedBy());
             if (currentUserIsOwner) {
                 this.modelService.deleteModel(model.getId(), Boolean.TRUE.equals(cascade), Boolean.TRUE.equals(deleteRuntimeApp));
@@ -156,7 +156,7 @@ public class ModelResource extends AbstractModelResource {
         }
 
         long lastUpdated = -1L;
-        String lastUpdatedString = (String) values.getFirst("lastUpdated");
+        String lastUpdatedString = values.getFirst("lastUpdated");
         if (lastUpdatedString == null) {
             throw new BadRequestException("Missing lastUpdated date");
         } else {
@@ -170,19 +170,19 @@ public class ModelResource extends AbstractModelResource {
             Model model = this.modelService.getModel(modelId);
             User currentUser = identityService.getCurrentUserObject();
             boolean currentUserIsOwner = model.getLastUpdatedBy().equals(currentUser.getId());
-            String resolveAction = (String) values.getFirst("conflictResolveAction");
+            String resolveAction = values.getFirst("conflictResolveAction");
             if (model.getLastUpdated().getTime() != lastUpdated) {
                 String isNewVersionString;
                 if ("saveAs".equals(resolveAction)) {
-                    isNewVersionString = (String) values.getFirst("saveAs");
-                    String json = (String) values.getFirst("json_xml");
+                    isNewVersionString = values.getFirst("saveAs");
+                    String json = values.getFirst("json_xml");
                     return this.createNewModel(isNewVersionString, model.getDescription(), model.getModelType(), json);
                 } else if ("overwrite".equals(resolveAction)) {
                     return this.updateModel(model, values, false);
                 } else if ("newVersion".equals(resolveAction)) {
                     return this.updateModel(model, values, true);
                 } else {
-                    isNewVersionString = (String) values.getFirst("newversion");
+                    isNewVersionString = values.getFirst("newversion");
                     if (currentUserIsOwner && "true".equals(isNewVersionString)) {
                         return this.updateModel(model, values, true);
                     } else {
@@ -207,10 +207,10 @@ public class ModelResource extends AbstractModelResource {
     }
 
     protected ModelRepresentation updateModel(Model model, MultiValueMap<String, String> values, boolean forceNewVersion) {
-        String name = (String) values.getFirst("name");
-        String key = (String) values.getFirst("key");
-        String description = (String) values.getFirst("description");
-        String isNewVersionString = (String) values.getFirst("newversion");
+        String name = values.getFirst("name");
+        String key = values.getFirst("key");
+        String description = values.getFirst("description");
+        String isNewVersionString = values.getFirst("newversion");
         String newVersionComment = null;
         ModelKeyRepresentation modelKeyInfo = this.modelService.validateModelKey(model, model.getModelType(), key);
         if (modelKeyInfo.isKeyAlreadyExists()) {
@@ -219,13 +219,13 @@ public class ModelResource extends AbstractModelResource {
             boolean newVersion = false;
             if (forceNewVersion) {
                 newVersion = true;
-                newVersionComment = (String) values.getFirst("comment");
+                newVersionComment = values.getFirst("comment");
             } else if (isNewVersionString != null) {
                 newVersion = "true".equals(isNewVersionString);
-                newVersionComment = (String) values.getFirst("comment");
+                newVersionComment = values.getFirst("comment");
             }
 
-            String json = (String) values.getFirst("json_xml");
+            String json = values.getFirst("json_xml");
 
             try {
                 model = this.modelService.saveModel(model.getId(), name, key, description, json, newVersion, newVersionComment, identityService.getCurrentUserObject());

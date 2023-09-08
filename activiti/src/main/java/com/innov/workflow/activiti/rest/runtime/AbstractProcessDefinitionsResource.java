@@ -35,7 +35,7 @@ public abstract class AbstractProcessDefinitionsResource {
     public ResultListDataRepresentation getProcessDefinitions(Boolean latest, String deploymentKey) {
         ProcessDefinitionQuery definitionQuery = this.repositoryService.createProcessDefinitionQuery();
         if (deploymentKey != null) {
-            Deployment deployment = (Deployment) this.repositoryService.createDeploymentQuery().deploymentKey(deploymentKey).latest().singleResult();
+            Deployment deployment = this.repositoryService.createDeploymentQuery().deploymentKey(deploymentKey).latest().singleResult();
             if (deployment == null) {
                 return new ResultListDataRepresentation(new ArrayList());
             }
@@ -80,7 +80,7 @@ public abstract class AbstractProcessDefinitionsResource {
                 }
 
                 ProcessDefinitionRepresentation rep = new ProcessDefinitionRepresentation(processDefinition);
-                rep.setHasStartForm((Boolean) startFormMap.get(processDefinition.getId()));
+                rep.setHasStartForm(startFormMap.get(processDefinition.getId()));
                 result.add(rep);
             }
         }

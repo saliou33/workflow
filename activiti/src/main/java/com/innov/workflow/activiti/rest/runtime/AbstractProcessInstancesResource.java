@@ -109,9 +109,9 @@ public abstract class AbstractProcessInstancesResource {
                 relatedContentService.storeRelatedContent(relatedContent);
             }
 
-            HistoricProcessInstance historicProcess = (HistoricProcessInstance) this.historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstance.getId()).singleResult();
+            HistoricProcessInstance historicProcess = this.historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstance.getId()).singleResult();
             if (formDefinition != null) {
-                this.formService.storeSubmittedForm(variables, formDefinition, (String) null, historicProcess.getId());
+                this.formService.storeSubmittedForm(variables, formDefinition, null, historicProcess.getId());
             }
 
             User user = null;
@@ -133,7 +133,7 @@ public abstract class AbstractProcessInstancesResource {
         RelatedContent content;
         for (Iterator i$ = allContent.getContent().iterator(); i$.hasNext(); ((List) list).add(content)) {
             content = (RelatedContent) i$.next();
-            list = (List) result.get(content.getField());
+            list = result.get(content.getField());
             if (list == null) {
                 list = new ArrayList();
                 result.put(content.getField(), (List<RelatedContent>) list);

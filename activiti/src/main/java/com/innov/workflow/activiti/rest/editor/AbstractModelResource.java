@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 @RestController
 public class AbstractModelResource {
@@ -62,7 +63,7 @@ public class AbstractModelResource {
         } else {
             try {
                 XMLInputFactory xif = XmlUtil.createSafeXmlInputFactory();
-                InputStreamReader xmlIn = new InputStreamReader(file.getInputStream(), "UTF-8");
+                InputStreamReader xmlIn = new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8);
                 XMLStreamReader xtr = xif.createXMLStreamReader(xmlIn);
                 BpmnModel bpmnModel = this.bpmnXMLConverter.convertToBpmnModel(xtr);
                 if (CollectionUtils.isEmpty(bpmnModel.getProcesses())) {

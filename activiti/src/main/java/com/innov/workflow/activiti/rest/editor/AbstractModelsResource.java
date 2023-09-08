@@ -41,6 +41,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -78,7 +79,7 @@ public class AbstractModelsResource {
     }
     public ResultListDataRepresentation getModels(String filter, String sort, Integer modelType, HttpServletRequest request) {
         String filterText = null;
-        List<NameValuePair> params = URLEncodedUtils.parse(request.getQueryString(), Charset.forName("UTF-8"));
+        List<NameValuePair> params = URLEncodedUtils.parse(request.getQueryString(), StandardCharsets.UTF_8);
         NameValuePair nameValuePair;
         if (params != null) {
             Iterator i$ = params.iterator();
@@ -124,7 +125,7 @@ public class AbstractModelsResource {
         List<ModelRepresentation> resultList = new ArrayList();
         User user = identityService.getCurrentUserObject();
         List<String> addedModelIds = new ArrayList();
-        List<Model> models = this.modelRepository.findModelsCreatedBy(user.getId(), 0, this.getSort((String) null, false));
+        List<Model> models = this.modelRepository.findModelsCreatedBy(user.getId(), 0, this.getSort(null, false));
         if (CollectionUtils.isNotEmpty(models)) {
             Iterator i$ = models.iterator();
 
@@ -149,7 +150,7 @@ public class AbstractModelsResource {
         } else {
             try {
                 XMLInputFactory xif = XmlUtil.createSafeXmlInputFactory();
-                InputStreamReader xmlIn = new InputStreamReader(file.getInputStream(), "UTF-8");
+                InputStreamReader xmlIn = new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8);
                 XMLStreamReader xtr = xif.createXMLStreamReader(xmlIn);
                 BpmnModel bpmnModel = this.bpmnXmlConverter.convertToBpmnModel(xtr);
                 if (CollectionUtils.isEmpty(bpmnModel.getProcesses())) {
@@ -192,7 +193,7 @@ public class AbstractModelsResource {
             AppDefinition appDefinition = null;
 
             try {
-                appDefinition = (AppDefinition) this.objectMapper.readValue(model.getModelEditorJson(), AppDefinition.class);
+                appDefinition = this.objectMapper.readValue(model.getModelEditorJson(), AppDefinition.class);
             } catch (Exception var5) {
                 this.logger.error("Error deserializing app " + model.getId(), var5);
                 throw new InternalServerErrorException("Could not deserialize app definition");
@@ -203,7 +204,7 @@ public class AbstractModelsResource {
             representation = new ModelRepresentation(model);
         }
 
-        return (ModelRepresentation) representation;
+        return representation;
     }
 
     protected String makeValidFilterText(String filterText) {
@@ -255,6 +256,6 @@ public class AbstractModelsResource {
             direction = Direction.DESC;
         }
 
-        return Sort.by(direction, new String[]{propName});
+        return Sort.by(direction, propName);
     }
 }

@@ -33,17 +33,17 @@ public class ContentStorageConfig {
     @Bean
     public ContentStorage contentStorage() {
         String fsRoot = this.env.getProperty("contentstorage.fs.rootFolder", Constants.UPLOAD_PATH);
-        this.log.info("Using file-system based content storage (" + fsRoot + ")");
-        Integer iterationDepth = (Integer) this.env.getProperty("contentstorage.fs.depth", Integer.class, DEFAULT_FS_DEPTH);
-        Integer blockSize = (Integer) this.env.getProperty("contentstorage.fs.blockSize", Integer.class, DEFAULT_FS_BLOCK_SIZE);
+        ContentStorageConfig.log.info("Using file-system based content storage (" + fsRoot + ")");
+        Integer iterationDepth = this.env.getProperty("contentstorage.fs.depth", Integer.class, DEFAULT_FS_DEPTH);
+        Integer blockSize = this.env.getProperty("contentstorage.fs.blockSize", Integer.class, DEFAULT_FS_BLOCK_SIZE);
         File root = new File(fsRoot);
-        if ((Boolean) this.env.getProperty("contentstorage.fs.createRoot", Boolean.class, Boolean.FALSE) && !root.exists()) {
-            this.log.info("Creating content storage root and possible missing parents: " + root.getAbsolutePath());
+        if (this.env.getProperty("contentstorage.fs.createRoot", Boolean.class, Boolean.FALSE) && !root.exists()) {
+            ContentStorageConfig.log.info("Creating content storage root and possible missing parents: " + root.getAbsolutePath());
             root.mkdirs();
         }
 
         if (root != null && root.exists()) {
-            this.log.info("File system root : " + root.getAbsolutePath());
+            ContentStorageConfig.log.info("File system root : " + root.getAbsolutePath());
         }
 
         return new FileSystemContentStorage(root, blockSize, iterationDepth);

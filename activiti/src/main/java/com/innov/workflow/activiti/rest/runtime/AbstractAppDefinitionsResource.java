@@ -40,7 +40,7 @@ public abstract class AbstractAppDefinitionsResource {
             if (deployment.getKey() != null) {
                 if (!deploymentMap.containsKey(deployment.getKey())) {
                     deploymentMap.put(deployment.getKey(), deployment);
-                } else if (((Deployment) deploymentMap.get(deployment.getKey())).getDeploymentTime().before(deployment.getDeploymentTime())) {
+                } else if (deploymentMap.get(deployment.getKey()).getDeploymentTime().before(deployment.getDeploymentTime())) {
                     deploymentMap.put(deployment.getKey(), deployment);
                 }
             }

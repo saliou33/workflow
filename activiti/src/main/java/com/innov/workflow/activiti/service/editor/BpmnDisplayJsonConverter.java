@@ -175,7 +175,7 @@ public class BpmnDisplayJsonConverter {
                     }
 
                     if (this.propertyMappers.containsKey(className)) {
-                        elementNode.put("properties", ((InfoMapper) this.propertyMappers.get(className)).map(element));
+                        elementNode.put("properties", this.propertyMappers.get(className).map(element));
                     }
 
                     elementArray.add(elementNode);
@@ -203,7 +203,7 @@ public class BpmnDisplayJsonConverter {
             elementNode.put("waypoints", waypointArray);
             String className = element.getClass().getSimpleName();
             if (this.propertyMappers.containsKey(className)) {
-                elementNode.put("properties", ((InfoMapper) this.propertyMappers.get(className)).map(element));
+                elementNode.put("properties", this.propertyMappers.get(className).map(element));
             }
 
             flowArray.add(elementNode);
@@ -267,7 +267,7 @@ public class BpmnDisplayJsonConverter {
         if (this.eventElementTypes.contains(className)) {
             Event event = (Event) element;
             if (CollectionUtils.isNotEmpty(event.getEventDefinitions())) {
-                EventDefinition eventDef = (EventDefinition) event.getEventDefinitions().get(0);
+                EventDefinition eventDef = event.getEventDefinitions().get(0);
                 ObjectNode eventNode = this.objectMapper.createObjectNode();
                 if (eventDef instanceof TimerEventDefinition) {
                     TimerEventDefinition timerDef = (TimerEventDefinition) eventDef;

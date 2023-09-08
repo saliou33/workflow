@@ -69,7 +69,7 @@ public class AppDefinitionServiceImpl implements AppDefinitionService {
         while (i$.hasNext()) {
             model = (ModelHistory) i$.next();
             if (modelMap.containsKey(model.getModelId())) {
-                if (model.getVersion() > ((ModelHistory) modelMap.get(model.getModelId())).getVersion()) {
+                if (model.getVersion() > modelMap.get(model.getModelId()).getVersion()) {
                     modelMap.put(model.getModelId(), model);
                 }
             } else {
@@ -81,7 +81,7 @@ public class AppDefinitionServiceImpl implements AppDefinitionService {
 
         while (i$.hasNext()) {
             model = (ModelHistory) i$.next();
-            Model latestModel = (Model) modelRepository.findById(model.getModelId()).orElse(null);
+            Model latestModel = modelRepository.findById(model.getModelId()).orElse(null);
             if (latestModel != null) {
                 resultList.add(this.createAppDefinition(model));
             }
@@ -105,7 +105,7 @@ public class AppDefinitionServiceImpl implements AppDefinitionService {
         AppDefinition appDefinition = null;
 
         try {
-            appDefinition = (AppDefinition) this.objectMapper.readValue(model.getModelEditorJson(), AppDefinition.class);
+            appDefinition = this.objectMapper.readValue(model.getModelEditorJson(), AppDefinition.class);
         } catch (Exception var8) {
             this.logger.error("Error deserializing app " + model.getId(), var8);
             throw new InternalServerErrorException("Could not deserialize app definition");

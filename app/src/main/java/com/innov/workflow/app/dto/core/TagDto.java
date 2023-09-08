@@ -6,7 +6,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Data
-public class RoleDto extends BaseDto {
+public class TagDto extends BaseDto {
     private Long id;
 
     @NotBlank(message = "le champs nom est vide")

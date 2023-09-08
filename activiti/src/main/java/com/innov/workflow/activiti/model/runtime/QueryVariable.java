@@ -41,7 +41,7 @@ public class QueryVariable {
         this.type = type;
     }
 
-    public static enum QueryVariableOperation {
+    public enum QueryVariableOperation {
         EQUALS("equals"),
         NOT_EQUALS("notEquals"),
         EQUALS_IGNORE_CASE("equalsIgnoreCase"),
@@ -52,9 +52,9 @@ public class QueryVariable {
         LESS_THAN("lessThan"),
         LESS_THAN_OR_EQUALS("lessThanOrEquals");
 
-        private String friendlyName;
+        private final String friendlyName;
 
-        private QueryVariableOperation(String friendlyName) {
+        QueryVariableOperation(String friendlyName) {
             this.friendlyName = friendlyName;
         }
 

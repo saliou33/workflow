@@ -24,6 +24,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -143,7 +144,7 @@ public class AppDefinitionExportService {
         AppDefinition appDefinition = null;
 
         try {
-            appDefinition = (AppDefinition) this.objectMapper.readValue(model.getModelEditorJson(), AppDefinition.class);
+            appDefinition = this.objectMapper.readValue(model.getModelEditorJson(), AppDefinition.class);
         } catch (Exception var4) {
             logger.error("Error deserializing app " + model.getId(), var4);
             throw new InternalServerErrorException("Could not deserialize app definition");
@@ -155,7 +156,7 @@ public class AppDefinitionExportService {
     }
 
     protected void createZipEntry(ZipOutputStream zipOutputStream, String filename, String content) throws Exception {
-        this.createZipEntry(zipOutputStream, filename, content.getBytes(Charset.forName("UTF-8")));
+        this.createZipEntry(zipOutputStream, filename, content.getBytes(StandardCharsets.UTF_8));
     }
 
     protected void createZipEntry(ZipOutputStream zipOutputStream, String filename, byte[] content) throws Exception {

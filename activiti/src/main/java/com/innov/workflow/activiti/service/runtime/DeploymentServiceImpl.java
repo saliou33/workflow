@@ -121,7 +121,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
                 while (i$.hasNext()) {
                     decisionTableId = (String) i$.next();
-                    decisionTableInfo = (Model) formMap.get(decisionTableId);
+                    decisionTableInfo = formMap.get(decisionTableId);
                     deploymentBuilder.addString("form-" + decisionTableInfo.getKey() + ".form", decisionTableInfo.getModelEditorJson());
                 }
             }
@@ -131,7 +131,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
                 while (i$.hasNext()) {
                     decisionTableId = (String) i$.next();
-                    decisionTableInfo = (Model) decisionTableMap.get(decisionTableId);
+                    decisionTableInfo = decisionTableMap.get(decisionTableId);
 
                     try {
                         JsonNode decisionTableNode = this.objectMapper.readTree(decisionTableInfo.getModelEditorJson());
@@ -275,7 +275,7 @@ public class DeploymentServiceImpl implements DeploymentService {
             if (flowElement instanceof UserTask) {
                 UserTask userTask = (UserTask) flowElement;
                 if ("$INITIATOR".equals(userTask.getAssignee()) && startEventMap.get(process.getId()) != null) {
-                    userTask.setAssignee("${" + ((StartEvent) startEventMap.get(process.getId())).getInitiator() + "}");
+                    userTask.setAssignee("${" + startEventMap.get(process.getId()).getInitiator() + "}");
                 }
             } else if (flowElement instanceof SubProcess) {
                 this.processUserTasks(((SubProcess) flowElement).getFlowElements(), process, startEventMap);
@@ -286,7 +286,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     protected AppDefinition resolveAppDefinition(Model appDefinitionModel) {
         try {
-            AppDefinition appDefinition = (AppDefinition) this.objectMapper.readValue(appDefinitionModel.getModelEditorJson(), AppDefinition.class);
+            AppDefinition appDefinition = this.objectMapper.readValue(appDefinitionModel.getModelEditorJson(), AppDefinition.class);
             return appDefinition;
         } catch (Exception var3) {
             logger.error("Error deserializing app " + appDefinitionModel.getId(), var3);

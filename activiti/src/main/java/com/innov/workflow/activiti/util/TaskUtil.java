@@ -31,7 +31,7 @@ public class TaskUtil {
         boolean isMemberOfCandidateGroup = false;
         boolean isMemberOfCandidateUsers = false;
         if (task.getProcessInstanceId() != null) {
-            HistoricProcessInstance historicProcessInstance = (HistoricProcessInstance) historyService.createHistoricProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult();
+            HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult();
             if (historicProcessInstance != null) {
                 processInstanceStartUserId = historicProcessInstance.getStartUserId();
                 BpmnModel bpmnModel = repositoryService.getBpmnModel(task.getProcessDefinitionId());
@@ -39,7 +39,7 @@ public class TaskUtil {
                 List links;
                 if (flowElement != null && flowElement instanceof UserTask) {
                     UserTask userTask = (UserTask) flowElement;
-                    links = (List) userTask.getExtensionElements().get("initiator-can-complete");
+                    links = userTask.getExtensionElements().get("initiator-can-complete");
                     if (CollectionUtils.isNotEmpty(links)) {
                         String value = ((ExtensionElement) links.get(0)).getElementText();
                         if (StringUtils.isNotEmpty(value)) {
@@ -49,7 +49,7 @@ public class TaskUtil {
 
                     Map<String, Object> variableMap = new HashMap();
                     List groups;
-                    if (CollectionUtils.isNotEmpty(userTask.getCandidateGroups()) && userTask.getCandidateGroups().size() == 1 && ((String) userTask.getCandidateGroups().get(0)).contains("${taskAssignmentBean.assignTaskToCandidateGroups('") || CollectionUtils.isNotEmpty(userTask.getCandidateUsers()) && userTask.getCandidateUsers().size() == 1 && ((String) userTask.getCandidateUsers().get(0)).contains("${taskAssignmentBean.assignTaskToCandidateUsers('")) {
+                    if (CollectionUtils.isNotEmpty(userTask.getCandidateGroups()) && userTask.getCandidateGroups().size() == 1 && userTask.getCandidateGroups().get(0).contains("${taskAssignmentBean.assignTaskToCandidateGroups('") || CollectionUtils.isNotEmpty(userTask.getCandidateUsers()) && userTask.getCandidateUsers().size() == 1 && userTask.getCandidateUsers().get(0).contains("${taskAssignmentBean.assignTaskToCandidateUsers('")) {
                         groups = historyService.createHistoricVariableInstanceQuery().processInstanceId(task.getProcessInstanceId()).list();
                         if (CollectionUtils.isNotEmpty(groups)) {
                             Iterator i$ = groups.iterator();
@@ -67,8 +67,8 @@ public class TaskUtil {
                         groups = identityService.getGroupsIds(currentUser);
                         if (CollectionUtils.isNotEmpty(groupIds)) {
 
-                            if (userTask.getCandidateGroups().size() == 1 && ((String) userTask.getCandidateGroups().get(0)).contains("${taskAssignmentBean.assignTaskToCandidateGroups('")) {
-                                String candidateGroupString = (String) userTask.getCandidateGroups().get(0);
+                            if (userTask.getCandidateGroups().size() == 1 && userTask.getCandidateGroups().get(0).contains("${taskAssignmentBean.assignTaskToCandidateGroups('")) {
+                                String candidateGroupString = userTask.getCandidateGroups().get(0);
                                 candidateGroupString = candidateGroupString.replace("${taskAssignmentBean.assignTaskToCandidateGroups('", "");
                                 candidateGroupString = candidateGroupString.replace("', execution)}", "");
                                 String[] groupsArray = candidateGroupString.split(",");
@@ -104,8 +104,8 @@ public class TaskUtil {
                     }
 
                     if (CollectionUtils.isNotEmpty(userTask.getCandidateUsers())) {
-                        if (userTask.getCandidateUsers().size() == 1 && ((String) userTask.getCandidateUsers().get(0)).contains("${taskAssignmentBean.assignTaskToCandidateUsers('")) {
-                            String candidateUserString = (String) userTask.getCandidateUsers().get(0);
+                        if (userTask.getCandidateUsers().size() == 1 && userTask.getCandidateUsers().get(0).contains("${taskAssignmentBean.assignTaskToCandidateUsers('")) {
+                            String candidateUserString = userTask.getCandidateUsers().get(0);
                             candidateUserString = candidateUserString.replace("${taskAssignmentBean.assignTaskToCandidateUsers('", "");
                             candidateUserString = candidateUserString.replace("', execution)}", "");
                             String[] users = candidateUserString.split(",");
@@ -154,7 +154,7 @@ public class TaskUtil {
 
                             while (i$.hasNext()) {
                                 GroupRepresentation group3 = (GroupRepresentation) v$.next();
-                                if (candidateGroupIds.contains(group3.getId().toString())) {
+                                if (candidateGroupIds.contains(group3.getId())) {
                                     isMemberOfCandidateGroup = true;
                                     break label106;
                                 }

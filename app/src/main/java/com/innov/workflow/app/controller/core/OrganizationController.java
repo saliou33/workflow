@@ -1,8 +1,11 @@
 package com.innov.workflow.app.controller.core;
 
+import com.innov.workflow.app.dto.core.GroupDto;
 import com.innov.workflow.app.dto.core.OrganizationDto;
+import com.innov.workflow.app.mapper.core.GroupMapper;
 import com.innov.workflow.app.mapper.core.OrganizationMapper;
 import com.innov.workflow.core.domain.ApiResponse;
+import com.innov.workflow.core.domain.entity.Group;
 import com.innov.workflow.core.domain.entity.Organization;
 import com.innov.workflow.core.service.OrganizationService;
 import lombok.AllArgsConstructor;
@@ -19,6 +22,8 @@ public class OrganizationController {
 
     private final OrganizationService organizationService;
     private final OrganizationMapper orgMapper;
+
+    private final GroupMapper groupeMapper;
 
     @GetMapping
     public ResponseEntity getAllOrganizations() {
@@ -55,4 +60,10 @@ public class OrganizationController {
         return ApiResponse.success("organisation supprimer");
     }
 
+    @PostMapping("/{id}/groups")
+    public ResponseEntity createGroup(@PathVariable Long id, @RequestBody GroupDto groupDto) {
+        Group group = groupeMapper.mapFromDto(groupDto);
+        organizationService.createGroup(id, group);
+        return ApiResponse.created("groupe créer", group);
+    }
 }

@@ -3,7 +3,6 @@ package com.innov.workflow.app.config;
 import com.innov.workflow.core.domain.ApiResponse;
 import com.innov.workflow.core.exception.ApiException;
 import io.jsonwebtoken.JwtException;
-import org.activiti.engine.ActivitiException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;

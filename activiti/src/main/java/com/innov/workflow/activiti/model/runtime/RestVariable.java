@@ -87,11 +87,11 @@ public class RestVariable {
         this.valueUrl = valueUrl;
     }
 
-    public static enum RestVariableScope {
+    public enum RestVariableScope {
         LOCAL,
         GLOBAL;
 
-        private RestVariableScope() {
+        RestVariableScope() {
         }
     }
 }

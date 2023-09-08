@@ -39,6 +39,7 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -97,17 +98,17 @@ public class ActivitiDecisionTableService extends BaseActivitiModelService {
     }
 
     public void exportDecisionTable(HttpServletResponse response, String decisionTableId) {
-        this.exportDecisionTable(response, (AbstractModel) this.getModel(decisionTableId, true, false));
+        this.exportDecisionTable(response, this.getModel(decisionTableId, true, false));
     }
 
     public void exportHistoricDecisionTable(HttpServletResponse response, String modelHistoryId) {
-        ModelHistory modelHistory = (ModelHistory) this.modelHistoryRepository.findById(modelHistoryId).orElse(null);
+        ModelHistory modelHistory = this.modelHistoryRepository.findById(modelHistoryId).orElse(null);
         this.getModel(modelHistory.getModelId(), true, false);
-        this.exportDecisionTable(response, (AbstractModel) modelHistory);
+        this.exportDecisionTable(response, modelHistory);
     }
 
     public void exportDecisionTableHistory(HttpServletResponse response, String decisionTableId) {
-        this.exportDecisionTable(response, (AbstractModel) this.getModel(decisionTableId, true, false));
+        this.exportDecisionTable(response, this.getModel(decisionTableId, true, false));
     }
 
     protected void exportDecisionTable(HttpServletResponse response, AbstractModel decisionTableModel) {
@@ -145,13 +146,13 @@ public class ActivitiDecisionTableService extends BaseActivitiModelService {
         if (fileName != null && (fileName.endsWith(".dmn") || fileName.endsWith(".xml"))) {
             try {
                 XMLInputFactory xif = XmlUtil.createSafeXmlInputFactory();
-                InputStreamReader xmlIn = new InputStreamReader(file.getInputStream(), "UTF-8");
+                InputStreamReader xmlIn = new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8);
                 XMLStreamReader xtr = xif.createXMLStreamReader(xmlIn);
                 DmnDefinition dmnDefinition = this.dmnXmlConverter.convertToDmnModel(xtr);
                 ObjectNode editorJsonNode = this.dmnJsonConverter.convertToJson(dmnDefinition);
                 editorJsonNode.remove("id");
                 ModelRepresentation modelRepresentation = new ModelRepresentation();
-                modelRepresentation.setKey(((Decision) dmnDefinition.getDecisions().get(0)).getId());
+                modelRepresentation.setKey(dmnDefinition.getDecisions().get(0).getId());
                 modelRepresentation.setName(dmnDefinition.getName());
                 modelRepresentation.setDescription(dmnDefinition.getDescription());
                 modelRepresentation.setModelType(4);
@@ -191,7 +192,7 @@ public class ActivitiDecisionTableService extends BaseActivitiModelService {
     }
 
     public DecisionTableRepresentation getHistoricDecisionTable(String modelHistoryId) {
-        ModelHistory modelHistory = (ModelHistory) this.modelHistoryRepository.findById(modelHistoryId).orElse(null);
+        ModelHistory modelHistory = this.modelHistoryRepository.findById(modelHistoryId).orElse(null);
         this.getModel(modelHistory.getModelId(), true, false);
         return this.createDecisionTableRepresentation(modelHistory);
     }
@@ -200,7 +201,7 @@ public class ActivitiDecisionTableService extends BaseActivitiModelService {
         DecisionTableDefinitionRepresentation decisionTableDefinitionRepresentation = null;
 
         try {
-            decisionTableDefinitionRepresentation = (DecisionTableDefinitionRepresentation) this.objectMapper.readValue(model.getModelEditorJson(), DecisionTableDefinitionRepresentation.class);
+            decisionTableDefinitionRepresentation = this.objectMapper.readValue(model.getModelEditorJson(), DecisionTableDefinitionRepresentation.class);
         } catch (Exception var4) {
             logger.error("Error deserializing decision table", var4);
             throw new InternalServerErrorException("Could not deserialize decision table definition");

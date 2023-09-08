@@ -286,7 +286,7 @@ public abstract class AbstractTaskQueryResource {
                     processDefinition = (ProcessDefinitionEntity) this.repositoryService.getProcessDefinition(task.getProcessDefinitionId());
                 }
 
-                representation = new TaskRepresentation(task, processDefinition, (String) processInstanceNames.get(task.getProcessInstanceId()));
+                representation = new TaskRepresentation(task, processDefinition, processInstanceNames.get(task.getProcessInstanceId()));
                 if (StringUtils.isNotEmpty(task.getAssignee())) {
 
                     User user = this.identityService.getUser(task.getAssignee());

@@ -20,6 +20,9 @@ public class Organization extends BaseEntity {
     private String name;
     @Lob
     private String description;
+
+    private String avatar;
+
     @OneToMany(fetch = FetchType.LAZY)
     private List<Group> groups;
 }

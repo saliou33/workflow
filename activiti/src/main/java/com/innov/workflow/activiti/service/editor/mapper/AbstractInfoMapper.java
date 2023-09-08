@@ -92,7 +92,7 @@ public abstract class AbstractInfoMapper implements InfoMapper {
                             listenerBuilder.append(",  ");
                         }
 
-                        FieldExtension field = (FieldExtension) listener.getFieldExtensions().get(i);
+                        FieldExtension field = listener.getFieldExtensions().get(i);
                         listenerBuilder.append(field.getFieldName());
                         if (StringUtils.isNotEmpty(field.getStringValue())) {
                             listenerBuilder.append(" - ");
@@ -105,7 +105,7 @@ public abstract class AbstractInfoMapper implements InfoMapper {
                 }
             }
 
-            this.createPropertyNode(name, (List) listenerValues);
+            this.createPropertyNode(name, listenerValues);
         }
 
     }
@@ -128,7 +128,7 @@ public abstract class AbstractInfoMapper implements InfoMapper {
                 }
             }
 
-            this.createPropertyNode(name, (List) fieldValues);
+            this.createPropertyNode(name, fieldValues);
         }
 
     }

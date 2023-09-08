@@ -84,9 +84,9 @@ public class AppDefinitionResource {
             throw new InternalServerErrorException("App definition could not be saved " + modelId);
         }
 
-        model = this.modelService.saveModel(model, editorJson, (byte[]) null, false, (String) null, user);
+        model = this.modelService.saveModel(model, editorJson, null, false, null, user);
         if (updatedModel.isPublish()) {
-            return this.appDefinitionImportService.publishAppDefinition(modelId, new AppDefinitionPublishRepresentation((String) null, updatedModel.getForce()));
+            return this.appDefinitionImportService.publishAppDefinition(modelId, new AppDefinitionPublishRepresentation(null, updatedModel.getForce()));
         } else {
             AppDefinitionRepresentation appDefinition = new AppDefinitionRepresentation(model);
             appDefinition.setDefinition(updatedModel.getAppDefinition().getDefinition());

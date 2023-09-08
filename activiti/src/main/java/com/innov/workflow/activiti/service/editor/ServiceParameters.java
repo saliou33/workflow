@@ -21,9 +21,9 @@ public class ServiceParameters {
         Enumeration<String> params = request.getParameterNames();
 
         while (params.hasMoreElements()) {
-            name = (String) params.nextElement();
+            name = params.nextElement();
             value = request.getParameter(name);
-            if (value != null && StringUtils.isNotEmpty(value)) {
+            if (StringUtils.isNotEmpty(value)) {
                 parameters.addParameter(name, value);
             }
         }
@@ -38,7 +38,7 @@ public class ServiceParameters {
         JsonNode value = null;
 
         while (ir.hasNext()) {
-            name = (String) ir.next();
+            name = ir.next();
             value = node.get(name);
             if (value != null) {
                 if (value.isNumber()) {

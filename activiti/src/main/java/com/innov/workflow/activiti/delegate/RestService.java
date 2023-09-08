@@ -18,7 +18,7 @@ public class RestService implements JavaDelegate {
             JSONObject formDataJson =  new JSONObject(formData);
             System.out.println("Inside Delegate Method");
             System.out.println(formDataJson.get("body"));
-            System.out.println("URL: " + (String) url.getValue(execution));
+            System.out.println("URL: " + url.getValue(execution));
         }
     }
 

@@ -44,9 +44,9 @@ public class TasksResource {
                 task.setCategory(taskRepresentation.getCategory());
             }
 
-            task.setAssignee(identityService.getCurrentUserObject().getId().toString());
+            task.setAssignee(identityService.getCurrentUserObject().getId());
             this.taskService.saveTask(task);
-            return new TaskRepresentation((Task) ((TaskQuery) this.taskService.createTaskQuery().taskId(task.getId())).singleResult());
+            return new TaskRepresentation(this.taskService.createTaskQuery().taskId(task.getId()).singleResult());
         }
     }
 }

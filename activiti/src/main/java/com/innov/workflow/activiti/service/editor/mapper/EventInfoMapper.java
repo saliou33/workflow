@@ -11,7 +11,7 @@ public class EventInfoMapper extends AbstractInfoMapper {
     protected void mapProperties(Object element) {
         Event event = (Event) element;
         if (CollectionUtils.isNotEmpty(event.getEventDefinitions())) {
-            EventDefinition eventDef = (EventDefinition) event.getEventDefinitions().get(0);
+            EventDefinition eventDef = event.getEventDefinitions().get(0);
             if (eventDef instanceof TimerEventDefinition) {
                 TimerEventDefinition timerDef = (TimerEventDefinition) eventDef;
                 if (StringUtils.isNotEmpty(timerDef.getTimeDate())) {

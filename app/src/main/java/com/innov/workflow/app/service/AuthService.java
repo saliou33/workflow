@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -69,7 +69,7 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
         user.setEmail(signupRequest.getEmail());
         user.setTel(signupRequest.getTel());
-        user.setSysRoles(Arrays.asList(roleService.getRoleByName(ESysRole.ROLE_USER)));
+        user.setSysRoles(Collections.singletonList(roleService.getRoleByName(ESysRole.ROLE_USER)));
         user.setEnabled(true);
         userService.saveUser(user);
 

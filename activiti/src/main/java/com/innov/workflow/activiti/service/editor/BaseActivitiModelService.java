@@ -30,7 +30,7 @@ public class BaseActivitiModelService {
     }
 
     protected Model getModel(String modelId, boolean checkRead, boolean checkEdit) {
-        Model model = (Model) this.modelRepository.findById(modelId).orElse(null);
+        Model model = this.modelRepository.findById(modelId).orElse(null);
         if (model == null) {
             NotFoundException processNotFound = new NotFoundException("No model found with the given id: " + modelId);
             processNotFound.setMessageKey("PROCESS.ERROR.NOT-FOUND");
@@ -42,7 +42,7 @@ public class BaseActivitiModelService {
 
     protected ModelHistory getModelHistory(String modelId, String modelHistoryId, boolean checkRead, boolean checkEdit) {
         Model model = this.getModel(modelId, checkRead, checkEdit);
-        ModelHistory modelHistory = (ModelHistory) this.modelHistoryRepository.findById(modelHistoryId).orElse(null);
+        ModelHistory modelHistory = this.modelHistoryRepository.findById(modelHistoryId).orElse(null);
         if (modelHistory != null && modelHistory.getRemovalDate() == null && modelHistory.getModelId().equals(model.getId())) {
             return modelHistory;
         } else {

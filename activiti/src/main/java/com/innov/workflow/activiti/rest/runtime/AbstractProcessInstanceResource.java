@@ -52,7 +52,7 @@ public abstract class AbstractProcessInstanceResource {
     }
 
     public ProcessInstanceRepresentation getProcessInstance(String processInstanceId, HttpServletResponse response) {
-        HistoricProcessInstance processInstance = (HistoricProcessInstance) this.historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+        HistoricProcessInstance processInstance = this.historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
         if (!this.permissionService.hasReadPermissionOnProcessInstance(identityService.getCurrentUserObject(), processInstance, processInstanceId)) {
             throw new NotFoundException("Process with id: " + processInstanceId + " does not exist or is not available for this user");
         } else {
@@ -74,7 +74,7 @@ public abstract class AbstractProcessInstanceResource {
     }
 
     public FormDefinition getProcessInstanceStartForm(String processInstanceId, HttpServletResponse response) {
-        HistoricProcessInstance processInstance = (HistoricProcessInstance) this.historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+        HistoricProcessInstance processInstance = this.historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
         if (!this.permissionService.hasReadPermissionOnProcessInstance(identityService.getCurrentUserObject(), processInstance, processInstanceId)) {
             throw new NotFoundException("Process with id: " + processInstanceId + " does not exist or is not available for this user");
         } else {
@@ -85,7 +85,7 @@ public abstract class AbstractProcessInstanceResource {
 
     public void deleteProcessInstance(String processInstanceId) {
         User currentUser = identityService.getCurrentUserObject();
-        HistoricProcessInstance processInstance = (HistoricProcessInstance) this.historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).startedBy(String.valueOf(currentUser.getId())).singleResult();
+        HistoricProcessInstance processInstance = this.historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).startedBy(String.valueOf(currentUser.getId())).singleResult();
         if (processInstance == null) {
             throw new NotFoundException("Process with id: " + processInstanceId + " does not exist or is not started by this user");
         } else {
@@ -96,7 +96,7 @@ public abstract class AbstractProcessInstanceResource {
 
                 this.processInstanceService.deleteProcessInstance(processInstanceId);
             } else {
-                this.runtimeService.deleteProcessInstance(processInstanceId, "Cancelled by " + identityService.getCurrentUserObject().getId().toString());
+                this.runtimeService.deleteProcessInstance(processInstanceId, "Cancelled by " + identityService.getCurrentUserObject().getId());
             }
 
         }
@@ -110,7 +110,7 @@ public abstract class AbstractProcessInstanceResource {
         if (startElement instanceof StartEvent) {
             StartEvent startEvent = (StartEvent) startElement;
             if (StringUtils.isNotEmpty(startEvent.getFormKey())) {
-                formDefinition = this.formService.getCompletedTaskFormDefinitionByKeyAndParentDeploymentId(startEvent.getFormKey(), processDefinition.getDeploymentId(), (String) null, processInstanceId, (Map) null, processDefinition.getTenantId());
+                formDefinition = this.formService.getCompletedTaskFormDefinitionByKeyAndParentDeploymentId(startEvent.getFormKey(), processDefinition.getDeploymentId(), null, processInstanceId, null, processDefinition.getTenantId());
             }
         }
 

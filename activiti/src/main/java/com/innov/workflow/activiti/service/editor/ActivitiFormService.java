@@ -99,7 +99,7 @@ public class ActivitiFormService {
         FormDefinition formDefinition = null;
 
         try {
-            formDefinition = (FormDefinition) this.objectMapper.readValue(model.getModelEditorJson(), FormDefinition.class);
+            formDefinition = this.objectMapper.readValue(model.getModelEditorJson(), FormDefinition.class);
         } catch (Exception var4) {
             logger.error("Error deserializing form", var4);
             throw new InternalServerErrorException("Could not deserialize form definition");

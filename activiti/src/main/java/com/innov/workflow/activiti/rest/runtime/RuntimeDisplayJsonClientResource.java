@@ -78,7 +78,7 @@ public class RuntimeDisplayJsonClientResource {
         if (!this.permissionService.hasReadPermissionOnProcessInstance(currentUser, processInstanceId)) {
             throw new NotPermittedException();
         } else {
-            ProcessInstance processInstance = (ProcessInstance) this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+            ProcessInstance processInstance = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
             if (processInstance == null) {
                 throw new BadRequestException("No process instance found with id " + processInstanceId);
             } else {
@@ -117,7 +117,7 @@ public class RuntimeDisplayJsonClientResource {
                         while (i$.hasNext()) {
                             Job job = (Job) i$.next();
                             if (executionMap.containsKey(job.getExecutionId())) {
-                                currentElements.add(((Execution) executionMap.get(job.getExecutionId())).getActivityId());
+                                currentElements.add(executionMap.get(job.getExecutionId()).getActivityId());
                             }
                         }
                     }
@@ -175,7 +175,7 @@ public class RuntimeDisplayJsonClientResource {
     public JsonNode getModelJSONForProcessDefinition(@PathVariable String processDefinitionId) {
         BpmnModel pojoModel = this.repositoryService.getBpmnModel(processDefinitionId);
         if (pojoModel != null && !pojoModel.getLocationMap().isEmpty()) {
-            return this.processProcessElements(pojoModel, (Set) null, (Set) null);
+            return this.processProcessElements(pojoModel, null, null);
         } else {
             throw new InternalServerErrorException("Process definition could not be found with id " + processDefinitionId);
         }
@@ -191,7 +191,7 @@ public class RuntimeDisplayJsonClientResource {
         if (!this.permissionService.hasReadPermissionOnProcessInstance(currentUser, processInstanceId)) {
             throw new NotPermittedException();
         } else {
-            HistoricProcessInstance processInstance = (HistoricProcessInstance) this.historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+            HistoricProcessInstance processInstance = this.historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
             if (processInstance == null) {
                 throw new BadRequestException("No process instance found with id " + processInstanceId);
             } else {
@@ -352,7 +352,7 @@ public class RuntimeDisplayJsonClientResource {
                     }
 
                     if (this.propertyMappers.containsKey(className)) {
-                        elementNode.put("properties", ((InfoMapper) this.propertyMappers.get(className)).map(element));
+                        elementNode.put("properties", this.propertyMappers.get(className).map(element));
                     }
 
                     elementArray.add(elementNode);
@@ -380,7 +380,7 @@ public class RuntimeDisplayJsonClientResource {
             elementNode.put("waypoints", waypointArray);
             String className = element.getClass().getSimpleName();
             if (this.propertyMappers.containsKey(className)) {
-                elementNode.put("properties", ((InfoMapper) this.propertyMappers.get(className)).map(element));
+                elementNode.put("properties", this.propertyMappers.get(className).map(element));
             }
 
             flowArray.add(elementNode);
@@ -444,7 +444,7 @@ public class RuntimeDisplayJsonClientResource {
         if (this.eventElementTypes.contains(className)) {
             Event event = (Event) element;
             if (CollectionUtils.isNotEmpty(event.getEventDefinitions())) {
-                EventDefinition eventDef = (EventDefinition) event.getEventDefinitions().get(0);
+                EventDefinition eventDef = event.getEventDefinitions().get(0);
                 ObjectNode eventNode = this.objectMapper.createObjectNode();
                 if (eventDef instanceof TimerEventDefinition) {
                     TimerEventDefinition timerDef = (TimerEventDefinition) eventDef;

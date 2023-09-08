@@ -56,7 +56,7 @@ public abstract class AbstractCommentsResource {
         if (StringUtils.isBlank(commentRequest.getMessage())) {
             throw new BadRequestException("Comment should not be empty");
         } else {
-            HistoricTaskInstance task = (HistoricTaskInstance) ((HistoricTaskInstanceQuery) this.historyService.createHistoricTaskInstanceQuery().taskId(taskId)).singleResult();
+            HistoricTaskInstance task = this.historyService.createHistoricTaskInstanceQuery().taskId(taskId).singleResult();
             if (task == null) {
                 throw new NotFoundException("No task found with id: " + taskId);
             } else {
@@ -87,7 +87,7 @@ public abstract class AbstractCommentsResource {
         if (StringUtils.isBlank(commentRequest.getMessage())) {
             throw new BadRequestException("Comment should not be empty");
         } else {
-            HistoricProcessInstance processInstance = (HistoricProcessInstance) this.historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+            HistoricProcessInstance processInstance = this.historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
             if (processInstance == null) {
                 throw new NotFoundException("No process instance found with id: " + processInstanceId);
             } else {

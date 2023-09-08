@@ -22,7 +22,7 @@ public class StringRestVariableConverter implements RestVariableConverter {
             if (!(result.getValue() instanceof String)) {
                 throw new ActivitiIllegalArgumentException("Converter can only convert strings");
             } else {
-                return (String) result.getValue();
+                return result.getValue();
             }
         } else {
             return null;
@@ -37,7 +37,7 @@ public class StringRestVariableConverter implements RestVariableConverter {
 
             result.setValue(variableValue);
         } else {
-            result.setValue((Object) null);
+            result.setValue(null);
         }
 
     }

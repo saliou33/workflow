@@ -98,7 +98,7 @@ public abstract class AbstractTaskResource {
     }
 
     public TaskRepresentation updateTask(String taskId, TaskUpdateRepresentation updated) {
-        Task task = (Task) ((TaskQuery) this.taskService.createTaskQuery().taskId(taskId)).singleResult();
+        Task task = this.taskService.createTaskQuery().taskId(taskId).singleResult();
         if (task == null) {
             throw new NotFoundException("Task with id: " + taskId + " does not exist");
         } else {

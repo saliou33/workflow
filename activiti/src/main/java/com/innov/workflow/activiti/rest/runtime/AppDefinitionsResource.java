@@ -39,7 +39,7 @@ public class AppDefinitionsResource extends AbstractAppDefinitionsResource {
             method = {RequestMethod.GET}
     )
     public AppDefinitionRepresentation getAppDefinition(@PathVariable("deploymentKey") String deploymentKey) {
-        Deployment deployment = (Deployment) this.repositoryService.createDeploymentQuery().deploymentKey(deploymentKey).latest().singleResult();
+        Deployment deployment = this.repositoryService.createDeploymentQuery().deploymentKey(deploymentKey).latest().singleResult();
         if (deployment == null) {
             throw new NotFoundException("No app definition is found with key: " + deploymentKey);
         } else {

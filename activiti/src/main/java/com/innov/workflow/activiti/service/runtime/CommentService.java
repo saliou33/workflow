@@ -31,15 +31,15 @@ public class CommentService {
     }
 
     public List<Comment> getCommentsForTask(String taskId, boolean latestFirst) {
-        return this.commentRepository.findByTaskId(taskId, Sort.by(latestFirst ? Direction.DESC : Direction.ASC, new String[]{"created"}));
+        return this.commentRepository.findByTaskId(taskId, Sort.by(latestFirst ? Direction.DESC : Direction.ASC, "created"));
     }
 
     public List<Comment> getCommentsForProcessInstance(String processInstanceId, boolean latestFirst) {
-        return this.commentRepository.findByProcessInstanceId(processInstanceId, Sort.by(latestFirst ? Direction.DESC : Direction.ASC, new String[]{"created"}));
+        return this.commentRepository.findByProcessInstanceId(processInstanceId, Sort.by(latestFirst ? Direction.DESC : Direction.ASC, "created"));
     }
 
     public Comment createComment(String message, User createdBy, String processInstanceId) {
-        return this.createComment(message, createdBy, (String) null, processInstanceId);
+        return this.createComment(message, createdBy, null, processInstanceId);
     }
 
     public Comment createComment(String message, User createdBy, String taskId, String processInstanceId) {

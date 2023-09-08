@@ -31,8 +31,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-;
-
 @Service
 public class ActivitiTaskFormService {
     private static final Logger logger = LoggerFactory.getLogger(ActivitiTaskFormService.class);
@@ -97,7 +95,7 @@ public class ActivitiTaskFormService {
     }
 
     public void completeTaskForm(String taskId, CompleteFormRepresentation completeTaskFormRepresentation) {
-        Task task = (Task) ((TaskQuery) this.taskService.createTaskQuery().taskId(taskId)).singleResult();
+        Task task = this.taskService.createTaskQuery().taskId(taskId).singleResult();
         if (task == null) {
             throw new NotFoundException("Task not found with id: " + taskId);
         } else {
