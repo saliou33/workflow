@@ -2,6 +2,7 @@ package com.innov.workflow.activiti.service.editor;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.domain.editor.AbstractModel;
 import com.innov.workflow.activiti.domain.editor.AppDefinition;
 import com.innov.workflow.activiti.domain.editor.AppModelDefinition;
@@ -9,7 +10,6 @@ import com.innov.workflow.activiti.domain.editor.Model;
 import com.innov.workflow.activiti.model.editor.AppDefinitionPublishRepresentation;
 import com.innov.workflow.activiti.model.editor.AppDefinitionRepresentation;
 import com.innov.workflow.activiti.model.editor.AppDefinitionUpdateResultRepresentation;
-import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.repository.editor.ModelRepository;
 import com.innov.workflow.activiti.service.api.ModelService;
 import com.innov.workflow.activiti.service.exception.BadRequestException;

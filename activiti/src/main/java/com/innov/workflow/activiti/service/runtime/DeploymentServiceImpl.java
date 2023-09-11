@@ -156,24 +156,23 @@ public class DeploymentServiceImpl implements DeploymentService {
 
         Iterator i = appDefinition.getModels().iterator();
 
-            while (i.hasNext()) {
-                AppModelDefinition appModelDef = (AppModelDefinition) i.next();
-                Model processModel = this.modelService.getModel(appModelDef.getId());
+        while (i.hasNext()) {
+            AppModelDefinition appModelDef = (AppModelDefinition) i.next();
+            Model processModel = this.modelService.getModel(appModelDef.getId());
 
-                if (processModel == null) {
-                    logger.error("Model " + appModelDef.getId() + " for app definition " + appDefinitionModel.getId() + " could not be found");
-                    throw new BadRequestException("Model for app definition could not be found");
-                }
-
-                if(processModel.getModelType() == 0) {
-                    createFormDeployment(processModel);
-                }
+            if (processModel == null) {
+                logger.error("Model " + appModelDef.getId() + " for app definition " + appDefinitionModel.getId() + " could not be found");
+                throw new BadRequestException("Model for app definition could not be found");
             }
+
+            if (processModel.getModelType() == 0) {
+                createFormDeployment(processModel);
+            }
+        }
     }
 
 
-
-    public void createFormDeployment (Model processModel) {
+    public void createFormDeployment(Model processModel) {
         List<Model> formModels = this.modelRepository.findModelsByParentModelId(processModel.getId());
         ProcessDefinition p = this.repositoryService.createProcessDefinitionQuery()
                 .processDefinitionKey(processModel.getKey()).orderByProcessDefinitionVersion().desc().list().get(0);
@@ -182,7 +181,7 @@ public class DeploymentServiceImpl implements DeploymentService {
             return;
         }
 
-        for(Model f: formModels) {
+        for (Model f : formModels) {
 //            FormDefinition formDefinition = null;
 //            try {
 //                formDefinition = formRepositoryService.getFormDefinitionByKey(f.getKey());

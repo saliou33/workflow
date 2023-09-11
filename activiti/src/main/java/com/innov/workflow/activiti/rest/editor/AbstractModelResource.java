@@ -2,10 +2,10 @@ package com.innov.workflow.activiti.rest.editor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.domain.editor.AbstractModel;
 import com.innov.workflow.activiti.domain.editor.Model;
 import com.innov.workflow.activiti.model.editor.ModelRepresentation;
-import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.service.api.ModelService;
 import com.innov.workflow.activiti.service.exception.BadRequestException;
 import com.innov.workflow.activiti.service.exception.NonJsonResourceNotFoundException;

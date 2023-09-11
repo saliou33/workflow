@@ -1,23 +1,16 @@
 package com.innov.workflow.activiti.rest.runtime;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.innov.workflow.activiti.domain.runtime.RelatedContent;
 import com.innov.workflow.activiti.model.common.ResultListDataRepresentation;
 import com.innov.workflow.activiti.model.runtime.RelatedContentRepresentation;
 import com.innov.workflow.activiti.service.exception.InternalServerErrorException;
-import com.innov.workflow.core.domain.ApiResponse;
-import com.innov.workflow.core.domain.entity.User;
-import com.innov.workflow.core.exception.ApiException;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/api")

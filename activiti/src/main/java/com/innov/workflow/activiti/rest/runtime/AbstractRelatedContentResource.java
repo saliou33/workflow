@@ -1,11 +1,11 @@
 package com.innov.workflow.activiti.rest.runtime;
 
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.domain.runtime.RelatedContent;
 import com.innov.workflow.activiti.model.common.ResultListDataRepresentation;
 import com.innov.workflow.activiti.model.component.SimpleContentTypeMapper;
 import com.innov.workflow.activiti.model.runtime.ProcessInstanceRepresentation;
 import com.innov.workflow.activiti.model.runtime.RelatedContentRepresentation;
-import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.service.exception.BadRequestException;
 import com.innov.workflow.activiti.service.exception.InternalServerErrorException;
 import com.innov.workflow.activiti.service.exception.NotFoundException;
@@ -25,7 +25,6 @@ import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricProcessInstanceQuery;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.task.Task;
-import org.activiti.engine.task.TaskQuery;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +32,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -169,7 +165,7 @@ public abstract class AbstractRelatedContentResource {
         } else {
             if (content.getMimeType() != null) {
                 response.setContentType(content.getMimeType());
-                response.setHeader("Content-Disposition", "attachment; filename=\""+content.getName()+"\"");
+                response.setHeader("Content-Disposition", "attachment; filename=\"" + content.getName() + "\"");
             }
             InputStream inputstream = null;
             try {
@@ -349,7 +345,7 @@ public abstract class AbstractRelatedContentResource {
         return contentType;
     }
 
-    public ResponseEntity uploadAvatar(Long id,  MultipartFile file) {
+    public ResponseEntity uploadAvatar(Long id, MultipartFile file) {
         User user = userService.getUserByUserId(id);
 
         if (file != null && file.getName() != null) {
@@ -365,14 +361,14 @@ public abstract class AbstractRelatedContentResource {
 
                 return ApiResponse.success("Avatar uploaded successfully");
             } catch (IOException e) {
-                throw new ApiException(HttpStatus.BAD_REQUEST,"Error while reading file data");
+                throw new ApiException(HttpStatus.BAD_REQUEST, "Error while reading file data");
             }
         } else {
-            throw new ApiException(HttpStatus.BAD_REQUEST,"File to upload is missing");
+            throw new ApiException(HttpStatus.BAD_REQUEST, "File to upload is missing");
         }
     }
 
-    protected String getContentTypeForImageFileExtension(MultipartFile file)   {
+    protected String getContentTypeForImageFileExtension(MultipartFile file) {
         String fileName = file.getOriginalFilename();
         String contentType = null;
 
@@ -382,11 +378,10 @@ public abstract class AbstractRelatedContentResource {
             contentType = "image/gif";
         } else if (fileName.endsWith("png")) {
             contentType = "image/png";
-        }
-        else {
+        } else {
             throw new ApiException(HttpStatus.BAD_REQUEST, "File type not supported");
         }
 
-        return  contentType;
+        return contentType;
     }
 }

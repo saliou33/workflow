@@ -8,13 +8,11 @@ import org.activiti.form.api.FormService;
 import org.activiti.form.engine.Clock;
 import org.activiti.form.engine.FormEngine;
 import org.activiti.form.engine.FormEngineConfiguration;
-
 import org.activiti.form.engine.impl.cfg.StandaloneFormEngineConfiguration;
 import org.activiti.form.engine.impl.persistence.deploy.DeploymentCache;
 import org.activiti.form.engine.impl.persistence.deploy.FormCacheEntry;
 import org.activiti.form.engine.impl.persistence.entity.FormDeploymentEntityManager;
 import org.activiti.form.engine.impl.persistence.entity.FormEntityManager;
-
 import org.activiti.form.engine.impl.persistence.entity.FormEntityManagerImpl;
 import org.activiti.form.engine.impl.persistence.entity.data.FormDataManager;
 import org.activiti.form.engine.impl.persistence.entity.data.impl.MybatisFormDataManager;
@@ -30,10 +28,9 @@ import javax.sql.DataSource;
 public class FormEngineConfig {
 
 
+    private static FormEngine formEngine;
     private final DataSource dataSource;
     private final DeploymentCacheImpl<FormCacheEntry> deploymentCache;
-    private static FormEngine formEngine;
-
 
     @Bean
     public FormEngineConfiguration formEngineConfiguration() {
@@ -54,7 +51,7 @@ public class FormEngineConfig {
     public FormEngine formEngine(@Qualifier("formEngineConfiguration") FormEngineConfiguration formEngineConfiguration) {
         return formEngine;
     }
-    
+
 //    @Bean
 //    public CommandContextFactory commandContextFactory (@Qualifier("formEngineConfiguration") FormEngineConfiguration formEngineConfiguration) {
 //        return formEngineConfiguration.getCommandContextFactory();
@@ -64,7 +61,7 @@ public class FormEngineConfig {
 //    public CommandExecutor commandExecutor (@Qualifier("formEngineConfiguration") FormEngineConfiguration formEngineConfiguration) {
 //        return formEngineConfiguration.getCommandExecutor();
 //    }
- 
+
     @Bean(name = "deploymentCache")
     public DeploymentCache deploymentCache(@Qualifier("formEngineConfiguration") FormEngineConfiguration formEngineConfiguration) {
         return formEngineConfiguration.getFormCache();
@@ -79,13 +76,13 @@ public class FormEngineConfig {
     }
 
     @Bean(name = "formEntityManager")
-    public FormEntityManager formEntityManager (@Qualifier("formEngineConfiguration") FormEngineConfiguration formEngineConfiguration) {
+    public FormEntityManager formEntityManager(@Qualifier("formEngineConfiguration") FormEngineConfiguration formEngineConfiguration) {
         return formEngineConfiguration.getFormEntityManager();
     }
 
     @Bean(name = "formDeploymentEntityManager")
-    public FormDeploymentEntityManager formDeploymentEntityManager (@Qualifier("formEngineConfiguration") FormEngineConfiguration formEngineConfiguration) {
-        return  formEngineConfiguration.getDeploymentEntityManager();
+    public FormDeploymentEntityManager formDeploymentEntityManager(@Qualifier("formEngineConfiguration") FormEngineConfiguration formEngineConfiguration) {
+        return formEngineConfiguration.getDeploymentEntityManager();
     }
 
 

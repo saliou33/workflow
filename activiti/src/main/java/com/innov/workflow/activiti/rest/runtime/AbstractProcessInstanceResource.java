@@ -1,7 +1,7 @@
 package com.innov.workflow.activiti.rest.runtime;
 
-import com.innov.workflow.activiti.model.runtime.ProcessInstanceRepresentation;
 import com.innov.workflow.activiti.custom.service.IdentityService;
+import com.innov.workflow.activiti.model.runtime.ProcessInstanceRepresentation;
 import com.innov.workflow.activiti.service.exception.NotFoundException;
 import com.innov.workflow.activiti.service.runtime.PermissionService;
 import com.innov.workflow.activiti.service.runtime.ProcessInstanceService;
@@ -25,7 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
 @Service
 public abstract class AbstractProcessInstanceResource {

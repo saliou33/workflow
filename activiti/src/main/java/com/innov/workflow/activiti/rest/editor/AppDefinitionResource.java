@@ -1,12 +1,12 @@
 package com.innov.workflow.activiti.rest.editor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.domain.editor.*;
 import com.innov.workflow.activiti.model.editor.AppDefinitionPublishRepresentation;
 import com.innov.workflow.activiti.model.editor.AppDefinitionRepresentation;
 import com.innov.workflow.activiti.model.editor.AppDefinitionSaveRepresentation;
 import com.innov.workflow.activiti.model.editor.AppDefinitionUpdateResultRepresentation;
-import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.service.api.ModelService;
 import com.innov.workflow.activiti.service.editor.AppDefinitionExportService;
 import com.innov.workflow.activiti.service.editor.AppDefinitionImportService;
@@ -50,7 +50,6 @@ public class AppDefinitionResource {
         Model model = this.modelService.getModel(modelId);
         return this.createAppDefinitionRepresentation(model);
     }
-
 
 
     @RequestMapping(
@@ -178,8 +177,8 @@ public class AppDefinitionResource {
             throw new InternalServerErrorException("Could not deserialize app definition");
         }
 
-        if(appDefinition.getModels() != null) {
-            for(AppModelDefinition m: appDefinition.getModels()) {
+        if (appDefinition.getModels() != null) {
+            for (AppModelDefinition m : appDefinition.getModels()) {
                 m.setKey(modelService.getModel(m.getId()).getKey());
             }
         }

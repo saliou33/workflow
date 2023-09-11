@@ -16,5 +16,7 @@ public class OrganizationDto extends BaseDto {
 
     private String description;
 
+    private String avatar;
+
 }
 

@@ -1,13 +1,12 @@
 package com.innov.workflow.activiti.rest.runtime;
 
 
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.model.runtime.CreateTaskRepresentation;
 import com.innov.workflow.activiti.model.runtime.TaskRepresentation;
-import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.service.exception.BadRequestException;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Task;
-import org.activiti.engine.task.TaskQuery;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

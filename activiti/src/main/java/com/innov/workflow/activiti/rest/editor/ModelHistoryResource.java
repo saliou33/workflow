@@ -1,11 +1,11 @@
 package com.innov.workflow.activiti.rest.editor;
 
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.domain.editor.ModelHistory;
 import com.innov.workflow.activiti.model.common.BaseRestActionRepresentation;
 import com.innov.workflow.activiti.model.common.ResultListDataRepresentation;
 import com.innov.workflow.activiti.model.editor.ModelRepresentation;
 import com.innov.workflow.activiti.model.editor.ReviveModelResultRepresentation;
-import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.service.exception.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

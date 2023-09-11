@@ -3,10 +3,10 @@ package com.innov.workflow.activiti.rest.runtime;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.util.ISO8601Utils;
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.model.common.ResultListDataRepresentation;
 import com.innov.workflow.activiti.model.idm.UserRepresentation;
 import com.innov.workflow.activiti.model.runtime.TaskRepresentation;
-import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.service.exception.BadRequestException;
 import com.innov.workflow.activiti.service.runtime.PermissionService;
 import com.innov.workflow.core.domain.entity.User;
@@ -64,8 +64,9 @@ public abstract class AbstractTaskQueryResource {
         counts.put("Suspended", nbSuspended);
         counts.put("Active", nbActive);
 
-        return  counts;
+        return counts;
     }
+
     public ResultListDataRepresentation listTasks(ObjectNode requestNode) {
         if (requestNode == null) {
             throw new BadRequestException("No request found");

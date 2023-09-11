@@ -3,6 +3,7 @@ package com.innov.workflow.activiti.rest.editor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.domain.editor.AbstractModel;
 import com.innov.workflow.activiti.domain.editor.AppDefinition;
 import com.innov.workflow.activiti.domain.editor.Model;
@@ -10,7 +11,6 @@ import com.innov.workflow.activiti.dto.ModelCount;
 import com.innov.workflow.activiti.model.common.ResultListDataRepresentation;
 import com.innov.workflow.activiti.model.editor.AppDefinitionListModelRepresentation;
 import com.innov.workflow.activiti.model.editor.ModelRepresentation;
-import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.repository.editor.ModelRepository;
 import com.innov.workflow.activiti.service.api.ModelService;
 import com.innov.workflow.activiti.service.exception.BadRequestException;
@@ -34,18 +34,14 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.Tuple;
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 
 @RestController
@@ -77,6 +73,7 @@ public class AbstractModelsResource {
         List<ModelCount> data = modelRepository.countModelsByType(userId);
         return data;
     }
+
     public ResultListDataRepresentation getModels(String filter, String sort, Integer modelType, HttpServletRequest request) {
         String filterText = null;
         List<NameValuePair> params = URLEncodedUtils.parse(request.getQueryString(), StandardCharsets.UTF_8);

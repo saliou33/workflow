@@ -23,7 +23,6 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity getAllUsers() {
-        //List<UserDTO> data = UserDTO.toList(userService.getAllUsers());
         List<UserDto> data = userMapper.mapToDtoList(userService.getAllUsers());
         return ApiResponse.success(data);
     }
@@ -39,49 +38,47 @@ public class UserController {
         return ApiResponse.success(data);
     }
 
-    @PostMapping("/{userId}/roles")
-    public ResponseEntity addRole(@PathVariable Long userId, @RequestBody Long roleId ) {
+    @GetMapping("/organizations/{id}")
+    public ResponseEntity getAllUsersByOrganization(@PathVariable Long id) {
+        return ApiResponse.success(userService.getUsersByOrganization(id));
+    }
+
+    @PutMapping("/{userId}/roles")
+    public ResponseEntity addUserRole(@PathVariable Long userId, @RequestBody Long roleId) {
         User user = userService.addRole(userId, roleId);
         return ApiResponse.success("role added to user", userMapper.mapToDto(user));
 
     }
 
-    @DeleteMapping("{userId}/roles")
-    public ResponseEntity deleteRole(@PathVariable Long userId, @RequestBody Long roleId) {
+    @DeleteMapping("{userId}/roles/{roleId}")
+    public ResponseEntity deleteUserRole(@PathVariable Long userId, @PathVariable Long roleId) {
         User user = userService.deleteRole(userId, roleId);
         return ApiResponse.success("role removed from user", userMapper.mapToDto(user));
 
     }
 
-    @PostMapping("/{userId}/groups")
+    @PutMapping("/{userId}/groups")
     public ResponseEntity addToGroup(@PathVariable Long userId, @RequestBody Long groupId) {
         User user = userService.addRole(userId, groupId);
         return ApiResponse.success("user added to group", userMapper.mapToDto(user));
     }
 
-    @DeleteMapping("/{userId}/groups")
-    public ResponseEntity deleteFromGroup(@PathVariable Long userId, @RequestBody Long groupId) {
+    @DeleteMapping("/{userId}/groups/{groupId}")
+    public ResponseEntity deleteFromGroup(@PathVariable Long userId, @PathVariable Long groupId) {
         User user = userService.deleteFromGroup(userId, groupId);
         return ApiResponse.success("user deleted from group", userMapper.mapToDto(user));
     }
 
-    @PostMapping("/{userId}/organization")
+    @PutMapping("/{userId}/organization")
     public ResponseEntity addToOrganization(@PathVariable Long userId, @RequestBody Long orgId) {
         User user = userService.addToOrganization(userId, orgId);
         return ApiResponse.success("user added to organization", userMapper.mapToDto(user));
     }
 
-    @DeleteMapping("/{userId}/organization")
-    public ResponseEntity DeleteFromOrganization(@PathVariable Long userId, @RequestBody Long orgId) {
+    @DeleteMapping("/{userId}/organization/{orgId}")
+    public ResponseEntity DeleteFromOrganization(@PathVariable Long userId, @PathVariable Long orgId) {
         User user = userService.deleteFromOrganization(userId, orgId);
         return ApiResponse.success("user deleted from organization", userMapper.mapToDto(user));
-    }
-
-
-
-    @GetMapping("/organizations/{id}")
-    public ResponseEntity getAllUsersByOrganization(@PathVariable Long id) {
-        return ApiResponse.success(userService.getUsersByOrganization(id));
     }
 
     @PostMapping

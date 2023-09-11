@@ -89,7 +89,7 @@ public class JwtUtils {
         Authentication authentication = SecurityContextHolder.
                 getContext().getAuthentication();
 
-        if(authentication.getPrincipal().toString().equals("anonymousUser")) return null;
+        if (authentication.getPrincipal().toString().equals("anonymousUser")) return null;
 
         UserDetailsImpl userImp = (UserDetailsImpl) authentication.getPrincipal();
         return userService.getUserByUserId(userImp.getId());

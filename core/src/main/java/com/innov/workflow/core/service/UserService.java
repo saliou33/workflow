@@ -10,18 +10,13 @@ import com.innov.workflow.core.domain.repository.SysRoleRepository;
 import com.innov.workflow.core.domain.repository.UserRepository;
 import com.innov.workflow.core.exception.ApiException;
 import lombok.AllArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,9 +53,11 @@ public class UserService {
     public Boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
     }
+
     public Boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
+
     public List<User> getUsersByGroup(Long id) {
         Optional<Group> group = groupRepository.findById(id);
 
@@ -73,11 +70,11 @@ public class UserService {
         return userRepository.findAllByOrganization(organization.get());
     }
 
-    public User addRole (Long userId, Long roleId) {
+    public User addRole(Long userId, Long roleId) {
         SysRole role = roleRepository.findById(roleId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Role not found"));
         User user = getUserByUserId(userId);
 
-        if(!user.getRoles().contains(role)) {
+        if (!user.getRoles().contains(role)) {
             user.getRoles().add(role);
             return userRepository.save(user);
         }
@@ -89,7 +86,7 @@ public class UserService {
         SysRole role = roleRepository.findById(roleId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Role not found"));
         User user = getUserByUserId(userId);
 
-        if(user.getRoles().contains(role)) {
+        if (user.getRoles().contains(role)) {
             user.getRoles().remove(role);
             return userRepository.save(user);
         }
@@ -99,7 +96,7 @@ public class UserService {
 
     public User addToGroup(Long userId, Long groupId) {
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Group not found with id: " + groupId));
-        User user  = getUserByUserId(userId);
+        User user = getUserByUserId(userId);
         if (!user.getGroups().contains(group)) {
             user.getGroups().add(group);
             return userRepository.save(user);
@@ -121,8 +118,8 @@ public class UserService {
 
     public User deleteFromOrganization(Long userId, Long orgId) {
         User user = getUserByUserId(userId);
-        if(user.getOrganization() != null) {
-            if(user.getOrganization().getId() == orgId) {
+        if (user.getOrganization() != null) {
+            if (user.getOrganization().getId() == orgId) {
                 user.setOrganization(null);
                 return userRepository.save(user);
             }
@@ -135,7 +132,7 @@ public class UserService {
         User user = getUserByUserId(userId);
         Organization org = organizationRepository.findById(orgId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Organization not found"));
 
-        if(user.getOrganization() != null) {
+        if (user.getOrganization() != null) {
             throw new ApiException(HttpStatus.BAD_REQUEST, "User already to an organization");
 
         } else {
@@ -143,7 +140,6 @@ public class UserService {
         }
         throw new ApiException(HttpStatus.BAD_REQUEST, "User not affected to organization");
     }
-
 
 
     public User createUser(User user) {

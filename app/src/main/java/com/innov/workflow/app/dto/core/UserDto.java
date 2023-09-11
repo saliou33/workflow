@@ -19,6 +19,5 @@ public class UserDto extends BaseDto {
     private String password;
     private String tel;
     private String avatar;
-    private List<GroupDto> roles;
-    private List<SysRole> sysRoles;
+    private List<SysRole> roles;
 }

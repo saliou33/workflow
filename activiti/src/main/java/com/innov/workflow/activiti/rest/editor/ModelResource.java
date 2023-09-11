@@ -2,10 +2,10 @@ package com.innov.workflow.activiti.rest.editor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.domain.editor.Model;
 import com.innov.workflow.activiti.model.editor.ModelKeyRepresentation;
 import com.innov.workflow.activiti.model.editor.ModelRepresentation;
-import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.repository.editor.ModelRepository;
 import com.innov.workflow.activiti.service.api.ModelService;
 import com.innov.workflow.activiti.service.exception.BadRequestException;
@@ -151,8 +151,8 @@ public class ModelResource extends AbstractModelResource {
     )
     public ModelRepresentation saveModel(@PathVariable("modelId") String modelId, @RequestBody MultiValueMap<String, String> values) {
 
-        if(values == null) {
-            throw  new BadRequestException("values are null");
+        if (values == null) {
+            throw new BadRequestException("values are null");
         }
 
         long lastUpdated = -1L;

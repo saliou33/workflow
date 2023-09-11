@@ -1,9 +1,9 @@
 package com.innov.workflow.activiti.util;
 
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.model.idm.GroupRepresentation;
 import com.innov.workflow.activiti.model.idm.UserRepresentation;
 import com.innov.workflow.activiti.model.runtime.TaskRepresentation;
-import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.core.domain.entity.User;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.ExtensionElement;

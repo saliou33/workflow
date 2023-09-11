@@ -1,9 +1,9 @@
 package com.innov.workflow.activiti.service.editor;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.model.idm.UserRepresentation;
 import com.innov.workflow.activiti.model.runtime.TaskRepresentation;
-import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.service.exception.BadRequestException;
 import com.innov.workflow.activiti.service.exception.NotFoundException;
 import com.innov.workflow.activiti.service.exception.NotPermittedException;
@@ -18,7 +18,6 @@ import org.activiti.engine.history.HistoricIdentityLink;
 import org.activiti.engine.task.IdentityLink;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskInfo;
-import org.activiti.engine.task.TaskQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

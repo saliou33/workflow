@@ -21,8 +21,8 @@ public class IdentityService {
     private final JwtUtils jwtUtils;
 
     public User getCurrentUserObject() {
-        User user =  jwtUtils.getCurrentUser();
-        if(user == null) throw new ApiException(HttpStatus.UNAUTHORIZED ,"User need to be authenticated");
+        User user = jwtUtils.getCurrentUser();
+        if (user == null) throw new ApiException(HttpStatus.UNAUTHORIZED, "User need to be authenticated");
         return user;
     }
 
@@ -45,5 +45,7 @@ public class IdentityService {
         return userService.getUserByUsername(assignee);
     }
 
-    public User saveUser(User user) { return userService.saveUser(user); }
+    public User saveUser(User user) {
+        return userService.saveUser(user);
+    }
 }

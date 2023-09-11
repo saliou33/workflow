@@ -1,10 +1,10 @@
 package com.innov.workflow.activiti.service.editor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.domain.runtime.RelatedContent;
 import com.innov.workflow.activiti.model.runtime.CompleteFormRepresentation;
 import com.innov.workflow.activiti.model.runtime.ProcessInstanceVariableRepresentation;
-import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.service.exception.NotFoundException;
 import com.innov.workflow.activiti.service.exception.NotPermittedException;
 import com.innov.workflow.activiti.service.runtime.PermissionService;
@@ -18,7 +18,6 @@ import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricVariableInstance;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.task.Task;
-import org.activiti.engine.task.TaskQuery;
 import org.activiti.form.api.FormRepositoryService;
 import org.activiti.form.api.FormService;
 import org.activiti.form.model.FormDefinition;
@@ -109,12 +108,12 @@ public class ActivitiTaskFormService {
                 this.taskService.complete(taskId, variables);
 
 
-                if(formDefinition != null) {
-                    for(FormField formField: formDefinition.getFields()) {
-                        if(formField.getType().equals("upload")) {
+                if (formDefinition != null) {
+                    for (FormField formField : formDefinition.getFields()) {
+                        if (formField.getType().equals("upload")) {
                             Long relatedContendId = Long.valueOf((String) completeTaskFormRepresentation.getValues().get(formField.getId()));
                             RelatedContent relatedContent = relatedContentService.getRelatedContent(relatedContendId, false);
-                            if(relatedContent != null) {
+                            if (relatedContent != null) {
                                 relatedContent.setTaskId(taskId);
                                 relatedContent.setProcessInstanceId(task.getProcessInstanceId());
                                 relatedContentService.storeRelatedContent(relatedContent);

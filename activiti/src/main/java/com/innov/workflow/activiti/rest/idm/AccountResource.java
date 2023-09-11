@@ -1,10 +1,7 @@
 package com.innov.workflow.activiti.rest.idm;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.innov.workflow.activiti.custom.service.IdentityService;
-import com.innov.workflow.activiti.model.idm.UserRepresentation;
 import com.innov.workflow.core.domain.entity.User;
-import com.innov.workflow.core.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,6 +41,6 @@ public class AccountResource {
     public User getAccount() {
         //  User user = SecurityUtils.getCurrentActivitiAppUser().getUserObject();
 
-       return identityService.getCurrentUserObject();
+        return identityService.getCurrentUserObject();
     }
 }

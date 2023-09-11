@@ -12,9 +12,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 @AllArgsConstructor
 public class OrganizationService {
 
@@ -56,21 +58,19 @@ public class OrganizationService {
     }
 
     public Organization createGroup(Long orgId, Group group) {
-        if(group != null) {
-            groupRepository.save(group);
+        Organization organization = organizationRepository.findById(orgId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Organization not found with id" + orgId));
 
-            Organization organization = organizationRepository.findById(orgId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Organization not found with id" + orgId));
+        Group group1 = groupRepository.findByName(group.getName());
 
-            if (!organization.getGroups().contains(group)) {
-                organization.getGroups().add(group);
-                return organizationRepository.save(organization);
-            }
+        if (group1 == null) {
+            group1 = groupRepository.save(group);
         }
 
-        return null;
+        if (!organization.getGroups().contains(group1)) {
+            organization.getGroups().add(group1);
+            organization = organizationRepository.save(organization);
+        }
+
+        return organization;
     }
-    
-    
-    
-    
 }

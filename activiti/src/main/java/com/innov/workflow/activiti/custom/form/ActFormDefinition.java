@@ -2,13 +2,16 @@ package com.innov.workflow.activiti.custom.form;
 
 
 import lombok.Data;
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Table(name = "ACT_FO_FORM_DEFINITION")
 @Data
 public class ActFormDefinition {
     @Id
-    @Column( name = "ID_")
+    @Column(name = "ID_")
     private String id;
 
     @Column(name = "NAME_")

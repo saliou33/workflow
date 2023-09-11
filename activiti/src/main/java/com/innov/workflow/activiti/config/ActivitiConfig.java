@@ -20,34 +20,24 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class ActivitiConfig implements ProcessEngineConfigurationConfigurer {
 
+    private static SpringProcessEngineConfiguration configuration = null;
     private final CustomActivitiEventListener customActivitiEventListener;
-
     @Value("${spring.datasource.url}")
     private String jdbcUrl;
-
     @Value("${spring.datasource.username}")
     private String jdbcUsername;
-
     @Value("${spring.datasource.password}")
     private String jdbcPassword;
-
     @Value("${spring.mail.host}")
     private String mailHost;
-
     @Value("${spring.mail.port}")
     private Integer mailPort;
-
     @Value("${spring.mail.username}")
     private String mailUsername;
-
     @Value("${spring.mail.password}")
     private String mailPassword;
-
     @Value("${spring.mail.protocol")
     private String mailProtocol;
-
-    private static  SpringProcessEngineConfiguration configuration = null;
-
 
     @Override
     public void configure(SpringProcessEngineConfiguration springProcessEngineConfiguration) {
@@ -72,7 +62,7 @@ public class ActivitiConfig implements ProcessEngineConfigurationConfigurer {
     }
 
     @Bean
-    Clock getClock () {
-        return  configuration.getClock();
+    Clock getClock() {
+        return configuration.getClock();
     }
 }

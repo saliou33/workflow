@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -39,8 +38,8 @@ public class ActivitiService {
 
         List<HistoricTaskInstance> taskList = historyService.createHistoricTaskInstanceQuery().processInstanceId(processInstance.getId()).list();
 
-        for(HistoricTaskInstance task: taskList) {
-            if(task.getAssignee() == null) {
+        for (HistoricTaskInstance task : taskList) {
+            if (task.getAssignee() == null) {
                 taskService.addUserIdentityLink(task.getId(), identityService.getCurrentUserObject().getId(), IdentityLinkType.ASSIGNEE);
             }
         }

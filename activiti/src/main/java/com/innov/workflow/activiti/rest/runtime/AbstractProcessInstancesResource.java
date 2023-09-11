@@ -2,20 +2,22 @@ package com.innov.workflow.activiti.rest.runtime;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.innov.workflow.activiti.custom.dao.ActFormDefinitionService;
+import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.domain.runtime.RelatedContent;
 import com.innov.workflow.activiti.model.component.SimpleContentTypeMapper;
 import com.innov.workflow.activiti.model.runtime.CreateProcessInstanceRepresentation;
 import com.innov.workflow.activiti.model.runtime.ProcessInstanceRepresentation;
 import com.innov.workflow.activiti.model.runtime.RelatedContentRepresentation;
-import com.innov.workflow.activiti.custom.service.IdentityService;
 import com.innov.workflow.activiti.repository.editor.ModelRepository;
 import com.innov.workflow.activiti.service.exception.BadRequestException;
 import com.innov.workflow.activiti.service.runtime.ActivitiService;
 import com.innov.workflow.activiti.service.runtime.PermissionService;
 import com.innov.workflow.activiti.service.runtime.RelatedContentService;
 import com.innov.workflow.core.domain.entity.User;
+import org.activiti.bpmn.model.BpmnModel;
+import org.activiti.bpmn.model.FlowElement;
 import org.activiti.bpmn.model.Process;
-import org.activiti.bpmn.model.*;
+import org.activiti.bpmn.model.StartEvent;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.history.HistoricProcessInstance;
@@ -30,7 +32,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-
 
 import java.util.*;
 
@@ -92,11 +93,11 @@ public abstract class AbstractProcessInstancesResource {
             }
 
             RelatedContent relatedContent = null;
-            if(formDefinition != null) {
-                for(FormField formField: formDefinition.getFields()) {
-                    if(formField.getType().equals("upload")) {
-                       Long relatedContendId = Long.valueOf((String) startRequest.getValues().get(formField.getId()));
-                       relatedContent = relatedContentService.getRelatedContent(relatedContendId, false);
+            if (formDefinition != null) {
+                for (FormField formField : formDefinition.getFields()) {
+                    if (formField.getType().equals("upload")) {
+                        Long relatedContendId = Long.valueOf((String) startRequest.getValues().get(formField.getId()));
+                        relatedContent = relatedContentService.getRelatedContent(relatedContendId, false);
                     }
                 }
             }
@@ -104,7 +105,7 @@ public abstract class AbstractProcessInstancesResource {
             ProcessInstance processInstance = this.activitiService.startProcessInstance(startRequest.getProcessDefinitionId(), variables, startRequest.getName());
 
             System.out.println(variables);
-            if(relatedContent != null) {
+            if (relatedContent != null) {
                 relatedContent.setProcessInstanceId(processInstance.getProcessInstanceId());
                 relatedContentService.storeRelatedContent(relatedContent);
             }
@@ -122,8 +123,6 @@ public abstract class AbstractProcessInstancesResource {
             return new ProcessInstanceRepresentation(historicProcess, processDefinition, ((ProcessDefinitionEntity) processDefinition).isGraphicalNotationDefined(), user);
         }
     }
-
-
 
 
     protected Map<String, List<RelatedContent>> groupContentByField(Page<RelatedContent> allContent) {
