@@ -59,8 +59,8 @@ public class UserController {
         return ApiResponse.success("user added to group", userMapper.mapToDto(user));
     }
 
-    @DeleteMapping("/{userId}/groups/{groupId}")
-    public ResponseEntity deleteFromGroup(@PathVariable Long userId, @PathVariable Long groupId) {
+    @DeleteMapping("/{userId}/groups")
+    public ResponseEntity deleteFromGroup(@PathVariable Long userId, @RequestBody Long groupId) {
         User user = userService.deleteFromGroup(userId, groupId);
         return ApiResponse.success("user deleted from group", userMapper.mapToDto(user));
     }
