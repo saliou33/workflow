@@ -1,6 +1,6 @@
 package com.innov.workflow.core.service;
 
-import com.innov.workflow.core.domain.entity.ESysRole;
+import com.innov.workflow.core.domain.entity.EnumSysRole;
 import com.innov.workflow.core.domain.entity.SysRole;
 import com.innov.workflow.core.domain.repository.SysRoleRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class SysRoleService {
         return roleRepository.findById(id).orElse(null);
     }
 
-    public SysRole getRoleByName(ESysRole name) {
+    public SysRole getRoleByName(EnumSysRole name) {
         return roleRepository.findByName(name);
     }
 

@@ -178,8 +178,10 @@ public class AppDefinitionResource {
             throw new InternalServerErrorException("Could not deserialize app definition");
         }
 
-        for(AppModelDefinition m: appDefinition.getModels()) {
-            m.setKey(modelService.getModel(m.getId()).getKey());
+        if(appDefinition.getModels() != null) {
+            for(AppModelDefinition m: appDefinition.getModels()) {
+                m.setKey(modelService.getModel(m.getId()).getKey());
+            }
         }
 
         AppDefinitionRepresentation result = new AppDefinitionRepresentation(model);

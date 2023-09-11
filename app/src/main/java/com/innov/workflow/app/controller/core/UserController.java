@@ -33,24 +33,37 @@ public class UserController {
         return ApiResponse.success(userMapper.mapToDto(userService.getUserByUserId(id)));
     }
 
-    @GetMapping("/roles/{id}")
-    public ResponseEntity getAllUsersByRole(@PathVariable Long id) {
-        List<UserDto> data = userMapper.mapToDtoList(userService.getUsersByRole(id));
+    @GetMapping("/groups/{id}")
+    public ResponseEntity getAllUsersByGroup(@PathVariable Long id) {
+        List<UserDto> data = userMapper.mapToDtoList(userService.getUsersByGroup(id));
         return ApiResponse.success(data);
     }
 
     @PostMapping("/{userId}/roles")
-    public ResponseEntity grantRole(@PathVariable Long userId, @RequestBody Long roleId) {
+    public ResponseEntity addRole(@PathVariable Long userId, @RequestBody Long roleId ) {
         User user = userService.addRole(userId, roleId);
-        return ApiResponse.success("role added", userMapper.mapToDto(user));
+        return ApiResponse.success("role added to user", userMapper.mapToDto(user));
+
     }
 
-    @DeleteMapping("/{userId}/roles/{roleId}")
-    public ResponseEntity revokeRole(@PathVariable Long userId, @PathVariable Long roleId) {
+    @DeleteMapping("{userId}/roles")
+    public ResponseEntity deleteRole(@PathVariable Long userId, @RequestBody Long roleId) {
         User user = userService.deleteRole(userId, roleId);
-        return ApiResponse.success("role revoked", userMapper.mapToDto(user));
+        return ApiResponse.success("role removed from user", userMapper.mapToDto(user));
+
     }
 
+    @PostMapping("/{userId}/groups")
+    public ResponseEntity addToGroup(@PathVariable Long userId, @RequestBody Long groupId) {
+        User user = userService.addRole(userId, groupId);
+        return ApiResponse.success("user added to group", userMapper.mapToDto(user));
+    }
+
+    @DeleteMapping("/{userId}/groups/{groupId}")
+    public ResponseEntity deleteFromGroup(@PathVariable Long userId, @PathVariable Long groupId) {
+        User user = userService.deleteFromGroup(userId, groupId);
+        return ApiResponse.success("user deleted from group", userMapper.mapToDto(user));
+    }
 
     @GetMapping("/organizations/{id}")
     public ResponseEntity getAllUsersByOrganization(@PathVariable Long id) {

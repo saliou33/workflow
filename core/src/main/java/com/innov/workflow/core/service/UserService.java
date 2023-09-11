@@ -2,9 +2,11 @@ package com.innov.workflow.core.service;
 
 import com.innov.workflow.core.domain.entity.Group;
 import com.innov.workflow.core.domain.entity.Organization;
+import com.innov.workflow.core.domain.entity.SysRole;
 import com.innov.workflow.core.domain.entity.User;
 import com.innov.workflow.core.domain.repository.GroupRepository;
 import com.innov.workflow.core.domain.repository.OrganizationRepository;
+import com.innov.workflow.core.domain.repository.SysRoleRepository;
 import com.innov.workflow.core.domain.repository.UserRepository;
 import com.innov.workflow.core.exception.ApiException;
 import lombok.AllArgsConstructor;
@@ -27,9 +29,10 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-
     private final GroupRepository groupRepository;
     private final OrganizationRepository organizationRepository;
+
+    private final SysRoleRepository roleRepository;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -58,10 +61,34 @@ public class UserService {
     public Boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
-    public List<User> getUsersByRole(Long id) {
+    public List<User> getUsersByGroup(Long id) {
         Optional<Group> group = groupRepository.findById(id);
 
         return userRepository.findAllByGroups(group.get());
+    }
+
+    public User addRole (Long userId, Long roleId) {
+        SysRole role = roleRepository.findById(roleId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Role not found"));
+        User user = getUserByUserId(userId);
+
+        if(!user.getRoles().contains(role)) {
+            user.getRoles().add(role);
+            return userRepository.save(user);
+        }
+
+        throw new ApiException(HttpStatus.BAD_REQUEST, "role already added to user");
+    }
+
+    public User deleteRole(Long userId, Long roleId) {
+        SysRole role = roleRepository.findById(roleId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Role not found"));
+        User user = getUserByUserId(userId);
+
+        if(user.getRoles().contains(role)) {
+            user.getRoles().remove(role);
+            return userRepository.save(user);
+        }
+
+        throw new ApiException(HttpStatus.BAD_REQUEST, "role not found with user");
     }
 
     public List<User> getUsersByOrganization(Long id) {
@@ -70,26 +97,25 @@ public class UserService {
         return userRepository.findAllByOrganization(organization.get());
     }
 
-    public User addRole(Long userId, Long groupId) {
-        Group group = groupRepository.findById(groupId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Role not found with id: " + groupId));
-        User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "User not found with id: " + groupId));
-
+    public User addToGroup(Long userId, Long groupId) {
+        Group group = groupRepository.findById(groupId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Group not found with id: " + groupId));
+        User user  = getUserByUserId(userId);
         if (!user.getGroups().contains(group)) {
             user.getGroups().add(group);
             return userRepository.save(user);
         }
-        throw new ApiException(HttpStatus.BAD_REQUEST, "Role already added");
+        throw new ApiException(HttpStatus.BAD_REQUEST, "User already added to group");
     }
 
-    public User deleteRole(Long userId, Long groupId) {
-        Group group = groupRepository.findById(groupId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Role not found with id: " + groupId));
+    public User deleteFromGroup(Long userId, Long groupId) {
+        Group group = groupRepository.findById(groupId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Group not found with id: " + groupId));
         User user = userRepository.findById(userId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "User not found with id: " + groupId));
 
         if (user.getGroups().contains(group)) {
             user.getGroups().remove(group);
             return userRepository.save(user);
         }
-        throw new ApiException(HttpStatus.BAD_REQUEST, "Role not affected to user");
+        throw new ApiException(HttpStatus.BAD_REQUEST, "User deleted from group");
     }
 
     public User createUser(User user) {

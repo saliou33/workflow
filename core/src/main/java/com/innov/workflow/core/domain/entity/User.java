@@ -18,7 +18,6 @@ public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
-
     @Column(unique = true)
     private String username;
     private String id;
@@ -38,10 +37,11 @@ public class User extends BaseEntity {
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Group> groups;
     @ManyToMany(fetch = FetchType.LAZY)
-    private List<SysRole> sysRoles;
+    private List<SysRole> roles;
 
 
     public User(String username, String email, String password) {
+        // for activiti engine id of user is the username
         this.id = username;
         this.username = username;
         this.email = email;

@@ -14,5 +14,5 @@ public class SysRole {
     private Long id;
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
-    private ESysRole name;
+    private EnumSysRole name;
 }

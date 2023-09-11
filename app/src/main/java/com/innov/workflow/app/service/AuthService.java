@@ -5,7 +5,7 @@ import com.innov.workflow.app.dto.auth.LoginRequest;
 import com.innov.workflow.app.dto.auth.RefreshTokenRequest;
 import com.innov.workflow.app.dto.auth.SignupRequest;
 import com.innov.workflow.app.mapper.core.UserMapper;
-import com.innov.workflow.core.domain.entity.ESysRole;
+import com.innov.workflow.core.domain.entity.EnumSysRole;
 import com.innov.workflow.core.domain.entity.User;
 import com.innov.workflow.core.domain.entity.auth.VerificationToken;
 import com.innov.workflow.core.domain.repository.auth.VerificationTokenRepository;
@@ -69,7 +69,7 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
         user.setEmail(signupRequest.getEmail());
         user.setTel(signupRequest.getTel());
-        user.setSysRoles(Collections.singletonList(roleService.getRoleByName(ESysRole.ROLE_USER)));
+        user.setRoles(Collections.singletonList(roleService.getRoleByName(EnumSysRole.ROLE_USER)));
         user.setEnabled(true);
         userService.saveUser(user);
 
