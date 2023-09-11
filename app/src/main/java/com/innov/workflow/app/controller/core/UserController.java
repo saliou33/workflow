@@ -65,6 +65,20 @@ public class UserController {
         return ApiResponse.success("user deleted from group", userMapper.mapToDto(user));
     }
 
+    @PostMapping("/{userId}/organization")
+    public ResponseEntity addToOrganization(@PathVariable Long userId, @RequestBody Long orgId) {
+        User user = userService.addToOrganization(userId, orgId);
+        return ApiResponse.success("user added to organization", userMapper.mapToDto(user));
+    }
+
+    @DeleteMapping("/{userId}/organization")
+    public ResponseEntity DeleteFromOrganization(@PathVariable Long userId, @RequestBody Long orgId) {
+        User user = userService.deleteFromOrganization(userId, orgId);
+        return ApiResponse.success("user deleted from organization", userMapper.mapToDto(user));
+    }
+
+
+
     @GetMapping("/organizations/{id}")
     public ResponseEntity getAllUsersByOrganization(@PathVariable Long id) {
         return ApiResponse.success(userService.getUsersByOrganization(id));

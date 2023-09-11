@@ -67,6 +67,12 @@ public class UserService {
         return userRepository.findAllByGroups(group.get());
     }
 
+    public List<User> getUsersByOrganization(Long id) {
+        Optional<Organization> organization = organizationRepository.findById(id);
+
+        return userRepository.findAllByOrganization(organization.get());
+    }
+
     public User addRole (Long userId, Long roleId) {
         SysRole role = roleRepository.findById(roleId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Role not found"));
         User user = getUserByUserId(userId);
@@ -91,12 +97,6 @@ public class UserService {
         throw new ApiException(HttpStatus.BAD_REQUEST, "role not found with user");
     }
 
-    public List<User> getUsersByOrganization(Long id) {
-        Optional<Organization> organization = organizationRepository.findById(id);
-
-        return userRepository.findAllByOrganization(organization.get());
-    }
-
     public User addToGroup(Long userId, Long groupId) {
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Group not found with id: " + groupId));
         User user  = getUserByUserId(userId);
@@ -117,6 +117,34 @@ public class UserService {
         }
         throw new ApiException(HttpStatus.BAD_REQUEST, "User deleted from group");
     }
+
+
+    public User deleteFromOrganization(Long userId, Long orgId) {
+        User user = getUserByUserId(userId);
+        if(user.getOrganization() != null) {
+            if(user.getOrganization().getId() == orgId) {
+                user.setOrganization(null);
+                return userRepository.save(user);
+            }
+        }
+        throw new ApiException(HttpStatus.BAD_REQUEST, "User not affected to organization");
+    }
+
+
+    public User addToOrganization(Long userId, Long orgId) {
+        User user = getUserByUserId(userId);
+        Organization org = organizationRepository.findById(orgId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Organization not found"));
+
+        if(user.getOrganization() != null) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "User already to an organization");
+
+        } else {
+            user.setOrganization(org);
+        }
+        throw new ApiException(HttpStatus.BAD_REQUEST, "User not affected to organization");
+    }
+
+
 
     public User createUser(User user) {
         return userRepository.save(user);
