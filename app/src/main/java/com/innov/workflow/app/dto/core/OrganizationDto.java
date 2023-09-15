@@ -1,5 +1,6 @@
 package com.innov.workflow.app.dto.core;
 
+import com.innov.workflow.core.domain.entity.Group;
 import lombok.Data;
 
 import javax.validation.constraints.Min;
@@ -17,6 +18,8 @@ public class OrganizationDto extends BaseDto {
     private String description;
 
     private String avatar;
+
+    private Group[] groups;
 
 }
 

@@ -9,16 +9,15 @@ import com.innov.workflow.core.domain.repository.OrganizationRepository;
 import com.innov.workflow.core.domain.repository.SysRoleRepository;
 import com.innov.workflow.core.domain.repository.UserRepository;
 import com.innov.workflow.core.exception.ApiException;
+import com.innov.workflow.core.specification.SearchSpecification;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -26,20 +25,15 @@ public class UserService {
     private final UserRepository userRepository;
     private final GroupRepository groupRepository;
     private final OrganizationRepository organizationRepository;
-
     private final SysRoleRepository roleRepository;
-
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
 
     public List<User> getAllUserLike(String p) {
         return userRepository.findUsersByUsernameLike(p);
     }
 
-    public Page<User> getAllUsers(int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        return userRepository.findAll(pageable);
+    public Page<User> getUsers(String[] fieldNames, String[] searchTerms, String[] notFieldNames, String[] notValues, Pageable pageable) {
+        SearchSpecification<User> specification = new SearchSpecification<>();
+        return userRepository.findAll(specification.searchByFields(fieldNames, searchTerms, notFieldNames, notValues), pageable);
     }
 
     public User getUserByUserId(Long userId) {
@@ -58,16 +52,16 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
-    public List<User> getUsersByGroup(Long id) {
-        Optional<Group> group = groupRepository.findById(id);
+    public Page<User> getUsersByGroup(Long id, Pageable pageable) {
+        Group group = groupRepository.findById(id).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "group not found"));
 
-        return userRepository.findAllByGroups(group.get());
+        return userRepository.findAllByGroups(group, pageable);
     }
 
-    public List<User> getUsersByOrganization(Long id) {
-        Optional<Organization> organization = organizationRepository.findById(id);
+    public Page<User> getUsersByOrganization(Long id, Pageable pageable) {
+        Organization organization = organizationRepository.findById(id).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "organization not found"));
 
-        return userRepository.findAllByOrganization(organization.get());
+        return userRepository.findAllByOrganization(organization, pageable);
     }
 
     public User addRole(Long userId, Long roleId) {
@@ -133,12 +127,12 @@ public class UserService {
         Organization org = organizationRepository.findById(orgId).orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "Organization not found"));
 
         if (user.getOrganization() != null) {
-            throw new ApiException(HttpStatus.BAD_REQUEST, "User already to an organization");
+            throw new ApiException(HttpStatus.BAD_REQUEST, "User already affected to an organization");
 
         } else {
             user.setOrganization(org);
+            return userRepository.save(user);
         }
-        throw new ApiException(HttpStatus.BAD_REQUEST, "User not affected to organization");
     }
 
 
@@ -153,14 +147,13 @@ public class UserService {
     public User updateUser(Long id, User user) {
         User existingUser = getUserByUserId(id);
 
-        existingUser.setOrganization(user.getOrganization());
         existingUser.setUsername(user.getUsername());
         existingUser.setFirstName(user.getFirstName());
         existingUser.setLastName(user.getLastName());
-        existingUser.setFullName();
         existingUser.setAvatar(user.getAvatar());
         existingUser.setTel(user.getTel());
         existingUser.setUpdatedAt(LocalDateTime.now());
+        existingUser.setPassword(user.getPassword());
 
         return userRepository.save(existingUser);
     }

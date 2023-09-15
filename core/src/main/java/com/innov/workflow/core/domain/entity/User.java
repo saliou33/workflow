@@ -1,6 +1,7 @@
 package com.innov.workflow.core.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.innov.workflow.core.domain.entity.auth.RefreshToken;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,22 +23,29 @@ public class User extends BaseEntity {
     private String username;
     private String id;
     private String fullName;
+
+    @Column(nullable = false)
     private String lastName;
+    @Column(nullable = false)
     private String firstName;
     private String avatar;
     @Email
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
     @JsonIgnore
+    @Column(nullable = false)
     private String password;
     private String tel;
     private boolean enabled;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Organization organization;
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Group> groups;
     @ManyToMany(fetch = FetchType.LAZY)
     private List<SysRole> roles;
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private RefreshToken refreshToken;
 
 
     public User(String username, String email, String password) {

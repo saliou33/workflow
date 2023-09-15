@@ -1,5 +1,6 @@
 package com.innov.workflow.core.service;
 
+import com.innov.workflow.core.domain.entity.User;
 import com.innov.workflow.core.domain.entity.auth.RefreshToken;
 import com.innov.workflow.core.domain.repository.UserRepository;
 import com.innov.workflow.core.domain.repository.auth.RefreshTokenRepository;
@@ -30,8 +31,12 @@ public class RefreshTokenService {
     }
 
     public RefreshToken createRefreshToken(Long userId) {
-        RefreshToken refreshToken = new RefreshToken();
-        refreshToken.setUser(userRepository.findById(userId).get());
+        User user = userRepository.findById(userId).get();
+
+        RefreshToken refreshToken = refreshTokenRepository.findByUser(user);
+        if (refreshToken == null) refreshToken = new RefreshToken();
+
+        refreshToken.setUser(user);
         refreshToken.setToken(UUID.randomUUID().toString());
         refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
 

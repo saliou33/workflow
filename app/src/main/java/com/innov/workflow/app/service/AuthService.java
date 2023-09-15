@@ -5,6 +5,7 @@ import com.innov.workflow.app.dto.auth.LoginRequest;
 import com.innov.workflow.app.dto.auth.RefreshTokenRequest;
 import com.innov.workflow.app.dto.auth.SignupRequest;
 import com.innov.workflow.app.mapper.core.UserMapper;
+import com.innov.workflow.app.model.NotificationEmail;
 import com.innov.workflow.core.domain.entity.EnumSysRole;
 import com.innov.workflow.core.domain.entity.User;
 import com.innov.workflow.core.domain.entity.auth.VerificationToken;
@@ -47,13 +48,17 @@ public class AuthService {
     private final UserMapper userMapper;
     private final JwtUtils jwtUtils;
 
+    public String hashPassword(String password) {
+        return passwordEncoder.encode(password);
+    }
+
     public void signup(SignupRequest signupRequest) {
         if (!signupRequest.getPassword().equals(signupRequest.getConfirmPassword())) {
-            throw new ApiException(HttpStatus.BAD_REQUEST, "les mots des passe ne sont pas identique");
+            throw new ApiException(HttpStatus.BAD_REQUEST, "champs mots de passe inégaux");
         }
 
         if (userService.existsByUsername(signupRequest.getUsername())) {
-            throw new ApiException(HttpStatus.BAD_REQUEST, "ce login est déjà pris");
+            throw new ApiException(HttpStatus.BAD_REQUEST, "ce login existe déjà");
         }
 
         if (userService.existsByEmail(signupRequest.getEmail())) {
@@ -71,14 +76,17 @@ public class AuthService {
         user.setTel(signupRequest.getTel());
         user.setRoles(Collections.singletonList(roleService.getRoleByName(EnumSysRole.ROLE_USER)));
         user.setEnabled(true);
-        userService.saveUser(user);
+        User newUser = userService.saveUser(user);
+        sendVerificationToken(newUser);
+    }
 
-//        String token = generateVerificationToken(user);
+    public void sendVerificationToken(User user) {
+        String token = generateVerificationToken(user);
 
-//        mailService.sendMail(new NotificationEmail("Activation compte",
-//                user.getEmail(), "Heureux de vous avoir parmi nous, " +
-//                "Merci de cliquer sur le lien en dessous pour activer votre compte: " +
-//                "http://localhost:8083/api/auth/accountVerification/" + token));
+        mailService.sendMail(new NotificationEmail("Activation compte",
+                user.getEmail(), "Heureux de vous avoir parmi nous, " +
+                "Merci de cliquer sur le lien en dessous pour activer votre compte: " +
+                "http://localhost:8083/api/auth/accountVerification/" + token));
     }
 
 

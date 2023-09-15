@@ -10,30 +10,30 @@ import javax.validation.constraints.Size;
 @Data
 public class SignupRequest {
 
-    @NotBlank(message = "le champs prénom est vide")
-    @Size(message = "votre nom doit être compris entre 3 et 100 caractères")
+    @NotBlank(message = "champ prenom vide")
+    @Size(message = "champ nom doit être compris entre 3 et 100 caractères")
     private String firstname;
 
-    @NotBlank(message = "le champs nom est vide")
-    @Size(message = "votre nom doit être compris entre 3 et 100 caractères")
+    @NotBlank(message = "champ nom vide")
+    @Size(message = "champ nom doit être compris entre 3 et 100 caractères")
     private String lastname;
 
-    @NotBlank(message = "le champs username est vide")
-    @Size(min = 4, max = 100, message = "votre username doit être compris entre 4 et 64 caractères")
+    @NotBlank(message = "champ login vide")
+    @Size(min = 4, max = 100, message = "champ login doit être compris entre 4 et 100 caractères")
     private String username;
 
-    @Size(max = 100, message = "le champs email ne doit pas dépasser 100 caractères")
-    @Email(message = "votre email est invalide")
-    @NotBlank(message = "le champs email est vide")
+    @Size(max = 100, message = "champ email ne doit pas dépasser 100 caractères")
+    @Email(message = "champ email invalide")
+    @NotBlank(message = "le champ email est vide")
     private String email;
 
-    @NotBlank(message = "le champs mot de passe est vide")
-    @Size(min = 8, max = 64, message = "votre mot de passe doit être compris entre 8 et 64 caractères")
+    @NotBlank(message = "champ mot de passe vide")
+    @Size(min = 4, max = 64, message = "champ mot de passe doit comprendre entre 4 et 64 caractères")
     private String password;
 
-    @NotBlank(message = "le champs confirmer mot de passe est vide")
+    @NotBlank(message = "champ confirmer mot de passe vide")
     private String confirmPassword;
 
-    @Pattern(regexp = "^\\d{10}$", message = "le numéro de téléphone est invalide")
+    @Pattern(regexp = "^\\d{9}$", message = "champ tel invalide")
     private String tel;
 }

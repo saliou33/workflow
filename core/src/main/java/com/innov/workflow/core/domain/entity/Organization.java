@@ -20,9 +20,7 @@ public class Organization extends BaseEntity {
     private String name;
     @Lob
     private String description;
-
     private String avatar;
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Group> groups;
 }

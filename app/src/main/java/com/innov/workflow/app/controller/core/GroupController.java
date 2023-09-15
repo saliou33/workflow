@@ -6,6 +6,8 @@ import com.innov.workflow.core.domain.ApiResponse;
 import com.innov.workflow.core.domain.entity.Group;
 import com.innov.workflow.core.service.GroupService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +20,15 @@ public class GroupController {
     private final GroupMapper groupMapper;
 
     @GetMapping
-    public ResponseEntity getAllGroups() {
-        return ApiResponse.success(groupService.getAllGroups());
+    public ResponseEntity getGroups(
+            @RequestParam(name = "f", required = false) String[] fieldNames,
+            @RequestParam(name = "s", required = false) String[] searchTerms,
+            @RequestParam(name = "n", required = false) String[] notFieldNames,
+            @RequestParam(name = "nv", required = false) String[] notValues,
+            Pageable pageable
+    ) {
+        Page<Group> data = groupService.getGroups(fieldNames, searchTerms, notFieldNames, notValues, pageable);
+        return ApiResponse.success(data);
     }
 
     @GetMapping("/{id}")
@@ -27,24 +36,29 @@ public class GroupController {
         return ApiResponse.success(groupService.getGroupById(id));
     }
 
+    @GetMapping("/organization/{id}")
+    public ResponseEntity getGroupByOrganization(@PathVariable Long id, Pageable pageable) {
+        return ApiResponse.success(groupService.getGroupsByOrganization(id, pageable));
+    }
+
     @PostMapping
     public ResponseEntity createGroup(@RequestBody GroupDto groupDTO) {
         Group data = groupMapper.mapFromDto(groupDTO);
         Group group = groupService.createGroup(data);
-        return ApiResponse.created("Group créer", group);
+        return ApiResponse.created("group created", group);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity updateGroup(@PathVariable Long id, @RequestBody GroupDto groupDTO) {
         Group data = groupMapper.mapFromDto(groupDTO);
         Group group = groupService.updateGroup(id, data);
-        return ApiResponse.success("Group modifier", group);
+        return ApiResponse.success("group updated", group);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteGroup(@PathVariable Long id) {
         groupService.deleteGroup(id);
-        return ApiResponse.success("Group supprimer");
+        return ApiResponse.success("group deleted");
     }
 }
 

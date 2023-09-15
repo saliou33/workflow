@@ -2,15 +2,16 @@ package com.innov.workflow.app.controller.core;
 
 import com.innov.workflow.app.dto.core.UserDto;
 import com.innov.workflow.app.mapper.core.UserMapper;
+import com.innov.workflow.app.service.AuthService;
 import com.innov.workflow.core.domain.ApiResponse;
 import com.innov.workflow.core.domain.entity.User;
 import com.innov.workflow.core.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -19,11 +20,19 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final AuthService authService;
+
     private final UserMapper userMapper;
 
     @GetMapping
-    public ResponseEntity getAllUsers() {
-        List<UserDto> data = userMapper.mapToDtoList(userService.getAllUsers());
+    public ResponseEntity getUsers(
+            @RequestParam(name = "f", required = false) String[] fieldNames,
+            @RequestParam(name = "s", required = false) String[] searchTerms,
+            @RequestParam(name = "n", required = false) String[] notFieldNames,
+            @RequestParam(name = "nv", required = false) String[] notValues,
+            Pageable pageable
+    ) {
+        Page<User> data = userService.getUsers(fieldNames, searchTerms, notFieldNames, notValues, pageable);
         return ApiResponse.success(data);
     }
 
@@ -33,21 +42,21 @@ public class UserController {
     }
 
     @GetMapping("/groups/{id}")
-    public ResponseEntity getAllUsersByGroup(@PathVariable Long id) {
-        List<UserDto> data = userMapper.mapToDtoList(userService.getUsersByGroup(id));
+    public ResponseEntity getUsersByGroup(@PathVariable Long id, Pageable pageable) {
+        Page<User> data = userService.getUsersByGroup(id, pageable);
         return ApiResponse.success(data);
     }
 
-    @GetMapping("/organizations/{id}")
-    public ResponseEntity getAllUsersByOrganization(@PathVariable Long id) {
-        return ApiResponse.success(userService.getUsersByOrganization(id));
+    @GetMapping("/organization/{id}")
+    public ResponseEntity getUsersByOrganization(@PathVariable Long id, Pageable pageable) {
+        Page<User> data = userService.getUsersByOrganization(id, pageable);
+        return ApiResponse.success(data);
     }
 
-    @PutMapping("/{userId}/roles")
-    public ResponseEntity addUserRole(@PathVariable Long userId, @RequestBody Long roleId) {
+    @PutMapping("/{userId}/role/{roleId}")
+    public ResponseEntity addUserRole(@PathVariable Long userId, @PathVariable Long roleId) {
         User user = userService.addRole(userId, roleId);
         return ApiResponse.success("role added to user", userMapper.mapToDto(user));
-
     }
 
     @DeleteMapping("{userId}/roles/{roleId}")
@@ -57,8 +66,8 @@ public class UserController {
 
     }
 
-    @PutMapping("/{userId}/groups")
-    public ResponseEntity addToGroup(@PathVariable Long userId, @RequestBody Long groupId) {
+    @PutMapping("/{userId}/groups/{groupId}")
+    public ResponseEntity addToGroup(@PathVariable Long userId, @PathVariable Long groupId) {
         User user = userService.addRole(userId, groupId);
         return ApiResponse.success("user added to group", userMapper.mapToDto(user));
     }
@@ -69,8 +78,8 @@ public class UserController {
         return ApiResponse.success("user deleted from group", userMapper.mapToDto(user));
     }
 
-    @PutMapping("/{userId}/organization")
-    public ResponseEntity addToOrganization(@PathVariable Long userId, @RequestBody Long orgId) {
+    @PutMapping("/{userId}/organization/{orgId}")
+    public ResponseEntity addToOrganization(@PathVariable Long userId, @PathVariable Long orgId) {
         User user = userService.addToOrganization(userId, orgId);
         return ApiResponse.success("user added to organization", userMapper.mapToDto(user));
     }
@@ -83,13 +92,19 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity createUser(@RequestBody UserDto userDTO) {
-        User user = userService.createUser(userMapper.mapFromDto(userDTO));
+        User userData = userMapper.mapFromDto(userDTO);
+        userData.setPassword(authService.hashPassword(userData.getPassword()));
+        User user = userService.createUser(userData);
+        authService.sendVerificationToken(user);
         return ApiResponse.created("user created", user);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity updateUser(@PathVariable Long id, @RequestBody UserDto userDTO) {
-        User user = userService.updateUser(id, userMapper.mapFromDto(userDTO));
+        User userData = userMapper.mapFromDto(userDTO);
+        userData.setPassword(authService.hashPassword(userData.getPassword()));
+
+        User user = userService.updateUser(id, userData);
         return ApiResponse.success("user updated", user);
     }
 

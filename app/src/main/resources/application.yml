@@ -9,6 +9,7 @@ spring:
     password: passer
 
   jpa:
+
     hibernate:
       ddl-auto: update
       naming:
@@ -31,6 +32,10 @@ spring:
 
   mvc:
     log-request-details: true
+
+#  sql:
+#    init:
+#      mode: always
 
 gpt:
   apiKey: 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

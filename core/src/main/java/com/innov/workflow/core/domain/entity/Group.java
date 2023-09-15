@@ -1,5 +1,6 @@
 package com.innov.workflow.core.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,12 @@ public class Group extends BaseEntity {
     private Long id;
     @ManyToOne
     private Tag tag;
+
+    @Column(nullable = false)
     private String name;
     @Lob
     private String description;
+    @JsonIgnore
+    @ManyToOne
+    private Organization organization;
 }

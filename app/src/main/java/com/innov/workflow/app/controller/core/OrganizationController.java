@@ -9,10 +9,10 @@ import com.innov.workflow.core.domain.entity.Group;
 import com.innov.workflow.core.domain.entity.Organization;
 import com.innov.workflow.core.service.OrganizationService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/organizations")
@@ -23,12 +23,17 @@ public class OrganizationController {
     private final OrganizationService organizationService;
     private final OrganizationMapper orgMapper;
 
-    private final GroupMapper groupeMapper;
+    private final GroupMapper groupMapper;
 
     @GetMapping
-    public ResponseEntity getAllOrganizations() {
-        List<OrganizationDto> data = orgMapper.
-                mapToDtoList(organizationService.getAllOrganizations());
+    public ResponseEntity getOrganizations(
+            @RequestParam(name = "f", required = false) String[] fieldNames,
+            @RequestParam(name = "s", required = false) String[] searchTerms,
+            @RequestParam(name = "n", required = false) String[] notFieldNames,
+            @RequestParam(name = "nv", required = false) String[] notValues,
+            Pageable pageable
+    ) {
+        Page<Organization> data = organizationService.getOrganizations(fieldNames, searchTerms, notFieldNames, notValues, pageable);
         return ApiResponse.success(data);
     }
 
@@ -44,26 +49,26 @@ public class OrganizationController {
     public ResponseEntity createOrganization(@RequestBody OrganizationDto organizationDto) {
         Organization data = orgMapper.mapFromDto(organizationDto);
         Organization organization = organizationService.createOrganization(data);
-        return ApiResponse.created("organisation créer", organization);
+        return ApiResponse.created("organization created", organization);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity updateOrganization(@PathVariable Long id, @RequestBody OrganizationDto organizationDto) {
         Organization data = orgMapper.mapFromDto(organizationDto);
         Organization organization = organizationService.updateOrganization(id, data);
-        return ApiResponse.success("organisation modifier", organization);
+        return ApiResponse.success("organization updated", organization);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteOrganization(@PathVariable Long id) {
         organizationService.deleteOrganization(id);
-        return ApiResponse.success("organisation supprimer");
+        return ApiResponse.success("organization deleted");
     }
 
     @PostMapping("/{id}/groups")
-    public ResponseEntity createGroup(@PathVariable Long id, @RequestBody GroupDto groupDto) {
-        Group group = groupeMapper.mapFromDto(groupDto);
-        organizationService.createGroup(id, group);
-        return ApiResponse.created("groupe créer", group);
+    public ResponseEntity addGroup(@PathVariable Long id, @RequestBody GroupDto groupDto) {
+        Group group = groupMapper.mapFromDto(groupDto);
+        organizationService.addGroup(id, group);
+        return ApiResponse.created("group added", group);
     }
 }
