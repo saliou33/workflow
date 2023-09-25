@@ -102,9 +102,16 @@ public abstract class AbstractProcessInstancesResource {
                 }
             }
 
+            User user = identityService.getCurrentUserObject();
+            if (user != null) {
+                if (variables == null) {
+                    variables = new HashMap<>();
+                }
+                variables.put("initiator", user.getId());
+            }
+
             ProcessInstance processInstance = this.activitiService.startProcessInstance(startRequest.getProcessDefinitionId(), variables, startRequest.getName());
 
-            System.out.println(variables);
             if (relatedContent != null) {
                 relatedContent.setProcessInstanceId(processInstance.getProcessInstanceId());
                 relatedContentService.storeRelatedContent(relatedContent);
@@ -115,10 +122,10 @@ public abstract class AbstractProcessInstancesResource {
                 this.formService.storeSubmittedForm(variables, formDefinition, null, historicProcess.getId());
             }
 
-            User user = null;
-            if (historicProcess.getStartUserId() != null) {
-                user = identityService.getUser(historicProcess.getStartUserId());
-            }
+//            User user = null;
+//            if (historicProcess.getStartUserId() != null) {
+//                user = identityService.getUser(historicProcess.getStartUserId());
+//            }
 
             return new ProcessInstanceRepresentation(historicProcess, processDefinition, ((ProcessDefinitionEntity) processDefinition).isGraphicalNotationDefined(), user);
         }

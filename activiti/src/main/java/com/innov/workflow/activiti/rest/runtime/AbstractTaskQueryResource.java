@@ -36,6 +36,7 @@ public abstract class AbstractTaskQueryResource {
     private static final String SORT_DUE_ASC = "due-asc";
     private static final String SORT_DUE_DESC = "due-desc";
     private static final int DEFAULT_PAGE_SIZE = 25;
+
     @Autowired
     protected RepositoryService repositoryService;
     @Autowired
@@ -273,7 +274,6 @@ public abstract class AbstractTaskQueryResource {
                 }
             }
         }
-
     }
 
     protected List<TaskRepresentation> convertTaskInfoList(List<? extends TaskInfo> tasks, Map<String, String> processInstanceNames) {

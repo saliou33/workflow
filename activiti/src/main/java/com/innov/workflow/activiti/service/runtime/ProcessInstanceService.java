@@ -19,8 +19,8 @@ public class ProcessInstanceService {
 
     @Transactional
     public void deleteProcessInstance(String processInstanceId) {
-        //this.relatedContentService.deleteContentForProcessInstance(processInstanceId);
-        //this.commentService.deleteAllCommentsForProcessInstance(processInstanceId);
-        //this.historyService.deleteHistoricProcessInstance(processInstanceId);
+        this.relatedContentService.deleteContentForProcessInstance(processInstanceId);
+        this.commentService.deleteAllCommentsForProcessInstance(processInstanceId);
+        this.historyService.deleteHistoricProcessInstance(processInstanceId);
     }
 }

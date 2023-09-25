@@ -2,8 +2,10 @@ package com.innov.workflow.activiti.custom.service;
 
 
 import com.innov.workflow.core.domain.entity.Group;
+import com.innov.workflow.core.domain.entity.Organization;
 import com.innov.workflow.core.domain.entity.User;
 import com.innov.workflow.core.exception.ApiException;
+import com.innov.workflow.core.service.GroupService;
 import com.innov.workflow.core.service.UserService;
 import com.innov.workflow.idm.config.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,8 @@ import java.util.List;
 public class IdentityService {
 
     private final UserService userService;
+
+    private final GroupService groupService;
     private final JwtUtils jwtUtils;
 
     public User getCurrentUserObject() {
@@ -37,8 +41,16 @@ public class IdentityService {
         return groupIds;
     }
 
-    public List<User> getUserLike(String p) {
-        return userService.getAllUserLike(p);
+    public List<User> getUsersLike(String pattern) {
+        return userService.getUserByUsernameLike(pattern);
+    }
+
+    public List<Group> getGroupsLike(String pattern) {
+        return groupService.getGroupsByNameLike(pattern);
+    }
+
+    public List<Group> getGroupsLikeFromOrganization(String pattern, Organization organization) {
+        return groupService.getGroupsByNameLikeAndOrganization(pattern, organization);
     }
 
     public User getUser(String assignee) {

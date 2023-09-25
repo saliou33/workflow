@@ -2,6 +2,7 @@ package com.innov.workflow.core.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.innov.workflow.core.domain.entity.auth.RefreshToken;
+import com.innov.workflow.core.domain.entity.auth.VerificationToken;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,11 +42,15 @@ public class User extends BaseEntity {
     private Organization organization;
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Group> groups;
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<SysRole> roles;
     @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private RefreshToken refreshToken;
+
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private VerificationToken verificationToken;
 
 
     public User(String username, String email, String password) {
@@ -61,7 +66,16 @@ public class User extends BaseEntity {
         this.id = username;
     }
 
+
     public void setFullName() {
         this.fullName = this.firstName + " " + this.lastName;
+    }
+
+    public String getFullName() {
+        return this.firstName + " " + this.lastName;
+    }
+
+    public String getId() {
+        return getUsername();
     }
 }

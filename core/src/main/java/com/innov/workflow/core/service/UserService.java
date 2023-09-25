@@ -27,7 +27,7 @@ public class UserService {
     private final OrganizationRepository organizationRepository;
     private final SysRoleRepository roleRepository;
 
-    public List<User> getAllUserLike(String p) {
+    public List<User> getUserByUsernameLike(String p) {
         return userRepository.findUsersByUsernameLike(p);
     }
 

@@ -33,7 +33,7 @@ public class AbstractWorkflowUsersResource {
 //            userQuery.userFullNameLike("%" + filter + "%");
 //        }
 
-        List<User> matchingUsers = identityService.getUserLike("%" + filter + "%");
+        List<User> matchingUsers = identityService.getUsersLike("%" + filter + "%");
         if (excludeTaskId != null) {
             this.filterUsersInvolvedInTask(excludeTaskId, matchingUsers);
         } else if (excludeProcessId != null) {

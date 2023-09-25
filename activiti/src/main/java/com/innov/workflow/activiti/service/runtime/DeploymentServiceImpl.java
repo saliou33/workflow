@@ -174,22 +174,18 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     public void createFormDeployment(Model processModel) {
         List<Model> formModels = this.modelRepository.findModelsByParentModelId(processModel.getId());
-        ProcessDefinition p = this.repositoryService.createProcessDefinitionQuery()
-                .processDefinitionKey(processModel.getKey()).orderByProcessDefinitionVersion().desc().list().get(0);
 
-        if (p == null) {
-            return;
+        List<ProcessDefinition> pList = this.repositoryService.createProcessDefinitionQuery()
+                .processDefinitionKey(processModel.getKey()).orderByProcessDefinitionVersion().desc().list();
+
+        if (pList.size() == 0) {
+            throw new BadRequestException("Process identifier and model key not equal");
         }
 
+        ProcessDefinition p = pList.get(0);
+
+
         for (Model f : formModels) {
-//            FormDefinition formDefinition = null;
-//            try {
-//                formDefinition = formRepositoryService.getFormDefinitionByKey(f.getKey());
-//            } catch (Exception e) {
-//
-//            }
-//
-//            if(formDefinition != null) continue;
 
             FormDefinition formDefinition = new FormDefinition();
 

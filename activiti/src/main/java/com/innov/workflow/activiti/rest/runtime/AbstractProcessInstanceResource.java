@@ -14,6 +14,8 @@ import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.history.HistoricProcessInstance;
+import org.activiti.engine.history.HistoricVariableInstance;
+import org.activiti.engine.history.HistoricVariableInstanceQuery;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.form.api.FormRepositoryService;
 import org.activiti.form.api.FormService;
@@ -25,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Service
 public abstract class AbstractProcessInstanceResource {
@@ -50,8 +53,25 @@ public abstract class AbstractProcessInstanceResource {
     public AbstractProcessInstanceResource() {
     }
 
+    public String getStartUserId(String processInstanceId) {
+        HistoricVariableInstanceQuery query = historyService.createHistoricVariableInstanceQuery()
+                .processInstanceId(processInstanceId)
+                .variableName("initiator");
+
+        List<HistoricVariableInstance> variableInstances = query.list();
+
+        if (variableInstances != null && variableInstances.size() > 0) {
+            HistoricVariableInstance variableInstance = variableInstances.get(0);
+            if (variableInstance != null) {
+                return (String) variableInstance.getValue();
+            }
+        }
+        return null;
+    }
+
     public ProcessInstanceRepresentation getProcessInstance(String processInstanceId, HttpServletResponse response) {
         HistoricProcessInstance processInstance = this.historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+
         if (!this.permissionService.hasReadPermissionOnProcessInstance(identityService.getCurrentUserObject(), processInstance, processInstanceId)) {
             throw new NotFoundException("Process with id: " + processInstanceId + " does not exist or is not available for this user");
         } else {
@@ -59,7 +79,11 @@ public abstract class AbstractProcessInstanceResource {
             User userRep = null;
             if (processInstance.getStartUserId() != null) {
                 userRep = this.identityService.getUser(processInstance.getStartUserId());
-
+            } else {
+                String startUserId = getStartUserId(processInstanceId);
+                if (startUserId != null) {
+                    userRep = this.identityService.getUser(startUserId);
+                }
             }
 
             ProcessInstanceRepresentation processInstanceResult = new ProcessInstanceRepresentation(processInstance, processDefinition, processDefinition.isGraphicalNotationDefined(), userRep);
@@ -84,12 +108,13 @@ public abstract class AbstractProcessInstanceResource {
 
     public void deleteProcessInstance(String processInstanceId) {
         User currentUser = identityService.getCurrentUserObject();
-        HistoricProcessInstance processInstance = this.historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).startedBy(String.valueOf(currentUser.getId())).singleResult();
+        HistoricProcessInstance processInstance = this.historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+        String startUserId = getStartUserId(processInstanceId);
         if (processInstance == null) {
             throw new NotFoundException("Process with id: " + processInstanceId + " does not exist or is not started by this user");
         } else {
             if (processInstance.getEndTime() != null) {
-                if (!this.permissionService.canDeleteProcessInstance(currentUser, processInstance)) {
+                if (!this.permissionService.canDeleteProcessInstance(currentUser, processInstance) || startUserId == null) {
                     throw new NotFoundException("Process with id: " + processInstanceId + " is already completed and can't be deleted");
                 }
 

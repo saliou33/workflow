@@ -22,7 +22,7 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
 
     Page<User> findAllByGroups(Group group, Pageable pageable);
 
-    List<User> findUsersByUsernameLike(String p);
+    List<User> findUsersByUsernameLike(String username);
 
     Page<User> findAllByOrganization(Organization organization, Pageable pageable);
 

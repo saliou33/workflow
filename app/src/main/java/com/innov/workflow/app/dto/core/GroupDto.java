@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 public class GroupDto extends BaseDto {
     private Long id;
     @NotBlank(message = "le champs nom est vide")
-    @Size(message = "le nom doit etre compris entre 3 et 100 caracterers", min = 3, max = 100)
+    @Size(min = 3, max = 100)
     private String name;
     private String description;
 

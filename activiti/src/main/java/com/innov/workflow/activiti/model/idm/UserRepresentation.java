@@ -18,7 +18,6 @@ public class UserRepresentation extends AbstractRepresentation {
     protected String fullName;
     protected List<GroupRepresentation> groups = new ArrayList();
 
-
     public UserRepresentation(User user) {
         if (user != null) {
             this.setId(user.getId());
@@ -27,6 +26,5 @@ public class UserRepresentation extends AbstractRepresentation {
             this.setFullName((user.getFirstName() != null ? user.getFirstName() : "") + " " + (user.getLastName() != null ? user.getLastName() : ""));
             this.setEmail(user.getEmail());
         }
-
     }
 }

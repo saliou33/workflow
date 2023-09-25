@@ -94,6 +94,8 @@ public class UserController {
     public ResponseEntity createUser(@RequestBody UserDto userDTO) {
         User userData = userMapper.mapFromDto(userDTO);
         userData.setPassword(authService.hashPassword(userData.getPassword()));
+        //TODO: change this before prod build
+        userData.setEnabled(true);
         User user = userService.createUser(userData);
         authService.sendVerificationToken(user);
         return ApiResponse.created("user created", user);
