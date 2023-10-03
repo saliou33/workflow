@@ -92,7 +92,7 @@ public class AppDefinitionServiceImpl implements AppDefinitionService {
 
     public AppDefinitionServiceRepresentation createAppDefinition(String modelKey) {
         Model model = modelRepository.findByKey(modelKey);
-        if(model != null) return createAppDefinition(model);
+        if (model != null) return createAppDefinition(model);
 
         return null;
     }

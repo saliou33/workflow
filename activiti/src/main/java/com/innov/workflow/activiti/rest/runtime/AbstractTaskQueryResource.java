@@ -178,12 +178,12 @@ public abstract class AbstractTaskQueryResource {
         String assignment = assignmentNode.asText();
         if (assignment.length() > 0) {
             String currentUserId = String.valueOf(currentUser.getId());
-            if("groups".equals(assignment)) {
+            if ("groups".equals(assignment)) {
                 List<String> listIdGroups = new ArrayList<>();
-                for(Group group: currentUser.getGroups()) {
+                for (Group group : currentUser.getGroups()) {
                     listIdGroups.add(group.getId().toString());
                 }
-                if(!listIdGroups.isEmpty()) {
+                if (!listIdGroups.isEmpty()) {
                     taskInfoQueryWrapper.getTaskInfoQuery().taskCandidateGroupIn(listIdGroups);
                 }
             } else if ("assignee".equals(assignment)) {
@@ -199,7 +199,7 @@ public abstract class AbstractTaskQueryResource {
                 }
                 taskInfoQueryWrapper.getTaskInfoQuery().taskCandidateGroup(groupIdString);
             } else {
-               taskInfoQueryWrapper.getTaskInfoQuery().taskInvolvedUser(currentUserId);
+                taskInfoQueryWrapper.getTaskInfoQuery().taskInvolvedUser(currentUserId);
             }
         }
 

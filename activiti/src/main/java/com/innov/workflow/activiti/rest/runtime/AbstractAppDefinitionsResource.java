@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.innov.workflow.activiti.model.common.ResultListDataRepresentation;
 import com.innov.workflow.activiti.model.runtime.AppDefinitionRepresentation;
 import com.innov.workflow.activiti.service.api.AppDefinitionServiceRepresentation;
-import com.innov.workflow.activiti.service.api.ModelService;
 import com.innov.workflow.activiti.service.editor.AppDefinitionServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.engine.RepositoryService;
