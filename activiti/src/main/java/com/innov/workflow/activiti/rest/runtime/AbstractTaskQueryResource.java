@@ -9,6 +9,7 @@ import com.innov.workflow.activiti.model.idm.UserRepresentation;
 import com.innov.workflow.activiti.model.runtime.TaskRepresentation;
 import com.innov.workflow.activiti.service.exception.BadRequestException;
 import com.innov.workflow.activiti.service.runtime.PermissionService;
+import com.innov.workflow.core.domain.entity.Group;
 import com.innov.workflow.core.domain.entity.User;
 import org.activiti.editor.language.json.converter.util.CollectionUtils;
 import org.activiti.engine.HistoryService;
@@ -107,6 +108,7 @@ public abstract class AbstractTaskQueryResource {
                 this.handleTextFiltering(taskInfoQueryWrapper, textNode);
             }
 
+
             JsonNode assignmentNode = requestNode.get("assignment");
             if (assignmentNode != null && !assignmentNode.isNull()) {
                 this.handleAssignment(taskInfoQueryWrapper, assignmentNode, currentUser);
@@ -176,22 +178,28 @@ public abstract class AbstractTaskQueryResource {
         String assignment = assignmentNode.asText();
         if (assignment.length() > 0) {
             String currentUserId = String.valueOf(currentUser.getId());
-            if ("assignee".equals(assignment)) {
+            if("groups".equals(assignment)) {
+                List<String> listIdGroups = new ArrayList<>();
+                for(Group group: currentUser.getGroups()) {
+                    listIdGroups.add(group.getId().toString());
+                }
+                if(!listIdGroups.isEmpty()) {
+                    taskInfoQueryWrapper.getTaskInfoQuery().taskCandidateGroupIn(listIdGroups);
+                }
+            } else if ("assignee".equals(assignment)) {
                 taskInfoQueryWrapper.getTaskInfoQuery().taskAssignee(currentUserId);
             } else if ("candidate".equals(assignment)) {
                 taskInfoQueryWrapper.getTaskInfoQuery().taskCandidateUser(currentUserId);
             } else if (assignment.startsWith("group_")) {
                 String groupIdString = assignment.replace("group_", "");
-
                 try {
                     Long.valueOf(groupIdString);
                 } catch (NumberFormatException var8) {
                     throw new BadRequestException("Invalid group id");
                 }
-
                 taskInfoQueryWrapper.getTaskInfoQuery().taskCandidateGroup(groupIdString);
             } else {
-                taskInfoQueryWrapper.getTaskInfoQuery().taskInvolvedUser(currentUserId);
+               taskInfoQueryWrapper.getTaskInfoQuery().taskInvolvedUser(currentUserId);
             }
         }
 

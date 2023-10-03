@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface ModelRepository extends JpaRepository<Model, String> {
 
-
+    Model findByKey(String key);
     @Query("from Model as model where model.createdBy = :user and model.modelType = :modelType")
     List<Model> findModelsCreatedBy(@Param("user") String var1, @Param("modelType") Integer var2, Sort var3);
 

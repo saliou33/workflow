@@ -90,6 +90,13 @@ public class AppDefinitionServiceImpl implements AppDefinitionService {
         return resultList;
     }
 
+    public AppDefinitionServiceRepresentation createAppDefinition(String modelKey) {
+        Model model = modelRepository.findByKey(modelKey);
+        if(model != null) return createAppDefinition(model);
+
+        return null;
+    }
+
     protected AppDefinitionServiceRepresentation createAppDefinition(AbstractModel model) {
         AppDefinitionServiceRepresentation resultInfo = new AppDefinitionServiceRepresentation();
         if (model instanceof ModelHistory) {

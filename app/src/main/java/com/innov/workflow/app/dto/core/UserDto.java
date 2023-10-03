@@ -1,5 +1,6 @@
 package com.innov.workflow.app.dto.core;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.innov.workflow.core.domain.entity.Group;
 import com.innov.workflow.core.domain.entity.Organization;
 import com.innov.workflow.core.domain.entity.SysRole;

@@ -137,10 +137,8 @@ public class ActivitiTaskFormService {
             processInstanceVariables.put(historicVariableInstance.getId(), processInstanceVariableRepresentation);
         }
 
-
         List<ProcessInstanceVariableRepresentation> processInstanceVariableRepresenations = new ArrayList(processInstanceVariables.values());
         return processInstanceVariableRepresenations;
     }
-
 
 }
